@@ -85,6 +85,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GraphDocs.DataServices\GraphDocs.DataServices.csproj">
+      <Project>{2243df9b-8e71-47d3-b7fe-82ec9050df21}</Project>
+      <Name>GraphDocs.DataServices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GraphDocs.Models\GraphDocs.Models.csproj">
       <Project>{ea1facfd-11ea-4333-9b70-e4761cf9224b}</Project>
       <Name>GraphDocs.Models</Name>

@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="DocumentManagementSystem.Global" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="GraphDocs.WebService.Global" Language="C#" %>

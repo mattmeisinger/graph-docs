@@ -9,6 +9,7 @@ namespace GraphDocs.WebService
 
         protected void Application_Start(object sender, EventArgs e)
         {
+            // This route allows the web service to be called using /folders instead of the /FolderService.svc relative URL.
             RouteTable.Routes.Add(new ServiceRoute("folders", new WebServiceHostFactory(), typeof(FoldersService)));
         }
 

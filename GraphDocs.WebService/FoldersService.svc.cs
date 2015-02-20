@@ -1,4 +1,5 @@
-﻿using GraphDocs.Models;
+﻿using GraphDocs.DataServices;
+using GraphDocs.Models;
 using System;
 using System.ServiceModel;
 using System.ServiceModel.Web;
@@ -9,7 +10,7 @@ namespace GraphDocs.WebService
     public interface IFoldersService
     {
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "")]
+        [WebInvoke(Method = "GET", UriTemplate = "/")]
         Folder[] GetRoot();
 
         [OperationContract]
