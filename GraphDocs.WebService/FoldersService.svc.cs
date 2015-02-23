@@ -34,6 +34,7 @@ namespace GraphDocs.WebService
     {
         public Folder[] GetRoot()
         {
+
             return new[] {
                 new Folder { Name = "Test", ParentFolderId = 0 },
                 new Folder { Name = "Test2", ParentFolderId = 0 }

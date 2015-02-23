@@ -1,0 +1,87 @@
+// GET /document/5
+// Request Body: (none)
+// Response: 200 OK
+// {
+//     "id": "5",
+//     "data": {
+//         "path": "/TestFolder",
+//         "mimeType": "text/plain",
+//         "filename": "test.txt",
+//         "fields": { /* fields are part of phase 2 */
+//             "type": "Plain Text",
+//             "datePublished": "2015-02-13"
+//         }
+//     },
+//     "tags": [ "Test Documents", "Resources" ],
+//     "links": {
+//         "self": "/document/5",
+//         "download": "/document/5/download",
+//         "related": "/document/5/related",
+//         "folder": "/folder?path=/TestFolder"
+//     }
+// }
+
+// GET /document/5/download
+// Request Body: (none)
+// Response: 200 OK (Will return the content of the document, with a response type of the mime type of the document.)
+
+// GET /document/5/related
+// Request Body: (none)
+// Response: 200 OK
+// {
+//     "documents": [
+//         {
+//             "id": "5",
+//             "links": {
+//                 "self": "/document/5",
+//                 "download": "/document/5/download",
+//                 "related": "/document/5/related",
+//                 "folder": "/folder?path=/TestFolder"
+//             }
+//         },
+//         {
+//             "id": "6",
+//             "links": {
+//                 "self": "/document/6",
+//                 "download": "/document/6/download",
+//                 "related": "/document/6/related",
+//                 "folder": "/folder?path=/AnotherFolder"
+//             }
+//         }
+//     ],
+//     "links": {
+//         "self": "/document/5/related"
+//     }
+// }
+
+// POST /document
+// Request Body: {
+//     "path": "/TestFolder",
+//     "mimeType": "text/plain",
+//     "filename": "test.txt",
+//     "tags": [ "Test Documents", "Resources" ],
+//     "bytes": "VGhpcyBpcyBhIHRlc3QgZmlsZS4=", /* binary represented in base64 here */
+//     "fields": {      /* fields are part of phase 2 */
+//         "type": "Plain Text",
+//         "datePublished": "2015-02-13"
+//     }
+// }
+// Response: 200 OK
+
+// PUT /document/5
+// Request Body: {
+//     "path": "/AnotherFolder",
+//     "mimeType": "text/plain",
+//     "filename": "test.txt",
+//     "tags": [ "Test Documents", "Resources" ],
+//     "bytes": "VGhpcyBpcyBhIHRlc3QgZmlsZS4=", /* binary represented in base64 here */
+//     "fields": {      /* fields are part of phase 2 */
+//         "type": "Plain Text",
+//         "datePublished": "2015-02-13"
+//     }
+// }
+// Response: 200 OK
+
+// DELETE /document/5
+// Request Body: (none)
+// Response: 200 OK

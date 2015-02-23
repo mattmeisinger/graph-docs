@@ -10,7 +10,8 @@ namespace GraphDocs.Tests
         [TestMethod]
         public void Test()
         {
-            FoldersDataService.Test();
+            var ds = new FoldersDataService();
+            var folders = ds.Get("/AnotherFolder/AnotherChildFolder/AnotherChildFolder2");
         }
     }
 }

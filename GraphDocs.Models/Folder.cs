@@ -7,8 +7,5 @@ namespace GraphDocs.Models
     {
         [DataMember]
         public string Name { get; set; }
-
-        [DataMember]
-        public int ParentFolderId { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Neo4jClient;
+﻿using GraphDocs.Models;
+using Neo4jClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,24 +10,55 @@ namespace GraphDocs.DataServices
 {
     public class FoldersDataService
     {
-        public static void Test()
+        private GraphClient client;
+        public FoldersDataService()
         {
-            var client = new GraphClient(new Uri("http://localhost:7474/db/data"));
-            client.Connect();
-            client.Cypher
-                .Create("(user:User {newUser})")
-                .WithParam("newUser", new User { Name = "TestUser1", Address = "Test Address" })
-                .ExecuteWithoutResults();
-            var results = client.Cypher
-                .Match("(user:User)")
-                .Return(user => user.As<User>())
-                .Results;
+            client = DatabaseService.GetConnection();
         }
 
-        public class User
+        public Folder Get(string path = "/")
         {
-            public string Name { get; set; }
-            public string Address { get; set; }
+            if (string.IsNullOrWhiteSpace(path))
+                path = "/";
+
+            var pathPieces = path.Split('/')
+                .Where(a => !string.IsNullOrWhiteSpace(a))
+                .ToArray();
+
+            var intermediateFolders = pathPieces.Select((a, i) => new { FolderName = a, ParamName = "folder" + i }).ToArray();
+
+            // Match at least the root node
+            var matchString = "(root:Folder{Name:\"Root\"})";
+            if (intermediateFolders.Any())
+                matchString += string.Join("", intermediateFolders.Select(a => "<-[:CHILD_OF]-(" + a.ParamName + ":Folder{Name:{" + a.ParamName + "}})"));
+
+            // Return the last folder in the list (if any are in the list). If the list is empty, return the root node.
+            var paramToReturn = intermediateFolders.Any() ? intermediateFolders.Last().ParamName : "root";
+
+            var folders = client.Cypher
+                .Match(matchString)
+                .WithParams(intermediateFolders.ToDictionary(a => a.ParamName, a => (object)a.FolderName))
+                .Return<Folder>(paramToReturn)
+                .Results;
+
+            return null;
+        }
+
+        public void Create(string folderName, string parentFolderId)
+        {
+            // Check if parent folder exists
+            var rootFolderExists = client.Cypher
+                .Match("(root:Folder)")
+                .Where((Folder folder) => folder.Name == "Root")
+                .Return(folder => folder.As<Folder>())
+                .Results.Any();
+            if (!rootFolderExists)
+            {
+                client.Cypher
+                    .Create("(folder:Folder {newFolder})")
+                    .WithParam("newFolder", new Folder { Name = "Root" })
+                    .ExecuteWithoutResults();
+            }
         }
     }
 }

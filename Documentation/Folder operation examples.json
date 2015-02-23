@@ -1,0 +1,59 @@
+
+// GET /folder
+// Request Body: (none)
+// Response: 200 OK
+// {
+//     "path": "/",
+//     "data": {
+//         "name": "Root"
+//     },
+//     "folders": [
+//         {
+//             "path": "/TestFolder",
+//             "links": {
+//                 "self": "/folder?path=/TestFolder"
+//             }
+//         }
+//     ],
+//     "documents": [
+//         {
+//             "id": "5",
+//             "links": {
+//                 "self": "/document/5"
+//             }
+//         }
+//     ],
+//     "links": {
+//         "self": "/folder?path=/",
+//         "parent": null
+//     }
+// }
+
+
+// GET /folder?path=/TestFolder
+// Request Body: (none)
+// Response: 200 OK
+// {
+//     "path": "/TestFolder",
+//     "data": {
+//         "name": "Root"
+//     },
+//     "folders": [ ],
+//     "documents": [ ],
+//     "links": {
+//         "self": "/folder?path=/TestFolder",
+//         "parent": "/folder?path=/"
+//     }
+// }
+
+// POST /folder
+// Request Body: { "path": "/", "name": "TestFolder" }
+// Response: 200 OK
+
+// PUT /folder
+// Request Body: { "path": "/TestFolder", "name": "TestFolder" }
+// Response: 200 OK
+
+// DELETE /folder
+// Request Body: { "path": "/TestFolder" }
+// Response: 200 OK

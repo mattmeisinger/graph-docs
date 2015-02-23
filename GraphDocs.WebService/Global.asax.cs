@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GraphDocs.DataServices;
+using System;
 using System.ServiceModel.Activation;
 using System.Web.Routing;
 
@@ -11,6 +12,9 @@ namespace GraphDocs.WebService
         {
             // This route allows the web service to be called using /folders instead of the /FolderService.svc relative URL.
             RouteTable.Routes.Add(new ServiceRoute("folders", new WebServiceHostFactory(), typeof(FoldersService)));
+
+            // Initialize Neo4J database
+            DatabaseService.Init();
         }
 
         protected void Session_Start(object sender, EventArgs e)
