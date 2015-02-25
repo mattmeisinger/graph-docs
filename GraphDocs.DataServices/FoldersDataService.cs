@@ -68,20 +68,20 @@ namespace GraphDocs.DataServices
             return folder;
         }
 
-        public void Create(string folderName, string parentFolderId)
+        public void Create(string folderName, string parentFolderPath)
         {
-            // Check if parent folder exists
-            var rootFolderExists = client.Cypher
-                .Match("(root:Folder)")
-                .Where((Folder folder) => folder.Name == "Root")
-                .Return(folder => folder.As<Folder>())
-                .Results.Any();
-            if (!rootFolderExists)
+            if (string.IsNullOrWhiteSpace(parentFolderPath) || parentFolderPath.Trim() == "/")
             {
+                // Attach to root folder
                 client.Cypher
-                    .Create("(folder:Folder {newFolder})")
-                    .WithParam("newFolder", new { Name = "Root" })
+                    .Match("(root:Folder { Name: 'Root' })")
+                    .Create("root<-[:CHILD_OF]-(folder:Folder {newFolder})")
+                    .WithParam("newFolder", new { Name = folderName })
                     .ExecuteWithoutResults();
+            }
+            else
+            {
+
             }
         }
     }

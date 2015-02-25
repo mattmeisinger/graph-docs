@@ -5,6 +5,8 @@ namespace GraphDocs.Models
     [DataContract]
     public class Folder
     {
+        public int id { get; set; }
+
         [DataMember]
         public string Name { get; set; }
 
