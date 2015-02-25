@@ -12,6 +12,7 @@ namespace GraphDocs.Tests
         {
             var ds = new FoldersDataService();
             var folders = ds.Get("/AnotherFolder/AnotherChildFolder/AnotherChildFolder2");
+            var folders2 = ds.Get("/AnotherFolder/AnotherChildFolder");
         }
     }
 }

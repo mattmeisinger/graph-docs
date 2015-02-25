@@ -32,16 +32,40 @@ namespace GraphDocs.DataServices
             if (intermediateFolders.Any())
                 matchString += string.Join("", intermediateFolders.Select(a => "<-[:CHILD_OF]-(" + a.ParamName + ":Folder{Name:{" + a.ParamName + "}})"));
 
+            // Get documents that are children of the last folder
+            matchString += "<-[:CHILD_OF]-(doc:Document)";
+
             // Return the last folder in the list (if any are in the list). If the list is empty, return the root node.
             var paramToReturn = intermediateFolders.Any() ? intermediateFolders.Last().ParamName : "root";
 
-            var folders = client.Cypher
+            var folder = client.Cypher
                 .Match(matchString)
                 .WithParams(intermediateFolders.ToDictionary(a => a.ParamName, a => (object)a.FolderName))
                 .Return<Folder>(paramToReturn)
-                .Results;
+                .Results
+                .SingleOrDefault();
 
-            return null;
+            if (folder == null)
+                return null;
+
+            folder.Path = "/" + string.Join("/", pathPieces);
+            folder.ChildFolders = client.Cypher
+                .Match(matchString + "<-[:CHILD_OF]-(child:Folder)")
+                .WithParams(intermediateFolders.ToDictionary(a => a.ParamName, a => (object)a.FolderName))
+                .Return((child, docs) => child.As<Folder>())
+                .Results
+                .ToArray();
+            foreach (var item in folder.ChildFolders)
+                item.Path = folder.Path + "/" + item.Name;
+
+            folder.ChildDocuments = client.Cypher
+                .Match(matchString + "<-[:CHILD_OF]-(child:Document)")
+                .WithParams(intermediateFolders.ToDictionary(a => a.ParamName, a => (object)a.FolderName))
+                .Return(child => child.As<Document>())
+                .Results
+                .ToArray();
+
+            return folder;
         }
 
         public void Create(string folderName, string parentFolderId)
@@ -56,7 +80,7 @@ namespace GraphDocs.DataServices
             {
                 client.Cypher
                     .Create("(folder:Folder {newFolder})")
-                    .WithParam("newFolder", new Folder { Name = "Root" })
+                    .WithParam("newFolder", new { Name = "Root" })
                     .ExecuteWithoutResults();
             }
         }

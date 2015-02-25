@@ -36,15 +36,15 @@ namespace GraphDocs.WebService
         {
 
             return new[] {
-                new Folder { Name = "Test", ParentFolderId = 0 },
-                new Folder { Name = "Test2", ParentFolderId = 0 }
+                new Folder { Name = "Test" },
+                new Folder { Name = "Test2" }
             };
         }
 
         public Folder Get(string folderId)
         {
             var id = Convert.ToInt32(folderId);
-            return new Folder { Name = "Test", ParentFolderId = id };
+            return new Folder { Name = "Test" };
         }
 
         public Folder Post(string folderId, Folder folder)
