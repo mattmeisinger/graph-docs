@@ -70,6 +70,8 @@ namespace GraphDocs.DataServices
 
         public void Create(string folderName, string parentFolderPath)
         {
+            if (folderName == "Root")
+                throw new Exception("'Root' is a reserved folder name and cannot be used.");
             if (string.IsNullOrWhiteSpace(parentFolderPath) || parentFolderPath.Trim() == "/")
             {
                 // Attach to root folder
@@ -82,6 +84,44 @@ namespace GraphDocs.DataServices
             else
             {
 
+            }
+        }
+
+        public int? GetNodeIdFromFolderPath(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path) || path.Trim() == "/")
+            {
+                // Attach to root folder
+                return client.Cypher
+                    .Match("(root:Folder { Name: 'Root' })")
+                    .Return<int?>("id(root)")
+                    .Results
+                    .SingleOrDefault();
+            }
+            else
+            {
+                var pathPieces = path.Split('/')
+                    .Where(a => !string.IsNullOrWhiteSpace(a))
+                    .ToArray();
+
+                var intermediateFolders = pathPieces.Select((a, i) => new { FolderName = a, ParamName = "folder" + i }).ToArray();
+
+                // Match at least the root node
+                var matchString = "(root:Folder{Name:\"Root\"})";
+                if (intermediateFolders.Any())
+                    matchString += string.Join("", intermediateFolders.Select(a => "<-[:CHILD_OF]-(" + a.ParamName + ":Folder{Name:{" + a.ParamName + "}})"));
+
+                // Return the last folder in the list (if any are in the list). If the list is empty, return the root node.
+                var paramToReturn = intermediateFolders.Any() ? intermediateFolders.Last().ParamName : "root";
+
+                var folderId = client.Cypher
+                    .Match(matchString)
+                    .WithParams(intermediateFolders.ToDictionary(a => a.ParamName, a => (object)a.FolderName))
+                    .Return<int?>("id(" + paramToReturn + ")")
+                    .Results
+                    .SingleOrDefault();
+
+                return folderId;
             }
         }
     }
