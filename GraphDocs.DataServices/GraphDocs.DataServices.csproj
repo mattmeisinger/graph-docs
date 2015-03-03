@@ -58,6 +58,7 @@
     <Compile Include="DatabaseService.cs" />
     <Compile Include="FoldersDataService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TagsDataService.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

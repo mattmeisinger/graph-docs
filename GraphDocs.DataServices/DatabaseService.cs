@@ -31,7 +31,7 @@ namespace GraphDocs.DataServices
             {
                 client.Cypher
                     .Create("(folder:Folder {newFolder})")
-                    .WithParam("newFolder", new Folder { Name = "Root" })
+                    .WithParam("newFolder", new { FolderID = Guid.NewGuid().ToString(), Name = "Root" })
                     .ExecuteWithoutResults();
             }
         }

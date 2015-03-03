@@ -1,11 +1,12 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 
 namespace GraphDocs.Models
 {
     [DataContract]
     public class Folder
     {
-        public int id { get; set; }
+        public string FolderID { get; set; }
 
         [DataMember]
         public string Name { get; set; }

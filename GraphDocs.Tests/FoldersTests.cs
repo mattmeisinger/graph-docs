@@ -7,20 +7,29 @@ namespace GraphDocs.Tests
     [TestClass]
     public class FoldersTests
     {
+        public FoldersTests()
+        {
+            var ds = new FoldersDataService();
+            ds.DeleteAll();
+            DatabaseService.Init();
+            ds.Create(new Models.Folder { Path = "/", Name = "TestFolder" });
+            ds.Create(new Models.Folder { Path = "/", Name = "Test1" });
+        }
+
         [TestMethod]
         public void GetFolder_Root()
         {
             var ds = new FoldersDataService();
-            var id = ds.GetNodeIdFromFolderPath("/");
-            Assert.IsTrue(id.HasValue);
+            var id = ds.GetIDFromFolderPath("/");
+            Assert.IsNotNull(id);
         }
 
         [TestMethod]
         public void GetFolder_Level1Folder()
         {
             var ds = new FoldersDataService();
-            var rootNodeId = ds.GetNodeIdFromFolderPath("/");
-            var folderNodeId = ds.GetNodeIdFromFolderPath("/Test1");
+            var rootNodeId = ds.GetIDFromFolderPath("/");
+            var folderNodeId = ds.GetIDFromFolderPath("/TestFolder");
             Assert.IsNotNull(rootNodeId);
             Assert.IsNotNull(folderNodeId);
             Assert.IsTrue(rootNodeId != folderNodeId);
@@ -30,18 +39,9 @@ namespace GraphDocs.Tests
         public void GetFolder_FolderDoesNotExist()
         {
             var ds = new FoldersDataService();
-            var folderNodeId = ds.GetNodeIdFromFolderPath("/FolderThatDoesNotExist");
+            var folderNodeId = ds.GetIDFromFolderPath("/FolderThatDoesNotExist");
+            Assert.IsNull(folderNodeId);
             Assert.IsTrue(folderNodeId == null);
         }
-
-        //[TestMethod]
-        //public void Test()
-        //{
-        //    var ds = new FoldersDataService();
-        //    ds.Create("Test1", "/");
-        //    ds.Create("Test2", "/Test1");
-        //    var folders = ds.Get("/Test1");
-        //    //var folders2 = ds.Get("/AnotherFolder/AnotherChildFolder");
-        //}
     }
 }
