@@ -11,55 +11,57 @@ namespace GraphDocs.WebService
     {
         [OperationContract]
         [WebInvoke(Method = "GET", UriTemplate = "/")]
-        Folder[] GetRoot();
+        Folder GetRoot();
 
         [OperationContract]
-        [WebInvoke(Method = "GET", UriTemplate = "/{folderId}")]
-        Folder Get(string folderId);
+        [WebInvoke(Method = "GET", UriTemplate = "/{path}")]
+        Folder Get(string path);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = "/{folderId}")]
-        Folder Post(string folderId, Folder folder);
+        [WebInvoke(Method = "POST", UriTemplate = "/{path}")]
+        Folder Post(string path, Folder folder);
 
         [OperationContract]
-        [WebInvoke(Method = "PUT", UriTemplate = "/{folderId}")]
-        Folder Put(string folderId, Folder folder);
+        [WebInvoke(Method = "PUT", UriTemplate = "/{path}")]
+        Folder Put(string path, Folder folder);
 
         [OperationContract]
-        [WebInvoke(Method = "DELETE", UriTemplate = "/{folderId}")]
-        Folder Delete(string folderId);
+        [WebInvoke(Method = "DELETE", UriTemplate = "/{path}")]
+        void Delete(string path);
     }
 
     public class FoldersService : IFoldersService
     {
-        public Folder[] GetRoot()
-        {
+        FoldersDataService ds = new FoldersDataService();
 
-            return new[] {
-                new Folder { Name = "Test" },
-                new Folder { Name = "Test2" }
-            };
+        public Folder GetRoot()
+        {
+            return ds.Get("/");
         }
 
-        public Folder Get(string folderId)
+        public Folder Get(string path)
         {
-            var id = Convert.ToInt32(folderId);
-            return new Folder { Name = "Test" };
+            return ds.Get(path);
         }
 
-        public Folder Post(string folderId, Folder folder)
+        public Folder Post(string path, Folder folder)
         {
+            folder.ID = null;
+            folder.Path = path;
+            ds.Save(folder);
             return folder;
         }
 
-        public Folder Put(string folderId, Folder folder)
+        public Folder Put(string path, Folder folder)
         {
+            folder.Path = path;
+            ds.Save(folder);
             return folder;
         }
 
-        public Folder Delete(string folderId)
+        public void Delete(string path)
         {
-            return null;
+            ds.Delete(path);
         }
     }
 }

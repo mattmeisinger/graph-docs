@@ -30,8 +30,15 @@ namespace GraphDocs.DataServices
             if (!rootFolderExists)
             {
                 client.Cypher
+                    .WithParams(new
+                    {
+                        newFolder = new
+                        {
+                            ID = Guid.NewGuid().ToString(),
+                            Name = "Root"
+                        }
+                    })
                     .Create("(folder:Folder {newFolder})")
-                    .WithParam("newFolder", new { FolderID = Guid.NewGuid().ToString(), Name = "Root" })
                     .ExecuteWithoutResults();
             }
         }

@@ -7,9 +7,10 @@ namespace GraphDocs.Tests
     [TestClass]
     public class FoldersTests
     {
+        FoldersDataService ds = new FoldersDataService();
+
         public FoldersTests()
         {
-            var ds = new FoldersDataService();
             ds.DeleteAll();
             DatabaseService.Init();
             ds.Create(new Models.Folder { Path = "/", Name = "TestFolder" });
@@ -19,7 +20,6 @@ namespace GraphDocs.Tests
         [TestMethod]
         public void GetFolder_Root()
         {
-            var ds = new FoldersDataService();
             var id = ds.GetIDFromFolderPath("/");
             Assert.IsNotNull(id);
         }
@@ -27,7 +27,6 @@ namespace GraphDocs.Tests
         [TestMethod]
         public void GetFolder_Level1Folder()
         {
-            var ds = new FoldersDataService();
             var rootNodeId = ds.GetIDFromFolderPath("/");
             var folderNodeId = ds.GetIDFromFolderPath("/TestFolder");
             Assert.IsNotNull(rootNodeId);
@@ -38,10 +37,20 @@ namespace GraphDocs.Tests
         [TestMethod]
         public void GetFolder_FolderDoesNotExist()
         {
-            var ds = new FoldersDataService();
             var folderNodeId = ds.GetIDFromFolderPath("/FolderThatDoesNotExist");
             Assert.IsNull(folderNodeId);
             Assert.IsTrue(folderNodeId == null);
+        }
+
+        [TestMethod]
+        public void DeleteFolder_FolderExists()
+        {
+            ds.Create(new Models.Folder { Path = "/", Name = "FolderToDelete" });
+            var id = ds.GetIDFromFolderPath("/FolderToDelete");
+            Assert.IsNotNull(id);
+            ds.Delete("/FolderToDelete");
+            id = ds.GetIDFromFolderPath("/FolderToDelete");
+            Assert.IsNull(id);
         }
     }
 }

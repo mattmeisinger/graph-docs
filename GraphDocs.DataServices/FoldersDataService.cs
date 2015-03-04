@@ -23,7 +23,7 @@ namespace GraphDocs.DataServices
             var folderId = GetIDFromFolderPath(path);
             var folder = client.Cypher
                 .WithParams(new { folderId })
-                .Match("(folder:Folder { FolderID: {folderId} })")
+                .Match("(folder:Folder { ID: {folderId} })")
                 .Return<Folder>("folder")
                 .Results
                 .SingleOrDefault();
@@ -34,7 +34,7 @@ namespace GraphDocs.DataServices
             folder.Path = path;
             folder.ChildFolders = client.Cypher
                 .WithParams(new { folderId })
-                .Match("(folder:Folder { FolderID: {folderId} })<-[:CHILD_OF]-(child:Folder)")
+                .Match("(folder:Folder { ID: {folderId} })<-[:CHILD_OF]-(child:Folder)")
                 .Return(child => child.As<Folder>())
                 .Results
                 .ToArray();
@@ -43,12 +43,26 @@ namespace GraphDocs.DataServices
 
             folder.ChildDocuments = client.Cypher
                 .WithParams(new { folderId })
-                .Match("(folder:Folder { FolderID: {folderId} })<-[:CHILD_OF]-(child:Document)")
+                .Match("(folder:Folder { ID: {folderId} })<-[:CHILD_OF]-(child:Document)")
                 .Return(child => child.As<Document>())
                 .Results
                 .ToArray();
 
             return folder;
+        }
+
+        public void Delete(string path)
+        {
+            var id = GetIDFromFolderPath(path);
+            client.Cypher
+                .WithParams(new
+                {
+                    folderId = id
+                })
+                .Match("(f:Folder { ID: {folderId} })<-[*]-(childFolder)")
+                .ForEach("(x in cr | delete x)")
+                .Delete("f, childFolder")
+                .ExecuteWithoutResults();
         }
 
         public void Create(Folder folder)
@@ -58,18 +72,22 @@ namespace GraphDocs.DataServices
             if (string.IsNullOrWhiteSpace(folder.Name))
                 throw new Exception("Folder name is required.");
 
-            if (folder.FolderID == null)
-                folder.FolderID = Guid.NewGuid().ToString();
+            if (folder.ID == null)
+                folder.ID = Guid.NewGuid().ToString();
             var parentId = GetIDFromFolderPath(folder.Path);
 
             // Attach to root folder
             client.Cypher
-                .Match("(parent { FolderID: {parentId} })")
                 .WithParams(new
                 {
                     parentId = parentId,
-                    newFolder = folder
+                    newFolder = new
+                    {
+                        folder.Name,
+                        folder.ID
+                    }
                 })
+                .Match("(parent:Folder { ID: {parentId} })")
                 .Create("parent<-[:CHILD_OF]-(folder:Folder {newFolder})")
                 .ExecuteWithoutResults();
         }
@@ -79,10 +97,10 @@ namespace GraphDocs.DataServices
             client.Cypher
                 .WithParams(new
                 {
-                    folderId = folder.FolderID,
+                    folderId = folder.ID,
                     folder = folder
                 })
-                .Match("(folder:Folder { FolderID: {folderId} })")
+                .Match("(folder:Folder { ID: {folderId} })")
                 .Set("folder = {folder}")
                 .ExecuteWithoutResults();
         }
@@ -94,7 +112,7 @@ namespace GraphDocs.DataServices
                 // Attach to root folder
                 var rootId = client.Cypher
                     .Match("(root:Folder { Name: \"Root\" })")
-                    .Return<string>("root.FolderID")
+                    .Return<string>("root.ID")
                     .Results
                     .SingleOrDefault();
                 if (rootId == null)
@@ -121,7 +139,7 @@ namespace GraphDocs.DataServices
                 var folderId = client.Cypher
                     .Match(matchString)
                     .WithParams(intermediateFolders.ToDictionary(a => a.ParamName, a => (object)a.FolderName))
-                    .Return<string>(paramToReturn + ".FolderID")
+                    .Return<string>(paramToReturn + ".ID")
                     .Results
                     .SingleOrDefault();
 
@@ -132,10 +150,12 @@ namespace GraphDocs.DataServices
         {
             client.Cypher
                 .Match("(folder:Folder)-[r]-()")
-                .Delete("folder, r");
+                .Delete("folder, r")
+                .ExecuteWithoutResults();
             client.Cypher
                 .Match("(folder:Folder)")
-                .Delete("folder");
+                .Delete("folder")
+                .ExecuteWithoutResults();
             //((IRawGraphClient)client).ExecuteCypher(new Neo4jClient.Cypher.CypherQuery("MATCH (folder:Folder)-[r]-() DELETE folder, r", new Dictionary<string, object>(), Neo4jClient.Cypher.CypherResultMode.Projection));
         }
     }
