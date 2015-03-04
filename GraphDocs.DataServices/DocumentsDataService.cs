@@ -9,46 +9,37 @@ using System.Threading.Tasks;
 
 namespace GraphDocs.DataServices
 {
-    public class FoldersDataService
+    public class DocumentsDataService
     {
         private GraphClient client;
 
-        public FoldersDataService()
+        public DocumentsDataService()
         {
             client = DatabaseService.GetConnection();
         }
 
-        public Folder Get(string path)
+        public Document Get(string path)
         {
-            var folderId = GetIDFromFolderPath(path);
-            var folder = client.Cypher
-                .WithParams(new { folderId })
-                .Match("(folder:Folder { ID: {folderId} })")
-                .Return<Folder>("folder")
+            var documentId = GetIDFromFolderPath(path);
+            var document = client.Cypher
+                .WithParams(new { documentId })
+                .Match("(d:Document { ID: {documentId} })")
+                .Return<Document>("d")
                 .Results
                 .SingleOrDefault();
 
-            if (folder == null)
+            if (document == null)
                 return null;
 
-            folder.Path = path;
-            folder.ChildFolders = client.Cypher
-                .WithParams(new { folderId })
-                .Match("(folder:Folder { ID: {folderId} })<-[:CHILD_OF]-(child:Folder)")
-                .Return(child => child.As<Folder>())
-                .Results
-                .ToArray();
-            foreach (var item in folder.ChildFolders)
-                item.Path = folder.Path + "/" + item.Name;
-
-            folder.ChildDocuments = client.Cypher
-                .WithParams(new { folderId })
-                .Match("(folder:Folder { ID: {folderId} })<-[:CHILD_OF]-(child:Document)")
-                .Return(child => child.As<Document>())
+            document.Path = path;
+            document.Tags = client.Cypher
+                .WithParams(new { documentId })
+                .Match("(:Document { ID: {documentId} })<-[:CHILD_OF]-(child:Tag)")
+                .Return<Tag>("child")
                 .Results
                 .ToArray();
 
-            return folder;
+            return document;
         }
 
         public void Delete(string path)
@@ -117,7 +108,7 @@ namespace GraphDocs.DataServices
                 .ExecuteWithoutResults();
         }
 
-        public string GetIDFromFolderPath(string path)
+        public string GetIDFromDocumentPath(string path)
         {
             if (string.IsNullOrWhiteSpace(path) || path.Trim() == "/")
             {

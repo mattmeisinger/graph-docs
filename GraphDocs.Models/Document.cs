@@ -12,5 +12,11 @@ namespace GraphDocs.Models
     {
         [DataMember]
         public string Filename { get; set; }
+
+        [DataMember]
+        public string Path { get; set; }
+
+        [DataMember]
+        public Tag[] Tags { get; set; }
     }
 }
