@@ -17,6 +17,12 @@ namespace GraphDocs.DataServices
             return client;
         }
 
+        public static void InitAndEraseAll()
+        {
+            EraseAll();
+            Init();
+        }
+
         public static void Init()
         {
             var client = GetConnection();
@@ -41,6 +47,16 @@ namespace GraphDocs.DataServices
                     .Create("(folder:Folder {newFolder})")
                     .ExecuteWithoutResults();
             }
+        }
+
+        public static void EraseAll()
+        {
+            var client = GetConnection();
+            client.Cypher
+                .Match("(i)")
+                .OptionalMatch("(i)-[r]-()")
+                .Delete("i, r")
+                .ExecuteWithoutResults();
         }
     }
 }

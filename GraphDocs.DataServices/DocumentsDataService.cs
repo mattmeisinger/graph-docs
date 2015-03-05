@@ -106,17 +106,5 @@ namespace GraphDocs.DataServices
                 .Set("d = {document}")
                 .ExecuteWithoutResults();
         }
-
-        public void DeleteAll()
-        {
-            client.Cypher
-                .Match("(d:Document)-[r]-()")
-                .Delete("d, r")
-                .ExecuteWithoutResults();
-            client.Cypher
-                .Match("(d:Document)")
-                .Delete("d")
-                .ExecuteWithoutResults();
-        }
     }
 }

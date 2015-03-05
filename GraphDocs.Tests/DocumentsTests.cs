@@ -14,8 +14,7 @@ namespace GraphDocs.Tests
 
         public DocumentsTests()
         {
-            folders.DeleteAll();
-            DatabaseService.Init();
+            DatabaseService.InitAndEraseAll();
             folders.Create(new Models.Folder { Path = "/", Name = "TestFolder" });
             folders.Create(new Models.Folder { Path = "/", Name = "Test1" });
             folders.Create(new Models.Folder { Path = "/Test1", Name = "Test2a" });

@@ -118,14 +118,5 @@ namespace GraphDocs.DataServices
                 .Set("folder = {folder}")
                 .ExecuteWithoutResults();
         }
-
-        public void DeleteAll()
-        {
-            client.Cypher
-                .Match("(i)")
-                .OptionalMatch("(i)-[r]-()")
-                .Delete("i, r")
-                .ExecuteWithoutResults();
-        }
     }
 }
