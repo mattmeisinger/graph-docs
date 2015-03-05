@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraphDocs.Models
 {
@@ -20,6 +16,6 @@ namespace GraphDocs.Models
         public string Path { get; set; }
 
         [DataMember]
-        public Tag[] Tags { get; set; }
+        public string[] Tags { get; set; }
     }
 }

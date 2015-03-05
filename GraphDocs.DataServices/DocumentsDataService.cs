@@ -1,11 +1,9 @@
-﻿using GraphDocs.Models;
-using Neo4jClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Neo4jClient;
+using GraphDocs.Models;
 
 namespace GraphDocs.DataServices
 {
@@ -36,8 +34,8 @@ namespace GraphDocs.DataServices
             document.Path = path;
             document.Tags = client.Cypher
                 .WithParams(new { documentId })
-                .Match("(:Document { ID: {documentId} })<-[:CHILD_OF]-(child:Tag)")
-                .Return<Tag>("child")
+                .Match("(:Document { ID: {documentId} })<-[:CHILD_OF]-(tag:Tag)")
+                .Return<string>("tag.Name")
                 .Results
                 .ToArray();
 
@@ -88,6 +86,36 @@ namespace GraphDocs.DataServices
                 .Match("(parent:Folder { ID: {parentId} })")
                 .Create("parent<-[:CHILD_OF]-(:Document {document})")
                 .ExecuteWithoutResults();
+
+            SetTags(d.ID, d.Tags);
+        }
+
+        private void SetTags(string documentId, string[] tags)
+        {
+            var existingTags = client.Cypher
+                .WithParams(new { documentId })
+                .Match("(:Document { ID: {documentId} })<-[:DESCRIBES]-(tag:Tag)")
+                .Return<string>("tag.ID")
+                .Results
+                .ToArray();
+            var tagsToDelete = existingTags.Except(tags).ToArray();
+            var tagsToAdd = tags.Except(existingTags).ToArray();
+            foreach (var tagName in tagsToDelete)
+            {
+                client.Cypher
+                    .WithParams(new { tagName, documentId })
+                    .Match("(:Document { ID: {documentId} })<-[:DESCRIBES]-(tag:Tag { Name: {tagName} })")
+                    .Delete("tag")
+                    .ExecuteWithoutResults();
+            }
+            foreach (var tagName in tagsToAdd)
+            {
+                client.Cypher
+                    .WithParams(new { tagName, documentId })
+                    .Match("(d:Document { ID: {documentId} })")
+                    .Merge("(d)<-[:DESCRIBES]-(:Tag { Name: tagName })") // Use Merge because we may or may not be creating the tag element, but are definitely creating the vertex.
+                    .ExecuteWithoutResults();
+            }
         }
 
         public void Save(Document d)
@@ -105,6 +133,8 @@ namespace GraphDocs.DataServices
                 .Match("(d:Document { ID: {documentId} })")
                 .Set("d = {document}")
                 .ExecuteWithoutResults();
+
+            SetTags(d.ID, d.Tags);
         }
     }
 }

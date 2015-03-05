@@ -56,5 +56,15 @@ namespace GraphDocs.Tests
             Assert.IsNull(folderNodeId);
             Assert.IsTrue(folderNodeId == null);
         }
+
+        [TestMethod]
+        public void GetDocumentID_DocumentsExistAtLevels()
+        {
+            var id1 = paths.GetIDFromDocumentPath("/doc1.txt");
+            var id2 = paths.GetIDFromDocumentPath("/Test1/doc2.txt");
+            Assert.IsNotNull(id1);
+            Assert.IsNotNull(id2);
+            Assert.IsFalse(id1 == id2);
+        }
     }
 }

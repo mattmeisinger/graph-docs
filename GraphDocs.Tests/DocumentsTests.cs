@@ -26,48 +26,9 @@ namespace GraphDocs.Tests
         }
 
         [TestMethod]
-        public void GetFolderID_Root()
+        public void SaveDocument_WithTags()
         {
-            var id = paths.GetIDFromFolderPath("/");
-            Assert.IsNotNull(id);
-        }
-
-        [TestMethod]
-        public void GetFolderID_Level1Folder()
-        {
-            var rootNodeId = paths.GetIDFromFolderPath("/");
-            var folderNodeId = paths.GetIDFromFolderPath("/TestFolder");
-            Assert.IsNotNull(rootNodeId);
-            Assert.IsNotNull(folderNodeId);
-            Assert.IsTrue(rootNodeId != folderNodeId);
-        }
-
-        [TestMethod]
-        public void GetFolderID_Level2Folder()
-        {
-            var rootNodeId = paths.GetIDFromFolderPath("/");
-            var folderNodeId = paths.GetIDFromFolderPath("/Test1/Test2a");
-            Assert.IsNotNull(rootNodeId);
-            Assert.IsNotNull(folderNodeId);
-            Assert.IsTrue(rootNodeId != folderNodeId);
-        }
-
-        [TestMethod]
-        public void GetFolderID_FolderDoesNotExist()
-        {
-            var folderNodeId = paths.GetIDFromFolderPath("/FolderThatDoesNotExist");
-            Assert.IsNull(folderNodeId);
-            Assert.IsTrue(folderNodeId == null);
-        }
-
-        [TestMethod]
-        public void GetDocumentID_DocumentsExistAtLevels()
-        {
-            var id1 = paths.GetIDFromDocumentPath("/doc1.txt");
-            var id2 = paths.GetIDFromDocumentPath("/Test1/doc2.txt");
-            Assert.IsNotNull(id1);
-            Assert.IsNotNull(id2);
-            Assert.IsFalse(id1 == id2);
+            documents.Create(new Models.Document { Path = "/Test1", Name = "doc3.txt", Tags = new[] { "TestTag1", "TestTag2" } });
         }
     }
 }
