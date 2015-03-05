@@ -11,7 +11,10 @@ namespace GraphDocs.Models
     public class Document
     {
         [DataMember]
-        public string Filename { get; set; }
+        public string ID { get; set; }
+
+        [DataMember]
+        public string Name { get; set; }
 
         [DataMember]
         public string Path { get; set; }

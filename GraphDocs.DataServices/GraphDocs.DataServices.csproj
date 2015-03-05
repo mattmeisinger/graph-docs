@@ -58,6 +58,7 @@
     <Compile Include="DatabaseService.cs" />
     <Compile Include="DocumentsDataService.cs" />
     <Compile Include="FoldersDataService.cs" />
+    <Compile Include="PathsDataService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TagsDataService.cs" />
   </ItemGroup>

@@ -12,15 +12,17 @@ namespace GraphDocs.DataServices
     public class DocumentsDataService
     {
         private GraphClient client;
+        private PathsDataService paths;
 
         public DocumentsDataService()
         {
             client = DatabaseService.GetConnection();
+            paths = new PathsDataService(client);
         }
 
         public Document Get(string path)
         {
-            var documentId = GetIDFromFolderPath(path);
+            var documentId = paths.GetIDFromDocumentPath(path);
             var document = client.Cypher
                 .WithParams(new { documentId })
                 .Match("(d:Document { ID: {documentId} })")
@@ -44,122 +46,77 @@ namespace GraphDocs.DataServices
 
         public void Delete(string path)
         {
-            var id = GetIDFromFolderPath(path);
+            var id = paths.GetIDFromDocumentPath(path);
 
-            // First delete this folders relationships to parents (probably only one, it's parent folder)
+            // First delete this document's relationships to parents (probably only one, it's parent folder)
             client.Cypher
-                .WithParams(new
-                {
-                    folderId = id
-                })
-                .Match("(f:Folder { ID: {folderId} })-[rel]->()")
+                .WithParams(new { id = id })
+                .Match("(:Document { ID: {id} })-[rel]->()")
                 .Delete("rel")
                 .ExecuteWithoutResults();
 
-            // Then delete all descendants and connecting relations
+            // Just delete all relationships to other nodes and this node.  Don't delete any of 
+            // the things this is related to, as those may still be in use.
             client.Cypher
-                .WithParams(new
-                {
-                    folderId = id
-                })
-                .Match("(f:Folder { ID: {folderId} })<-[rels*0..]-(child:Folder)")
+                .WithParams(new { id = id })
+                .Match("(d:Document { ID: {id} })<-[rels*0..]-()")
                 .ForEach("(rel in rels | delete rel)")
-                .Delete("f, child")
+                .Delete("d")
                 .ExecuteWithoutResults();
         }
 
-        public void Create(Folder folder)
+        public void Create(Document d)
         {
-            if (folder.Name == "Root")
-                throw new Exception("'Root' is a reserved folder name and cannot be used.");
-            if (string.IsNullOrWhiteSpace(folder.Name))
-                throw new Exception("Folder name is required.");
+            if (string.IsNullOrWhiteSpace(d.Name))
+                throw new Exception("A document name is required.");
 
-            if (folder.ID == null)
-                folder.ID = Guid.NewGuid().ToString();
-            var parentId = GetIDFromFolderPath(folder.Path);
+            if (d.ID == null)
+                d.ID = Guid.NewGuid().ToString();
+            var parentId = paths.GetIDFromFolderPath(d.Path);
 
             // Attach to root folder
             client.Cypher
                 .WithParams(new
                 {
                     parentId = parentId,
-                    newFolder = new
+                    document = new
                     {
-                        folder.Name,
-                        folder.ID
+                        d.ID,
+                        d.Name
                     }
                 })
                 .Match("(parent:Folder { ID: {parentId} })")
-                .Create("parent<-[:CHILD_OF]-(folder:Folder {newFolder})")
+                .Create("parent<-[:CHILD_OF]-(:Document {document})")
                 .ExecuteWithoutResults();
         }
 
-        public void Save(Folder folder)
+        public void Save(Document d)
         {
             client.Cypher
                 .WithParams(new
                 {
-                    folderId = folder.ID,
-                    folder = folder
+                    documentId = d.ID,
+                    document = new
+                    {
+                        d.ID,
+                        d.Name
+                    }
                 })
-                .Match("(folder:Folder { ID: {folderId} })")
-                .Set("folder = {folder}")
+                .Match("(d:Document { ID: {documentId} })")
+                .Set("d = {document}")
                 .ExecuteWithoutResults();
         }
 
-        public string GetIDFromDocumentPath(string path)
-        {
-            if (string.IsNullOrWhiteSpace(path) || path.Trim() == "/")
-            {
-                // Attach to root folder
-                var rootId = client.Cypher
-                    .Match("(root:Folder { Name: \"Root\" })")
-                    .Return<string>("root.ID")
-                    .Results
-                    .SingleOrDefault();
-                if (rootId == null)
-                    throw new Exception("Root folder not found.");
-                else
-                    return rootId;
-            }
-            else
-            {
-                var pathPieces = path.Split('/')
-                    .Where(a => !string.IsNullOrWhiteSpace(a))
-                    .ToArray();
-
-                var intermediateFolders = pathPieces.Select((a, i) => new { FolderName = a, ParamName = "folder" + i }).ToArray();
-
-                // Match at least the root node
-                var matchString = "(root:Folder { Name: \"Root\" })";
-                if (intermediateFolders.Any())
-                    matchString += string.Join("", intermediateFolders.Select(a => "<-[:CHILD_OF]-(" + a.ParamName + ":Folder{Name:{" + a.ParamName + "}})"));
-
-                // Return the last folder in the list (if any are in the list). If the list is empty, return the root node.
-                var paramToReturn = intermediateFolders.Any() ? intermediateFolders.Last().ParamName : "root";
-
-                var folderId = client.Cypher
-                    .Match(matchString)
-                    .WithParams(intermediateFolders.ToDictionary(a => a.ParamName, a => (object)a.FolderName))
-                    .Return<string>(paramToReturn + ".ID")
-                    .Results
-                    .SingleOrDefault();
-
-                return folderId;
-            }
-        }
         public void DeleteAll()
         {
             client.Cypher
-                .Match("(folder:Folder)-[r]-()")
-                .Delete("folder, r")
+                .Match("(d:Document)-[r]-()")
+                .Delete("d, r")
                 .ExecuteWithoutResults();
             client.Cypher
-                .Match("(folder:Folder)")
-                .Delete("folder")
+                .Match("(d:Document)")
+                .Delete("d")
                 .ExecuteWithoutResults();
-            //((IRawGraphClient)client).ExecuteCypher(new Neo4jClient.Cypher.CypherQuery("MATCH (folder:Folder)-[r]-() DELETE folder, r", new Dictionary<string, object>(), Neo4jClient.Cypher.CypherResultMode.Projection));
         }
     }
 }

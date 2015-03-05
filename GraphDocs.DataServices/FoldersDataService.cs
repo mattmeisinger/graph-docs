@@ -12,15 +12,17 @@ namespace GraphDocs.DataServices
     public class FoldersDataService
     {
         private GraphClient client;
+        private PathsDataService paths;
 
         public FoldersDataService()
         {
             client = DatabaseService.GetConnection();
+            paths = new PathsDataService(client);
         }
 
         public Folder Get(string path)
         {
-            var folderId = GetIDFromFolderPath(path);
+            var folderId = paths.GetIDFromFolderPath(path);
             var folder = client.Cypher
                 .WithParams(new { folderId })
                 .Match("(folder:Folder { ID: {folderId} })")
@@ -53,7 +55,7 @@ namespace GraphDocs.DataServices
 
         public void Delete(string path)
         {
-            var id = GetIDFromFolderPath(path);
+            var id = paths.GetIDFromFolderPath(path);
 
             // First delete this folders relationships to parents (probably only one, it's parent folder)
             client.Cypher
@@ -86,7 +88,7 @@ namespace GraphDocs.DataServices
 
             if (folder.ID == null)
                 folder.ID = Guid.NewGuid().ToString();
-            var parentId = GetIDFromFolderPath(folder.Path);
+            var parentId = paths.GetIDFromFolderPath(folder.Path);
 
             // Attach to root folder
             client.Cypher
@@ -117,47 +119,6 @@ namespace GraphDocs.DataServices
                 .ExecuteWithoutResults();
         }
 
-        public string GetIDFromFolderPath(string path)
-        {
-            if (string.IsNullOrWhiteSpace(path) || path.Trim() == "/")
-            {
-                // Attach to root folder
-                var rootId = client.Cypher
-                    .Match("(root:Folder { Name: \"Root\" })")
-                    .Return<string>("root.ID")
-                    .Results
-                    .SingleOrDefault();
-                if (rootId == null)
-                    throw new Exception("Root folder not found.");
-                else
-                    return rootId;
-            }
-            else
-            {
-                var pathPieces = path.Split('/')
-                    .Where(a => !string.IsNullOrWhiteSpace(a))
-                    .ToArray();
-
-                var intermediateFolders = pathPieces.Select((a, i) => new { FolderName = a, ParamName = "folder" + i }).ToArray();
-
-                // Match at least the root node
-                var matchString = "(root:Folder { Name: \"Root\" })";
-                if (intermediateFolders.Any())
-                    matchString += string.Join("", intermediateFolders.Select(a => "<-[:CHILD_OF]-(" + a.ParamName + ":Folder{Name:{" + a.ParamName + "}})"));
-
-                // Return the last folder in the list (if any are in the list). If the list is empty, return the root node.
-                var paramToReturn = intermediateFolders.Any() ? intermediateFolders.Last().ParamName : "root";
-
-                var folderId = client.Cypher
-                    .Match(matchString)
-                    .WithParams(intermediateFolders.ToDictionary(a => a.ParamName, a => (object)a.FolderName))
-                    .Return<string>(paramToReturn + ".ID")
-                    .Results
-                    .SingleOrDefault();
-
-                return folderId;
-            }
-        }
         public void DeleteAll()
         {
             client.Cypher
@@ -168,7 +129,6 @@ namespace GraphDocs.DataServices
                 .Match("(folder:Folder)")
                 .Delete("folder")
                 .ExecuteWithoutResults();
-            //((IRawGraphClient)client).ExecuteCypher(new Neo4jClient.Cypher.CypherQuery("MATCH (folder:Folder)-[r]-() DELETE folder, r", new Dictionary<string, object>(), Neo4jClient.Cypher.CypherResultMode.Projection));
         }
     }
 }
