@@ -87,11 +87,31 @@ namespace GraphDocs.DataServices
                 .Create("parent<-[:CHILD_OF]-(:Document {document})")
                 .ExecuteWithoutResults();
 
-            SetTags(d.ID, d.Tags);
+            setTags(d.ID, d.Tags);
         }
 
-        private void SetTags(string documentId, string[] tags)
+        public void Save(Document d)
         {
+            client.Cypher
+                .WithParams(new
+                {
+                    documentId = d.ID,
+                    document = new
+                    {
+                        d.ID,
+                        d.Name
+                    }
+                })
+                .Match("(d:Document { ID: {documentId} })")
+                .Set("d = {document}")
+                .ExecuteWithoutResults();
+
+            setTags(d.ID, d.Tags);
+        }
+
+        private void setTags(string documentId, string[] tags)
+        {
+            tags = tags ?? new string[] { };
             var existingTags = client.Cypher
                 .WithParams(new { documentId })
                 .Match("(:Document { ID: {documentId} })<-[:DESCRIBES]-(tag:Tag)")
@@ -113,28 +133,10 @@ namespace GraphDocs.DataServices
                 client.Cypher
                     .WithParams(new { tagName, documentId })
                     .Match("(d:Document { ID: {documentId} })")
-                    .Merge("(d)<-[:DESCRIBES]-(:Tag { Name: tagName })") // Use Merge because we may or may not be creating the tag element, but are definitely creating the vertex.
+                    .Merge("(t:Tag { Name: {tagName} })") // Use Merge because we may or may not be creating the tag element, but are definitely creating the vertex.
+                    .Create("(d)<-[:DESCRIBES]-(t)")
                     .ExecuteWithoutResults();
             }
-        }
-
-        public void Save(Document d)
-        {
-            client.Cypher
-                .WithParams(new
-                {
-                    documentId = d.ID,
-                    document = new
-                    {
-                        d.ID,
-                        d.Name
-                    }
-                })
-                .Match("(d:Document { ID: {documentId} })")
-                .Set("d = {document}")
-                .ExecuteWithoutResults();
-
-            SetTags(d.ID, d.Tags);
         }
     }
 }

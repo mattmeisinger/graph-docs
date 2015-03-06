@@ -10,6 +10,7 @@ namespace GraphDocs.Tests
     {
         FoldersDataService folders = new FoldersDataService();
         PathsDataService paths = new PathsDataService();
+        DocumentsDataService documents = new DocumentsDataService();
 
         public PathsTests()
         {
@@ -20,6 +21,9 @@ namespace GraphDocs.Tests
             folders.Create(new Models.Folder { Path = "/Test1", Name = "Test2b" });
             folders.Create(new Models.Folder { Path = "/Test1/Test2a", Name = "Test3a" });
             folders.Create(new Models.Folder { Path = "/Test1/Test2a/Test3a", Name = "Test4a" });
+            documents.Create(new Models.Document { Path = "/", Name = "doc1.txt", Tags = new[] { "Tag1" } });
+            documents.Create(new Models.Document { Path = "/Test1", Name = "doc2.txt", Tags = new[] { "Tag1", "Tag2" } });
+            documents.Create(new Models.Document { Path = "/Test1", Name = "doc3.txt", Tags = new[] { "Tag1", "Tag2", "Tag3" } });
         }
 
         [TestMethod]
@@ -62,6 +66,9 @@ namespace GraphDocs.Tests
         {
             var id1 = paths.GetIDFromDocumentPath("/doc1.txt");
             var id2 = paths.GetIDFromDocumentPath("/Test1/doc2.txt");
+            var doc = documents.Get("/Test1/doc2.txt");
+            doc.Tags = doc.Tags.Union(new[] { "Tag4", "Tag5" }).Where(a => a != "Tag3").ToArray();
+            documents.Save(doc);
             Assert.IsNotNull(id1);
             Assert.IsNotNull(id2);
             Assert.IsFalse(id1 == id2);

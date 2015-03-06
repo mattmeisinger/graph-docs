@@ -10,6 +10,7 @@ namespace GraphDocs.Tests
     {
         FoldersDataService folders = new FoldersDataService();
         PathsDataService paths = new PathsDataService();
+        DocumentsDataService documents = new DocumentsDataService();
 
         public FoldersTests()
         {
@@ -20,6 +21,8 @@ namespace GraphDocs.Tests
             folders.Create(new Models.Folder { Path = "/Test1", Name = "Test2b" });
             folders.Create(new Models.Folder { Path = "/Test1/Test2a", Name = "Test3a" });
             folders.Create(new Models.Folder { Path = "/Test1/Test2a/Test3a", Name = "Test4a" });
+            documents.Create(new Models.Document { Path = "/", Name = "doc1.txt" });
+            documents.Create(new Models.Document { Path = "/Test1", Name = "doc2.txt" });
         }
 
         [TestMethod]

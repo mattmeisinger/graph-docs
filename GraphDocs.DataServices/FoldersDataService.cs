@@ -41,7 +41,7 @@ namespace GraphDocs.DataServices
                 .Results
                 .ToArray();
             foreach (var item in folder.ChildFolders)
-                item.Path = folder.Path + "/" + item.Name;
+                item.Path = folder.Path + item.Name;
 
             folder.ChildDocuments = client.Cypher
                 .WithParams(new { folderId })
@@ -49,6 +49,8 @@ namespace GraphDocs.DataServices
                 .Return(child => child.As<Document>())
                 .Results
                 .ToArray();
+            foreach (var item in folder.ChildDocuments)
+                item.Path = folder.Path + folder.Name + item.Name;
 
             return folder;
         }

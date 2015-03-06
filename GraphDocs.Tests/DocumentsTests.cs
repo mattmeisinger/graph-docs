@@ -9,8 +9,8 @@ namespace GraphDocs.Tests
     public class DocumentsTests
     {
         FoldersDataService folders = new FoldersDataService();
-        DocumentsDataService documents = new DocumentsDataService();
         PathsDataService paths = new PathsDataService();
+        DocumentsDataService documents = new DocumentsDataService();
 
         public DocumentsTests()
         {
