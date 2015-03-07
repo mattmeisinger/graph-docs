@@ -1,4 +1,5 @@
-﻿using GraphDocs.Models;
+﻿using GraphDocs.DataServices.Utilities;
+using GraphDocs.Models;
 using Neo4jClient;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace GraphDocs.DataServices
 
         public Folder Get(string path)
         {
+            path = PathUtilities.ReformatPath(path);
             var folderId = paths.GetIDFromFolderPath(path);
             var folder = client.Cypher
                 .WithParams(new { folderId })
@@ -41,7 +43,7 @@ namespace GraphDocs.DataServices
                 .Results
                 .ToArray();
             foreach (var item in folder.ChildFolders)
-                item.Path = folder.Path + item.Name;
+                item.Path = PathUtilities.Join(folder.Path, item.Name);
 
             folder.ChildDocuments = client.Cypher
                 .WithParams(new { folderId })
@@ -50,14 +52,17 @@ namespace GraphDocs.DataServices
                 .Results
                 .ToArray();
             foreach (var item in folder.ChildDocuments)
-                item.Path = folder.Path + folder.Name + item.Name;
+                item.Path = PathUtilities.Join(folder.Path, item.Name);
 
             return folder;
         }
 
         public void Delete(string path)
         {
+            path = PathUtilities.ReformatPath(path);
             var id = paths.GetIDFromFolderPath(path);
+            if (id == null)
+                throw new Exception("Unable to delete, folder path not found: " + path);
 
             // First delete this folders relationships to parents (probably only one, it's parent folder)
             client.Cypher
@@ -87,6 +92,13 @@ namespace GraphDocs.DataServices
                 throw new Exception("'Root' is a reserved folder name and cannot be used.");
             if (string.IsNullOrWhiteSpace(folder.Name))
                 throw new Exception("Folder name is required.");
+            folder.Path = PathUtilities.ReformatPath(folder.Path);
+
+            // Check to see if folder already exists, and throw an exception if so.
+            var pathToCreate = PathUtilities.Join(folder.Path, folder.Name);
+            var existingId = paths.GetIDFromFolderPath(pathToCreate);
+            if (existingId != null)
+                throw new Exception("Folder already exists.");
 
             if (folder.ID == null)
                 folder.ID = Guid.NewGuid().ToString();
@@ -99,8 +111,8 @@ namespace GraphDocs.DataServices
                     parentId = parentId,
                     newFolder = new
                     {
-                        folder.Name,
-                        folder.ID
+                        folder.ID,
+                        folder.Name
                     }
                 })
                 .Match("(parent:Folder { ID: {parentId} })")
@@ -108,13 +120,22 @@ namespace GraphDocs.DataServices
                 .ExecuteWithoutResults();
         }
 
-        public void Save(Folder folder)
+        public void Save(Folder f)
         {
+            f.Path = PathUtilities.ReformatPath(f.Path);
+
+            // If the ID is passed in, save based on that. Otherwise, save based on the path passed in.
+            f.ID = f.ID ?? paths.GetIDFromFolderPath(f.Path);
+
             client.Cypher
                 .WithParams(new
                 {
-                    folderId = folder.ID,
-                    folder = folder
+                    folderId = f.ID,
+                    folder = new
+                    {
+                        f.ID,
+                        f.Name
+                    }
                 })
                 .Match("(folder:Folder { ID: {folderId} })")
                 .Set("folder = {folder}")

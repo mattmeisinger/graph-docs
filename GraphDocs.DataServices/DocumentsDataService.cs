@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Neo4jClient;
 using GraphDocs.Models;
+using GraphDocs.DataServices.Utilities;
 
 namespace GraphDocs.DataServices
 {
@@ -20,7 +21,11 @@ namespace GraphDocs.DataServices
 
         public Document Get(string path)
         {
+            path = PathUtilities.ReformatPath(path);
             var documentId = paths.GetIDFromDocumentPath(path);
+            if (documentId == null)
+                throw new Exception("Document does not exist at this path: " + path);
+
             var document = client.Cypher
                 .WithParams(new { documentId })
                 .Match("(d:Document { ID: {documentId} })")
@@ -34,17 +39,27 @@ namespace GraphDocs.DataServices
             document.Path = path;
             document.Tags = client.Cypher
                 .WithParams(new { documentId })
-                .Match("(:Document { ID: {documentId} })<-[:CHILD_OF]-(tag:Tag)")
+                .Match("(:Document { ID: {documentId} })<-[:DESCRIBES]-(tag:Tag)")
                 .Return<string>("tag.Name")
                 .Results
                 .ToArray();
+
+            document.HasFile = client.Cypher
+                .WithParams(new { documentId })
+                .Match("(d:Document { ID: {documentId} })<-[:FILE_FOR]-(:DocumentFile)")
+                .Return<Document>("d")
+                .Results
+                .Any();
 
             return document;
         }
 
         public void Delete(string path)
         {
+            path = PathUtilities.ReformatPath(path);
             var id = paths.GetIDFromDocumentPath(path);
+            if (id == null)
+                throw new Exception("Unable to delete, document path not found: " + path);
 
             // First delete this document's relationships to parents (probably only one, it's parent folder)
             client.Cypher
@@ -65,12 +80,15 @@ namespace GraphDocs.DataServices
 
         public void Create(Document d)
         {
+            d.Path = PathUtilities.ReformatPath(d.Path);
             if (string.IsNullOrWhiteSpace(d.Name))
                 throw new Exception("A document name is required.");
 
             if (d.ID == null)
                 d.ID = Guid.NewGuid().ToString();
             var parentId = paths.GetIDFromFolderPath(d.Path);
+            if (parentId == null)
+                throw new Exception("Folder does not exist--document cannot be created: " + d.Path);
 
             // Attach to root folder
             client.Cypher
@@ -92,6 +110,11 @@ namespace GraphDocs.DataServices
 
         public void Save(Document d)
         {
+            d.Path = PathUtilities.ReformatPath(d.Path);
+
+            // Populate the ID if it is not passed in by the user
+            d.ID = d.ID ?? paths.GetIDFromDocumentPath(d.Path);
+
             client.Cypher
                 .WithParams(new
                 {

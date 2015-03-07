@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GraphDocs.DataServices;
+using System.Text;
 
 namespace GraphDocs.Tests
 {
@@ -11,6 +12,7 @@ namespace GraphDocs.Tests
         FoldersDataService folders = new FoldersDataService();
         PathsDataService paths = new PathsDataService();
         DocumentsDataService documents = new DocumentsDataService();
+        DocumentFilesDataService documentFiles = new DocumentFilesDataService();
 
         public PathsTests()
         {
@@ -23,7 +25,8 @@ namespace GraphDocs.Tests
             folders.Create(new Models.Folder { Path = "/Test1/Test2a/Test3a", Name = "Test4a" });
             documents.Create(new Models.Document { Path = "/", Name = "doc1.txt", Tags = new[] { "Tag1" } });
             documents.Create(new Models.Document { Path = "/Test1", Name = "doc2.txt", Tags = new[] { "Tag1", "Tag2" } });
-            documents.Create(new Models.Document { Path = "/Test1", Name = "doc3.txt", Tags = new[] { "Tag1", "Tag2", "Tag3" } });
+            documents.Create(new Models.Document { Path = "/Test1/Test2a/Test3a", Name = "doc3.txt", Tags = new[] { "Tag1", "Tag2", "Tag3" } });
+            documentFiles.Create(new Models.DocumentFile { DocumentPath = "/Test1/Test2a/Test3a/doc3.txt", Data = Encoding.UTF8.GetBytes("Test text in a file."), MimeType = "text/plain" });
         }
 
         [TestMethod]

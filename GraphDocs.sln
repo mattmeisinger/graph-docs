@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.22310.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDocs.WebService", "GraphDocs.WebService\GraphDocs.WebService.csproj", "{D5B318EE-E4CE-4301-9148-A78FCC224F79}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDocs.Models", "GraphDocs.Models\GraphDocs.Models.csproj", "{EA1FACFD-11EA-4333-9B70-E4761CF9224B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDocs.DataServices", "GraphDocs.DataServices\GraphDocs.DataServices.csproj", "{2243DF9B-8E71-47D3-B7FE-82EC9050DF21}"
@@ -19,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D5B318EE-E4CE-4301-9148-A78FCC224F79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D5B318EE-E4CE-4301-9148-A78FCC224F79}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D5B318EE-E4CE-4301-9148-A78FCC224F79}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D5B318EE-E4CE-4301-9148-A78FCC224F79}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EA1FACFD-11EA-4333-9B70-E4761CF9224B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EA1FACFD-11EA-4333-9B70-E4761CF9224B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA1FACFD-11EA-4333-9B70-E4761CF9224B}.Release|Any CPU.ActiveCfg = Release|Any CPU

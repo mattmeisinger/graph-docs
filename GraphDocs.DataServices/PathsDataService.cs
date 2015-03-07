@@ -1,4 +1,6 @@
-﻿using Neo4jClient;
+﻿using GraphDocs.DataServices.Utilities;
+using GraphDocs.Models;
+using Neo4jClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -101,6 +103,28 @@ namespace GraphDocs.DataServices
                 .SingleOrDefault();
 
             return documentId;
+        }
+
+        public string GetPathFromDocumentID(string id)
+        {
+            var pieces = client.Cypher
+                .WithParams(new { id })
+                .Match("(d:Document { ID: {id} })-[:CHILD_OF*0..]->(f:Folder)")
+                .Return((d, f) => new { document = d.As<Document>(), folder = f.As<Folder>() })
+                .Results
+                .ToArray();
+
+            if (!pieces.Any())
+                return null;
+
+            var documentName = pieces.Select(a => a.document.Name).First();
+            var folderNames = pieces.Select(a => a.folder.Name).Where(a => a != "Root").ToArray();
+            var elements = new List<string>();
+            if (folderNames.Any())
+                elements.AddRange(folderNames.Reverse());
+            elements.Add(documentName);
+
+            return PathUtilities.Join(elements.ToArray());
         }
     }
 }

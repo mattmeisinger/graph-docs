@@ -1,55 +1,74 @@
-﻿using GraphDocs.DataServices;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using GraphDocs.DataServices;
 
 namespace GraphDocs.RESTEndpoint.Controllers
 {
-    public class FoldersController : Controller
+    public class FoldersController : BaseController
     {
         private FoldersDataService folders = new FoldersDataService();
 
-        [HttpGet]
-        public ActionResult Index()
-        {
-            return Get("/");
-        }
-
-        [HttpGet]
+        [ActionName("Index"), HttpGet]
         public ActionResult Get(string path)
         {
             var folder = folders.Get(path);
             return Json(new
             {
-                path = path,
                 data = new
                 {
-                    name = folder.Name
+                    id = folder.ID,
+                    name = folder.Name,
+                    path = folder.Path
                 },
                 childFolders = folder.ChildFolders.Select(a => new
                 {
+                    id = a.ID,
                     path = a.Path,
                     links = new
                     {
-                        self = "/folders" + a.Path
+                        self = PathToController("folders", a.Path)
                     }
                 }),
                 childDocuments = folder.ChildDocuments.Select(a => new
                 {
+                    id = a.ID,
                     path = a.Path,
                     name = a.Name,
                     links = new
                     {
-                        self = "/documents" + a.Path
+                        self = PathToController("documents", a.Path)
                     }
                 }),
                 links = new
                 {
-                    self = "/folders" + path
+                    self = PathTo(folder.Path)
                 }
-            }, JsonRequestBehavior.AllowGet);
+            });
+        }
+
+        [ActionName("Index"), HttpPost]
+        public ActionResult Post(string path, string name)
+        {
+            folders.Create(new Models.Folder { Path = path, Name = name });
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
+        [ActionName("Index"), HttpPut]
+        public ActionResult Put(string path, string name, string id)
+        {
+            folders.Save(new Models.Folder { Path = path, Name = name, ID = id });
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
+        [ActionName("Index"), HttpDelete]
+        public ActionResult Delete(string path)
+        {
+            folders.Delete(path);
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
     }
 }

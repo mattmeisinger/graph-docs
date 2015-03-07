@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="GraphDocs.WebService.FoldersService" CodeBehind="FoldersService.svc.cs" %>
