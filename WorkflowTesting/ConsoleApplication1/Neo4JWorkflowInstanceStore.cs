@@ -11,6 +11,7 @@ using System.Runtime.DurableInstancing;
 using System.Xml.Linq;
 using System.Xml;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace ConsoleApplication1
 {
@@ -53,7 +54,10 @@ namespace ConsoleApplication1
             {
                 SaveWorkflowCommand saveCommand = (SaveWorkflowCommand)command;
                 data = saveCommand.InstanceData;
-
+                var json = JsonConvert.SerializeObject(data.ToDictionary(a => a.Key.ToString(), a => a.Value.ToString()));
+                Console.WriteLine("Saving Object:");
+                Console.WriteLine(json);
+                var deserializedObject = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
                 //Save(data);
             }
 
@@ -63,6 +67,9 @@ namespace ConsoleApplication1
                 //var instance = _workflowInstanceService.GetById(this.ownerInstanceID);
                 //data = LoadInstanceData(instance.InstanceData);
                 data = new Dictionary<XName, InstanceValue>();
+
+                Console.WriteLine("Loading Object:");
+                Console.WriteLine(JsonConvert.SerializeObject(data));
 
                 //load the data into the persistence Context
                 context.LoadedInstance(InstanceState.Initialized, data, null, null, null);
