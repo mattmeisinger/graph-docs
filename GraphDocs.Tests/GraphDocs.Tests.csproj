@@ -57,13 +57,13 @@
     <Compile Include="PathsTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GraphDocs.DataServices\GraphDocs.DataServices.csproj">
+    <ProjectReference Include="..\GraphDocs.Infrastructure\GraphDocs.Infrastructure.csproj">
       <Project>{2243df9b-8e71-47d3-b7fe-82ec9050df21}</Project>
-      <Name>GraphDocs.DataServices</Name>
+      <Name>GraphDocs.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GraphDocs.Models\GraphDocs.Models.csproj">
+    <ProjectReference Include="..\GraphDocs.Core\GraphDocs.Core.csproj">
       <Project>{ea1facfd-11ea-4333-9b70-e4761cf9224b}</Project>
-      <Name>GraphDocs.Models</Name>
+      <Name>GraphDocs.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

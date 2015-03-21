@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using GraphDocs.DataServices;
+using GraphDocs.Infrastructure;
 using System.Text;
 
 namespace GraphDocs.Tests
@@ -17,16 +17,16 @@ namespace GraphDocs.Tests
         public PathsTests()
         {
             DatabaseService.InitAndEraseAll();
-            folders.Create(new Models.Folder { Path = "/", Name = "TestFolder" });
-            folders.Create(new Models.Folder { Path = "/", Name = "Test1" });
-            folders.Create(new Models.Folder { Path = "/Test1", Name = "Test2a" });
-            folders.Create(new Models.Folder { Path = "/Test1", Name = "Test2b" });
-            folders.Create(new Models.Folder { Path = "/Test1/Test2a", Name = "Test3a" });
-            folders.Create(new Models.Folder { Path = "/Test1/Test2a/Test3a", Name = "Test4a" });
-            documents.Create(new Models.Document { Path = "/", Name = "doc1.txt", Tags = new[] { "Tag1" } });
-            documents.Create(new Models.Document { Path = "/Test1", Name = "doc2.txt", Tags = new[] { "Tag1", "Tag2" } });
-            documents.Create(new Models.Document { Path = "/Test1/Test2a/Test3a", Name = "doc3.txt", Tags = new[] { "Tag1", "Tag2", "Tag3" } });
-            documentFiles.Create(new Models.DocumentFile { DocumentPath = "/Test1/Test2a/Test3a/doc3.txt", Data = Encoding.UTF8.GetBytes("Test text in a file."), MimeType = "text/plain" });
+            folders.Create(new Core.Models.Folder { Path = "/", Name = "TestFolder" });
+            folders.Create(new Core.Models.Folder { Path = "/", Name = "Test1" });
+            folders.Create(new Core.Models.Folder { Path = "/Test1", Name = "Test2a" });
+            folders.Create(new Core.Models.Folder { Path = "/Test1", Name = "Test2b" });
+            folders.Create(new Core.Models.Folder { Path = "/Test1/Test2a", Name = "Test3a" });
+            folders.Create(new Core.Models.Folder { Path = "/Test1/Test2a/Test3a", Name = "Test4a" });
+            documents.Create(new Core.Models.Document { Path = "/", Name = "doc1.txt", Tags = new[] { "Tag1" } });
+            documents.Create(new Core.Models.Document { Path = "/Test1", Name = "doc2.txt", Tags = new[] { "Tag1", "Tag2" } });
+            documents.Create(new Core.Models.Document { Path = "/Test1/Test2a/Test3a", Name = "doc3.txt", Tags = new[] { "Tag1", "Tag2", "Tag3" } });
+            documentFiles.Create(new Core.Models.DocumentFile { DocumentPath = "/Test1/Test2a/Test3a/doc3.txt", Data = Encoding.UTF8.GetBytes("Test text in a file."), MimeType = "text/plain" });
         }
 
         [TestMethod]

@@ -1,15 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.22310.1
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDocs.Models", "GraphDocs.Models\GraphDocs.Models.csproj", "{EA1FACFD-11EA-4333-9B70-E4761CF9224B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDocs.Core", "GraphDocs.Core\GraphDocs.Core.csproj", "{EA1FACFD-11EA-4333-9B70-E4761CF9224B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDocs.DataServices", "GraphDocs.DataServices\GraphDocs.DataServices.csproj", "{2243DF9B-8E71-47D3-B7FE-82EC9050DF21}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDocs.Infrastructure", "GraphDocs.Infrastructure\GraphDocs.Infrastructure.csproj", "{2243DF9B-8E71-47D3-B7FE-82EC9050DF21}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDocs.Tests", "GraphDocs.Tests\GraphDocs.Tests.csproj", "{9C4AB162-868C-4E86-9861-97A12EC4FE71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDocs.RESTEndpoint", "GraphDocs.RESTEndpoint\GraphDocs.RESTEndpoint.csproj", "{F50EA729-E6DE-414A-A1C4-9AA9279E4FF0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDocs.WebService", "GraphDocs.WebService\GraphDocs.WebService.csproj", "{F50EA729-E6DE-414A-A1C4-9AA9279E4FF0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F1611485-034C-45AA-A10B-AB30AF1148CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,5 +38,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9C4AB162-868C-4E86-9861-97A12EC4FE71} = {F1611485-034C-45AA-A10B-AB30AF1148CC}
 	EndGlobalSection
 EndGlobal
