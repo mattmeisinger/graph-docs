@@ -13,14 +13,18 @@ namespace Neo4jWorkflowInstanceStore
 {
     public class Neo4jInstanceStore : InstanceStore
     {
-        Guid ownerInstanceID;
+        /// <summary>
+        /// The current instance of a workflow that this instance store is going to save or retrieve.
+        /// </summary>
+        Guid workflowInstanceId;
         Neo4jClient.GraphClient client;
 
         public Neo4jInstanceStore(string connectionString) : this(connectionString, Guid.NewGuid()) { }
         public Neo4jInstanceStore(string connectionString, Guid id)
         {
             client = new Neo4jClient.GraphClient(new Uri(connectionString));
-            ownerInstanceID = id;
+            client.Connect();
+            workflowInstanceId = id;
         }
 
         private void SaveXMLDocument(Guid guid, XmlDocument doc)
@@ -68,7 +72,7 @@ namespace Neo4jWorkflowInstanceStore
             //The CreateWorkflowOwner command instructs the instance store to create a new instance owner bound to the instanace handle
             if (command is CreateWorkflowOwnerCommand)
             {
-                context.BindInstanceOwner(ownerInstanceID, Guid.NewGuid());
+                context.BindInstanceOwner(workflowInstanceId, Guid.NewGuid());
             }
             //The SaveWorkflow command instructs the instance store to modify the instance bound to the instance handle or an instance key
             else if (command is SaveWorkflowCommand)
@@ -81,7 +85,7 @@ namespace Neo4jWorkflowInstanceStore
             //The LoadWorkflow command instructs the instance store to lock and load the instance bound to the identifier in the instance handle
             else if (command is LoadWorkflowCommand)
             {
-                var xml = LoadXMLDocument(ownerInstanceID);
+                var xml = LoadXMLDocument(workflowInstanceId);
                 data = LoadInstanceDataFromFile(xml);
                 //load the data into the persistence Context
                 context.LoadedInstance(InstanceState.Initialized, data, null, null, null);
@@ -151,7 +155,7 @@ namespace Neo4jWorkflowInstanceStore
 
                 doc.DocumentElement.AppendChild(newInstance);
             }
-            SaveXMLDocument(this.ownerInstanceID, doc);
+            SaveXMLDocument(this.workflowInstanceId, doc);
         }
 
         XmlElement SerializeObject(string elementName, object o, XmlDocument doc)

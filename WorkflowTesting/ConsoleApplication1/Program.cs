@@ -11,35 +11,66 @@ using System.Runtime.DurableInstancing;
 using System.Xml.Linq;
 using System.Xml;
 using System.IO;
+using Neo4jWorkflowInstanceStore;
+using System.Threading;
+using WorkflowActivities;
 
 namespace ConsoleApplication1
 {
     class Program
     {
+        static AutoResetEvent instanceUnloaded = new AutoResetEvent(false);
+
         static void Main(string[] args)
         {
-            Console.WriteLine("Starting workflow...");
-            var workflow = new ClassLibrary1.TestWorkflow();
-            var wfApp = new WorkflowApplication(workflow);
+            var app = new WorkflowApplication(new TestWorkflow2());
 
-            //var connStr = "Server=(localdb)\\v11.0;Integrated Security=true;";
-            //var conn = new SqlConnection(connStr);
-            //conn.Open();
-            //conn.Execute("Create table MyTable (Id INT, Name VARCHAR(100))");
-            //conn.Execute("INSERT INTO MyTable (Id,Name) VALUES (1,'Matt')");
-            //conn.Execute("INSERT INTO MyTable (Id,Name) VALUES (2,'Kari')");
-            //var i = conn.Query<int>("SELECT count(*) from MyTable").Single();
-            //Console.WriteLine("Found rows: " + i);
+            //setup persistence
+            var neoConnectionString = "http://localhost:7474/db/data";
+            var store = new Neo4jWorkflowInstanceStore.Neo4jInstanceStore(neoConnectionString);
+            InstanceHandle handle = store.CreateInstanceHandle();
+            InstanceView view = store.Execute(handle, new CreateWorkflowOwnerCommand(), TimeSpan.FromSeconds(30));
+            handle.Free();
+            store.DefaultInstanceOwner = view.InstanceOwner;
+            app.InstanceStore = store;
+            app.PersistableIdle = (e) =>
+            {
+                return PersistableIdleAction.Unload;
+            };
+            app.Unloaded = (workflowApplicationEventArgs) =>
+            {
+                Console.WriteLine("WorkflowApplication has Unloaded\n");
+                instanceUnloaded.Set();
+            };
 
-            //var store = new SqlWorkflowInstanceStore(connStr);
+            Guid id = app.Id;
+            app.Run();
+            Console.WriteLine("Host thread: " + System.Threading.Thread.CurrentThread.ManagedThreadId.ToString());
+            instanceUnloaded.WaitOne();
 
-            var neo4jConnStr = "";
-            var store = new New4JWorkflowInstanceStore(neo4jConnStr);
-            wfApp.InstanceStore = store;
-            wfApp.Persist();
-            
-            var results = WorkflowInvoker.Invoke(workflow);
-            System.Threading.Thread.Sleep(2000);
+            //resume
+            string name = Console.ReadLine();
+
+            app = new WorkflowApplication(new TestWorkflow2());
+            app.InstanceStore = store;
+
+            app.Completed = (arg) =>
+            {
+                Console.WriteLine("\nWorkflowApplication has Completed in the {0} state.", arg.CompletionState);
+            };
+            app.Unloaded = (arg) =>
+            {
+                Console.WriteLine("WorkflowApplication has Unloaded\n");
+                instanceUnloaded.Set();
+            };
+
+            app.Load(id);
+
+            app.ResumeBookmark("OrderNameBookmark", name);
+            Console.WriteLine("Host thread: " + Thread.CurrentThread.ManagedThreadId.ToString());
+            instanceUnloaded.WaitOne();
+
+            Console.ReadLine();
         }
     }
 }

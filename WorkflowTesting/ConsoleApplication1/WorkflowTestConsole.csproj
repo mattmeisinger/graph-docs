@@ -54,8 +54,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompletedAsyncResult.cs" />
-    <Compile Include="Neo4JWorkflowInstanceStore.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -64,9 +62,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibrary1\ClassLibrary1.csproj">
-      <Project>{db4f6216-d1b8-4170-b914-91e8733052f3}</Project>
-      <Name>ClassLibrary1</Name>
+    <ProjectReference Include="..\Neo4jWorkflowInstanceStore\Neo4jWorkflowInstanceStore.csproj">
+      <Project>{d7ed7782-73ea-4187-837f-4bfdad7a52dd}</Project>
+      <Name>Neo4jWorkflowInstanceStore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WorkflowActivities\WorkflowActivities.csproj">
+      <Project>{b848c685-8136-472b-b205-0d9f32745b1f}</Project>
+      <Name>WorkflowActivities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
