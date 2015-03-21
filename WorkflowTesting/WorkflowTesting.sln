@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.csproj", "{478FC525-61EF-47F7-BCFB-EBA84D34B3FF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "ClassLibrary1\ClassLibrary1.csproj", "{DB4F6216-D1B8-4170-B914-91E8733052F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neo4jWorkflowInstanceStore", "Neo4jWorkflowInstanceStore\Neo4jWorkflowInstanceStore.csproj", "{D7ED7782-73EA-4187-837F-4BFDAD7A52DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{DB4F6216-D1B8-4170-B914-91E8733052F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB4F6216-D1B8-4170-B914-91E8733052F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB4F6216-D1B8-4170-B914-91E8733052F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7ED7782-73EA-4187-837F-4BFDAD7A52DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7ED7782-73EA-4187-837F-4BFDAD7A52DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7ED7782-73EA-4187-837F-4BFDAD7A52DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7ED7782-73EA-4187-837F-4BFDAD7A52DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
