@@ -7,8 +7,8 @@
     <ProjectGuid>{EA1FACFD-11EA-4333-9B70-E4761CF9224B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GraphDocs.Models</RootNamespace>
-    <AssemblyName>GraphDocs.Models</AssemblyName>
+    <RootNamespace>GraphDocs.Core</RootNamespace>
+    <AssemblyName>GraphDocs.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>4451b85d</NuGetPackageImportStamp>
@@ -44,6 +44,8 @@
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\DocumentFile.cs" />
     <Compile Include="Models\Folder.cs" />
+    <Compile Include="Models\Workflow.cs" />
+    <Compile Include="Models\WorkflowRule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Tag.cs" />
   </ItemGroup>

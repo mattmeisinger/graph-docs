@@ -2,6 +2,9 @@
 {
     public class Document
     {
+        // Active is only set to true once all 'Create' workflows are completed successfully.
+        public bool Active { get; set; }
+
         public bool HasFile { get; set; }
         public string ID { get; set; }
         public string Name { get; set; }

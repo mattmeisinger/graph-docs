@@ -7,5 +7,7 @@
         public string Path { get; set; }
         public Folder[] ChildFolders { get; set; }
         public Document[] ChildDocuments { get; set; }
+
+        public WorkflowRule WorkflowDefinitions { get; set; }
     }
 }

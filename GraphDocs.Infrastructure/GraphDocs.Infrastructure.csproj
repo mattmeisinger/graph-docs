@@ -7,8 +7,8 @@
     <ProjectGuid>{2243DF9B-8E71-47D3-B7FE-82EC9050DF21}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GraphDocs.DataServices</RootNamespace>
-    <AssemblyName>GraphDocs.DataServices</AssemblyName>
+    <RootNamespace>GraphDocs.Infrastructure</RootNamespace>
+    <AssemblyName>GraphDocs.Infrastructure</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>11ddd5b9</NuGetPackageImportStamp>
