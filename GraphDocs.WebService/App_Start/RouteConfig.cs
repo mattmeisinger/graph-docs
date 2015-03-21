@@ -14,9 +14,9 @@ namespace GraphDocs.WebService
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                name: "Default",
+                name: "RestApiV1",
                 url: "v1/{controller}/{*path}",
-                defaults: new { controller = "Home", action = "Index", path = UrlParameter.Optional }
+                defaults: new { action = "Index", path = UrlParameter.Optional }
             );
         }
     }
