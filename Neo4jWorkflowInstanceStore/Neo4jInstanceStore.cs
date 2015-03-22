@@ -11,41 +11,52 @@ using System.Xml;
 
 namespace Neo4jWorkflowInstanceStore
 {
-    public class Neo4jInstanceStore : InstanceStore
+    public class Neo4jInstanceStore : InstanceStore, IDisposable
     {
         /// <summary>
-        /// The current instance of a workflow that this instance store is going to save or retrieve.
+        /// A unique identifier for the store of instances. There will usually be one store id for all workflows
+        /// in an application. If one is not specified, then one will be generated.
         /// </summary>
-        Guid workflowInstanceId;
+        Guid storeId;
         Neo4jClient.GraphClient client;
+        InstanceHandle handle;
 
         public Neo4jInstanceStore(string connectionString) : this(connectionString, Guid.NewGuid()) { }
-        public Neo4jInstanceStore(string connectionString, Guid id)
+        public Neo4jInstanceStore(string connectionString, Guid storeId)
         {
             client = new Neo4jClient.GraphClient(new Uri(connectionString));
             client.Connect();
-            workflowInstanceId = id;
+            this.storeId = storeId;
+
+            // This sets the owner based on the store id. This must be done for persisting and resuming workflows
+            // to work.
+            this.handle = this.CreateInstanceHandle();
+            var view = this.Execute(handle, new CreateWorkflowOwnerCommand(), TimeSpan.FromSeconds(30));
+            this.DefaultInstanceOwner = view.InstanceOwner;
         }
 
-        private void SaveXMLDocument(Guid guid, XmlDocument doc)
+        private void SaveXMLDocument(Guid instanceId, XmlDocument doc)
         {
             client.Cypher
                 .WithParams(new
                 {
-                    id = guid.ToString(),
+                    instanceId = instanceId.ToString(),
+                    storeId = this.storeId.ToString(),
                     item = doc.OuterXml
                 })
-                .Create("(:SavedWorkflowInstance { ID: {id}, XmlContent: {item}})")
+                .Merge("(i:SavedWorkflowInstance { InstanceID: {instanceId}, StoreID: {storeId} })")
+                .Set("i += { XmlContent: {item} }")
                 .ExecuteWithoutResults();
         }
-        private XmlDocument LoadXMLDocument(Guid guid)
+        private XmlDocument LoadXMLDocument(Guid instanceId)
         {
             var xml = client.Cypher
                 .WithParams(new
                 {
-                    id = guid.ToString()
+                    instanceId = instanceId.ToString(),
+                    storeId = this.storeId.ToString()
                 })
-                .Match("(i:SavedWorkflowInstance { ID: {id} })")
+                .Match("(i:SavedWorkflowInstance { InstanceID: {instanceId}, StoreID: {storeId} })")
                 .Return<string>("i.XmlContent")
                 .Results
                 .SingleOrDefault();
@@ -72,7 +83,7 @@ namespace Neo4jWorkflowInstanceStore
             //The CreateWorkflowOwner command instructs the instance store to create a new instance owner bound to the instanace handle
             if (command is CreateWorkflowOwnerCommand)
             {
-                context.BindInstanceOwner(workflowInstanceId, Guid.NewGuid());
+                context.BindInstanceOwner(storeId, Guid.NewGuid());
             }
             //The SaveWorkflow command instructs the instance store to modify the instance bound to the instance handle or an instance key
             else if (command is SaveWorkflowCommand)
@@ -80,12 +91,12 @@ namespace Neo4jWorkflowInstanceStore
                 SaveWorkflowCommand saveCommand = (SaveWorkflowCommand)command;
                 data = saveCommand.InstanceData;
 
-                Save(data);
+                Save(context.InstanceView.InstanceId, data);
             }
             //The LoadWorkflow command instructs the instance store to lock and load the instance bound to the identifier in the instance handle
             else if (command is LoadWorkflowCommand)
             {
-                var xml = LoadXMLDocument(workflowInstanceId);
+                var xml = LoadXMLDocument(context.InstanceView.InstanceId);
                 data = LoadInstanceDataFromFile(xml);
                 //load the data into the persistence Context
                 context.LoadedInstance(InstanceState.Initialized, data, null, null, null);
@@ -138,7 +149,7 @@ namespace Neo4jWorkflowInstanceStore
         }
 
         //Saves the persistance data to an xml file.
-        void Save(IDictionary<System.Xml.Linq.XName, InstanceValue> instanceData)
+        void Save(Guid instanceId, IDictionary<System.Xml.Linq.XName, InstanceValue> instanceData)
         {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml("<InstanceValues/>");
@@ -155,7 +166,7 @@ namespace Neo4jWorkflowInstanceStore
 
                 doc.DocumentElement.AppendChild(newInstance);
             }
-            SaveXMLDocument(this.workflowInstanceId, doc);
+            SaveXMLDocument(instanceId, doc);
         }
 
         XmlElement SerializeObject(string elementName, object o, XmlDocument doc)
@@ -170,6 +181,12 @@ namespace Neo4jWorkflowInstanceStore
             newElement.InnerXml = rdr.ReadToEnd();
 
             return newElement;
+        }
+
+        public void Dispose()
+        {
+            this.Execute(handle, new DeleteWorkflowOwnerCommand(), TimeSpan.FromSeconds(30));
+            handle.Free();            
         }
     }
 }
