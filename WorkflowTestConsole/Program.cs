@@ -19,7 +19,6 @@ namespace ConsoleApplication1
 {
     class Program
     {
-
         static void Main(string[] args)
         {
             var neoConnectionString = "http://localhost:7474/db/data";

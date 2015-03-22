@@ -82,6 +82,7 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
+    <Content Include="Workflows\Readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />

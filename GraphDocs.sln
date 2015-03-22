@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.22310.1
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDocs.Core", "GraphDocs.Core\GraphDocs.Core.csproj", "{EA1FACFD-11EA-4333-9B70-E4761CF9224B}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neo4jWorkflowInstanceStore", "Neo4jWorkflowInstanceStore\Neo4jWorkflowInstanceStore.csproj", "{D7ED7782-73EA-4187-837F-4BFDAD7A52DD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkflowTestConsole", "WorkflowTestConsole\WorkflowTestConsole.csproj", "{478FC525-61EF-47F7-BCFB-EBA84D34B3FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDocs.Workflow.Core", "GraphDocs.Workflow.Core\GraphDocs.Workflow.Core.csproj", "{F6F9BC1B-5CB8-4C75-97E4-F4081A0C88A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,10 @@ Global
 		{478FC525-61EF-47F7-BCFB-EBA84D34B3FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{478FC525-61EF-47F7-BCFB-EBA84D34B3FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{478FC525-61EF-47F7-BCFB-EBA84D34B3FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6F9BC1B-5CB8-4C75-97E4-F4081A0C88A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6F9BC1B-5CB8-4C75-97E4-F4081A0C88A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6F9BC1B-5CB8-4C75-97E4-F4081A0C88A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6F9BC1B-5CB8-4C75-97E4-F4081A0C88A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,5 +70,6 @@ Global
 		{B848C685-8136-472B-B205-0D9F32745B1F} = {26AD2ED5-024A-42EC-8934-FDB96D691497}
 		{D7ED7782-73EA-4187-837F-4BFDAD7A52DD} = {26AD2ED5-024A-42EC-8934-FDB96D691497}
 		{478FC525-61EF-47F7-BCFB-EBA84D34B3FF} = {26AD2ED5-024A-42EC-8934-FDB96D691497}
+		{F6F9BC1B-5CB8-4C75-97E4-F4081A0C88A7} = {26AD2ED5-024A-42EC-8934-FDB96D691497}
 	EndGlobalSection
 EndGlobal

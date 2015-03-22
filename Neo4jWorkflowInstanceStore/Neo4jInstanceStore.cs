@@ -21,11 +21,9 @@ namespace Neo4jWorkflowInstanceStore
         Neo4jClient.GraphClient client;
         InstanceHandle handle;
 
-        public Neo4jInstanceStore(string connectionString) : this(connectionString, Guid.NewGuid()) { }
-        public Neo4jInstanceStore(string connectionString, Guid storeId)
+        public Neo4jInstanceStore(Neo4jClient.GraphClient conn) : this(conn, Guid.NewGuid()) { }
+        public Neo4jInstanceStore(Neo4jClient.GraphClient conn, Guid storeId)
         {
-            client = new Neo4jClient.GraphClient(new Uri(connectionString));
-            client.Connect();
             this.storeId = storeId;
 
             // This sets the owner based on the store id. This must be done for persisting and resuming workflows
