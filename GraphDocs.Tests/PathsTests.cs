@@ -3,20 +3,21 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GraphDocs.Infrastructure;
 using System.Text;
+using GraphDocs.Infrastructure.Database;
 
 namespace GraphDocs.Tests
 {
     [TestClass]
     public class PathsTests
     {
-        FoldersDataService folders = new FoldersDataService();
-        PathsDataService paths = new PathsDataService();
+        FoldersDataService folders = new FoldersDataService(Neo4jConnectionFactory.GetConnection());
+        PathsDataService paths = new PathsDataService(Neo4jConnectionFactory.GetConnection());
         DocumentsDataService documents = new DocumentsDataService();
         DocumentFilesDataService documentFiles = new DocumentFilesDataService();
 
         public PathsTests()
         {
-            DatabaseService.InitAndEraseAll();
+            Neo4jConnectionFactory.InitAndEraseAll();
             folders.Create(new Core.Models.Folder { Path = "/", Name = "TestFolder" });
             folders.Create(new Core.Models.Folder { Path = "/", Name = "Test1" });
             folders.Create(new Core.Models.Folder { Path = "/Test1", Name = "Test2a" });

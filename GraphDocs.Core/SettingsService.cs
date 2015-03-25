@@ -12,5 +12,7 @@ namespace GraphDocs.Core
         public string APIVersionNumber { get; set; }
         public string SiteBaseUrl { get; set; }
         public string SmtpServer { get; set; }
+        public string WorkflowFolder { get; set; }
+        public Guid WorkflowStoreId { get; set; }
     }
 }

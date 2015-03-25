@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GraphDocs.Core.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -6,11 +7,18 @@ using System.Web.Mvc;
 
 namespace GraphDocs.WebService.Controllers
 {
-    public class WorkflowsController : Controller
+    public class WorkflowsController : BaseController
     {
-        public ActionResult Index()
+        IWorkflowService workflow;
+        public WorkflowsController(IWorkflowService workflow)
         {
-            return View();
+            this.workflow = workflow;
+        }
+
+        [ActionName("Index"), HttpGet]
+        public ActionResult Get()
+        {
+            return Json(workflow.GetAvailableWorkflows());
         }
     }
 }

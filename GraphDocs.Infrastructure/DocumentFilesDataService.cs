@@ -3,17 +3,18 @@ using System.Linq;
 using Neo4jClient;
 using GraphDocs.Core.Models;
 using GraphDocs.Infrastructure.Utilities;
+using GraphDocs.Infrastructure.Database;
 
 namespace GraphDocs.Infrastructure
 {
     public class DocumentFilesDataService
     {
-        private GraphClient client;
+        private IGraphClient client;
         private PathsDataService paths;
 
         public DocumentFilesDataService()
         {
-            client = DatabaseService.GetConnection();
+            client = Neo4jConnectionFactory.GetConnection();
             paths = new PathsDataService(client);
         }
 

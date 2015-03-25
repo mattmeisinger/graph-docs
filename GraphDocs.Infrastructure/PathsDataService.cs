@@ -9,14 +9,8 @@ namespace GraphDocs.Infrastructure
 {
     public class PathsDataService
     {
-        private GraphClient client;
-
-        public PathsDataService()
-        {
-            this.client = DatabaseService.GetConnection();
-        }
-
-        public PathsDataService(GraphClient client)
+        private IGraphClient client;
+        public PathsDataService(IGraphClient client)
         {
             this.client = client;
         }

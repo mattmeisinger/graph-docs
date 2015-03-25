@@ -10,6 +10,6 @@ namespace GraphDocs.Core.Interfaces
     {
         string[] GetAvailableWorkflows();
         Guid InitializeWorkflow(string workflowName);
-        void ResumeWorkflow(string workflowName, Guid workflowInstanceId, string bookmarkName);
+        void ResumeWorkflow(string workflowName, Guid workflowInstanceId, string bookmarkName, object bookmarkValue);
     }
 }

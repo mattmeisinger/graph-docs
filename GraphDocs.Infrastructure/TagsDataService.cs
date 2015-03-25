@@ -2,16 +2,17 @@
 using System.Linq;
 using GraphDocs.Core.Models;
 using Neo4jClient;
+using GraphDocs.Infrastructure.Database;
 
 namespace GraphDocs.Infrastructure
 {
     public class TagsDataService
     {
-        private GraphClient client;
+        private IGraphClient client;
         private PathsDataService paths;
         public TagsDataService()
         {
-            client = DatabaseService.GetConnection();
+            client = Neo4jConnectionFactory.GetConnection();
             paths = new PathsDataService(client);
         }
 

@@ -2,12 +2,13 @@
 using System.Linq;
 using GraphDocs.Core.Models;
 using Neo4jClient;
+using GraphDocs.Core.Interfaces;
 
-namespace GraphDocs.Infrastructure
+namespace GraphDocs.Infrastructure.Database
 {
-    public class DatabaseService
+    public class Neo4jConnectionFactory
     {
-        public static GraphClient GetConnection()
+        public static IGraphClient GetConnection()
         {
             var client = new GraphClient(new Uri("http://localhost:7474/db/data"));
             client.Connect();

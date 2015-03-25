@@ -11,6 +11,7 @@ namespace GraphDocs.WebService
     {
         protected void Application_Start()
         {
+            DependencyInjection.ConfigureDI();
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }

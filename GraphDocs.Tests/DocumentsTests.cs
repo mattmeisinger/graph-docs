@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GraphDocs.Infrastructure;
+using GraphDocs.Infrastructure.Database;
 
 namespace GraphDocs.Tests
 {
@@ -9,12 +10,11 @@ namespace GraphDocs.Tests
     public class DocumentsTests
     {
         FoldersDataService folders = new FoldersDataService();
-        PathsDataService paths = new PathsDataService();
         DocumentsDataService documents = new DocumentsDataService();
 
         public DocumentsTests()
         {
-            DatabaseService.InitAndEraseAll();
+            Neo4jConnectionFactory.InitAndEraseAll();
             folders.Create(new Core.Models.Folder { Path = "/", Name = "TestFolder" });
             folders.Create(new Core.Models.Folder { Path = "/", Name = "Test1" });
             folders.Create(new Core.Models.Folder { Path = "/Test1", Name = "Test2a" });
