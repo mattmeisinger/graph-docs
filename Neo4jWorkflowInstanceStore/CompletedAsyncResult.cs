@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Neo4jWorkflowInstanceStore
+namespace GraphDocs.Workflow.Neo4jInstanceStore
 {
     //An AsyncResult that completes as soon as it is instantiated.
     class CompletedAsyncResult : AsyncResult

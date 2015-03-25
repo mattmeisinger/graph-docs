@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Neo4jClient;
+using System;
 using System.Activities.DurableInstancing;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace Neo4jWorkflowInstanceStore
+namespace GraphDocs.Workflow.Neo4jInstanceStore
 {
     public class Neo4jInstanceStore : InstanceStore, IDisposable
     {
@@ -21,8 +22,8 @@ namespace Neo4jWorkflowInstanceStore
         Neo4jClient.GraphClient client;
         InstanceHandle handle;
 
-        public Neo4jInstanceStore(Neo4jClient.GraphClient conn) : this(conn, Guid.NewGuid()) { }
-        public Neo4jInstanceStore(Neo4jClient.GraphClient conn, Guid storeId)
+        public Neo4jInstanceStore(IGraphClient conn) : this(conn, Guid.NewGuid()) { }
+        public Neo4jInstanceStore(IGraphClient conn, Guid storeId)
         {
             this.storeId = storeId;
 

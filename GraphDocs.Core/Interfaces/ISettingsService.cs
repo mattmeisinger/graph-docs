@@ -8,8 +8,8 @@ namespace GraphDocs.Core.Interfaces
 {
     public interface ISettingsService
     {
-        public string APIVersionNumber { get; set; }
-        public string SiteBaseUrl { get; set; }
-        public string SmtpServer { get; set; }
+        string APIVersionNumber { get; set; }
+        string SiteBaseUrl { get; set; }
+        string SmtpServer { get; set; }
     }
 }

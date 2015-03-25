@@ -11,9 +11,10 @@ using System.Runtime.DurableInstancing;
 using System.Xml.Linq;
 using System.Xml;
 using System.IO;
-using Neo4jWorkflowInstanceStore;
 using System.Threading;
 using WorkflowActivities;
+using GraphDocs.Workflow.Neo4jInstanceStore;
+using Neo4jClient;
 
 namespace ConsoleApplication1
 {
@@ -22,11 +23,12 @@ namespace ConsoleApplication1
         static void Main(string[] args)
         {
             var neoConnectionString = "http://localhost:7474/db/data";
+            var neoConnection = new GraphClient(new Uri(neoConnectionString));
 
             //setup persistence
             var storeId = new Guid("c068fd97-117e-4bac-b93a-613d7baaa088");
             Console.WriteLine("Store ID: " + storeId);
-            var store = new Neo4jWorkflowInstanceStore.Neo4jInstanceStore(neoConnectionString, storeId);
+            var store = new Neo4jInstanceStore(neoConnection, storeId);
             var instanceId = CreateAndStartWorkflowInstance(store, new TestWorkflow2());
             Console.WriteLine("Instance ID: " + instanceId);
             store.Dispose();
@@ -34,7 +36,7 @@ namespace ConsoleApplication1
             //resume
             var bookmarkName = "OrderNameBookmark";
             var name = Console.ReadLine();
-            var store2 = new Neo4jWorkflowInstanceStore.Neo4jInstanceStore(neoConnectionString, storeId);
+            var store2 = new Neo4jInstanceStore(neoConnection, storeId);
             ResumeWorkflowInstance(store2, new TestWorkflow2(), instanceId, bookmarkName, name);
             store2.Dispose();
 
