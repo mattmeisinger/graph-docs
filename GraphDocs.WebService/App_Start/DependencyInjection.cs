@@ -27,7 +27,7 @@ namespace GraphDocs.WebService
                     e.Instance.APIVersionNumber = "v1";
                     e.Instance.SiteBaseUrl = GetCurrentDomain();
                     e.Instance.SmtpServer = "localhost";
-                    e.Instance.WorkflowFolder = HttpContext.Current.Server.MapPath("~/Workflows");
+                    e.Instance.WorkflowFolder = HttpContext.Current.Server.MapPath("~/WorkflowDefinitions");
                     e.Instance.WorkflowStoreId = new Guid("c068fd97-117e-4bac-b93a-613d7baaa088");
                 })
                 .InstancePerRequest();

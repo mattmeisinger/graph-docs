@@ -69,12 +69,12 @@ namespace GraphDocs.Infrastructure.Workflow
             }
         }
 
-        public Guid InitializeWorkflow(string workflowName)
+        public Guid InitializeWorkflow(string workflowName, IDictionary<string, object> parameters)
         {
             using (var store = new Neo4jInstanceStore(client, settings.WorkflowStoreId))
             {
                 Activity workflow = GetWorkflow(workflowName);
-                var instanceId = CreateAndStartWorkflowInstance(store, workflow);
+                var instanceId = CreateAndStartWorkflowInstance(store, workflow, parameters);
                 Console.WriteLine("Started instance #" + instanceId);
                 return instanceId;
             }
@@ -89,10 +89,10 @@ namespace GraphDocs.Infrastructure.Workflow
             }
         }
 
-        private static Guid CreateAndStartWorkflowInstance(InstanceStore store, Activity workflowDefinition)
+        private static Guid CreateAndStartWorkflowInstance(InstanceStore store, Activity workflowDefinition, IDictionary<string, object> parameters)
         {
             var instanceUnloaded = new AutoResetEvent(false);
-            var app = new WorkflowApplication(workflowDefinition)
+            var app = new WorkflowApplication(workflowDefinition, parameters)
             {
                 InstanceStore = store,
                 PersistableIdle = (e) =>

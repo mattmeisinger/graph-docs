@@ -89,7 +89,7 @@ namespace GraphDocs.Infrastructure
             if (parentId == null)
                 throw new Exception("Folder does not exist--document cannot be created: " + d.Path);
 
-            // Attach to root folder
+            // Attach to parent folder
             client.Cypher
                 .WithParams(new
                 {

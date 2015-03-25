@@ -10,8 +10,16 @@ namespace GraphDocs.Infrastructure.Database
     {
         public static IGraphClient GetConnection()
         {
-            var client = new GraphClient(new Uri("http://localhost:7474/db/data"));
-            client.Connect();
+            var connectionString = "http://localhost:7474/db/data";
+            var client = new GraphClient(new Uri(connectionString));
+            try
+            {
+                client.Connect();
+            }
+            catch (Exception)
+            {
+                throw new Exception("Unable to connect to database at: " + connectionString);
+            }
             return client;
         }
 

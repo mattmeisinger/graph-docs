@@ -10,7 +10,7 @@ namespace GraphDocs.Tests
     [TestClass]
     public class PathsTests
     {
-        FoldersDataService folders = new FoldersDataService(Neo4jConnectionFactory.GetConnection());
+        FoldersDataService folders = new FoldersDataService();
         PathsDataService paths = new PathsDataService(Neo4jConnectionFactory.GetConnection());
         DocumentsDataService documents = new DocumentsDataService();
         DocumentFilesDataService documentFiles = new DocumentFilesDataService();

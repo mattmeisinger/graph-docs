@@ -19,12 +19,13 @@ namespace GraphDocs.Workflow.Neo4jInstanceStore
         /// in an application. If one is not specified, then one will be generated.
         /// </summary>
         Guid storeId;
-        Neo4jClient.GraphClient client;
+        IGraphClient client;
         InstanceHandle handle;
 
         public Neo4jInstanceStore(IGraphClient conn) : this(conn, Guid.NewGuid()) { }
         public Neo4jInstanceStore(IGraphClient conn, Guid storeId)
         {
+            this.client = conn;
             this.storeId = storeId;
 
             // This sets the owner based on the store id. This must be done for persisting and resuming workflows

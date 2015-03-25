@@ -10,7 +10,7 @@ using System.Net;
 
 namespace GraphDocs.Workflow.Core
 {
-    public sealed class EmailApprovalRequest : CodeActivity
+    public sealed class SimpleEmailNotification : CodeActivity
     {
         /// <summary>
         /// Comma- or semicolon-separated list of email addresses.
@@ -37,9 +37,7 @@ namespace GraphDocs.Workflow.Core
                 "<br/>Name : " + document.Name +
                 "<br/>Path : " + document.Path +
                 "<br/>Tags : " + string.Join(", ", document.Tags) +
-                "</p>" +
-                "<p><a href=\"" + ConfigurationManager.AppSettings["SiteBaseUrl"] + "/Workflow/Approve?id=" + context.WorkflowInstanceId + "?approver=" + WebUtility.UrlEncode(to) + "\" style=\"font-weight: bold;\">Approve</a></p>" +
-                "<p><a href=\"" + ConfigurationManager.AppSettings["SiteBaseUrl"] + "/Workflow/Reject?id=" + context.WorkflowInstanceId + "?approver=" + WebUtility.UrlEncode(to) + "\">Reject</a></p>";
+                "</p>";
 
             Utilities.Email.Send(from, to, subject, body, true);
         }
