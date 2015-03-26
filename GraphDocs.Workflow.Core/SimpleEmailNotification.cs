@@ -19,9 +19,10 @@ namespace GraphDocs.Workflow.Core
         public InArgument<string> EmailRecipients { get; set; }
 
         [RequiredArgument]
-        public InArgument<Document> Document { get; set; }
+        public InArgument<string> Subject { get; set; }
 
-        public InArgument<DocumentFile> DocumentFile { get; set; }
+        [RequiredArgument]
+        public InArgument<string> Body { get; set; }
 
         // If your activity returns a value, derive from CodeActivity<TResult>
         // and return the value from the Execute method.
@@ -29,15 +30,9 @@ namespace GraphDocs.Workflow.Core
         {
             // Obtain the runtime value of the Text input argument
             var to = context.GetValue(EmailRecipients);
-            var document = context.GetValue(Document);
-            var documentFile = context.GetValue(DocumentFile);
-            var from = "GraphDocs@noreply.com";
-            var subject = "Approval requested: " + document.Name;
-            var body = "<p>Approval requested for GraphDocs document." +
-                "<br/>Name : " + document.Name +
-                "<br/>Path : " + document.Path +
-                "<br/>Tags : " + string.Join(", ", document.Tags) +
-                "</p>";
+            var from = ConfigurationManager.AppSettings["EmailFromAddress"];
+            var subject = context.GetValue(Subject);
+            var body = context.GetValue(Body);
 
             Utilities.Email.Send(from, to, subject, body, true);
         }

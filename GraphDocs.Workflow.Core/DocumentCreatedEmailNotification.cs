@@ -10,7 +10,7 @@ using System.Net;
 
 namespace GraphDocs.Workflow.Core
 {
-    public sealed class EmailApprovalRequest : CodeActivity
+    public sealed class DocumentCreatedEmailNotification : CodeActivity
     {
         /// <summary>
         /// Comma- or semicolon-separated list of email addresses.
@@ -30,16 +30,13 @@ namespace GraphDocs.Workflow.Core
             // Obtain the runtime value of the Text input argument
             var to = context.GetValue(EmailRecipients);
             var document = context.GetValue(Document);
-            var documentFile = context.GetValue(DocumentFile);
-            var from = "GraphDocs@noreply.com";
-            var subject = "Approval requested: " + document.Name;
-            var body = "<p>Approval requested for GraphDocs document." +
+            var from = ConfigurationManager.AppSettings["EmailFromAddress"];
+            var subject = "New Document Added: " + document.Name;
+            var body = "<p>A new document has been added to the document management system." +
                 "<br/>Name : " + document.Name +
                 "<br/>Path : " + document.Path +
                 "<br/>Tags : " + string.Join(", ", document.Tags) +
-                "</p>" +
-                "<p><a href=\"" + ConfigurationManager.AppSettings["SiteBaseUrl"] + "/Workflow/Approve?id=" + context.WorkflowInstanceId + "?approver=" + WebUtility.UrlEncode(to) + "\" style=\"font-weight: bold;\">Approve</a></p>" +
-                "<p><a href=\"" + ConfigurationManager.AppSettings["SiteBaseUrl"] + "/Workflow/Reject?id=" + context.WorkflowInstanceId + "?approver=" + WebUtility.UrlEncode(to) + "\">Reject</a></p>";
+                "</p>";
 
             Utilities.Email.Send(from, to, subject, body, true);
         }
