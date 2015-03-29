@@ -1,4 +1,5 @@
 ﻿using GraphDocs.Core.Interfaces;
+using GraphDocs.Core.Models;
 using GraphDocs.Infrastructure.Database;
 using GraphDocs.Workflow.Neo4jInstanceStore;
 using Neo4jClient;
@@ -6,6 +7,7 @@ using System;
 using System.Activities;
 using System.Activities.XamlIntegration;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Runtime.DurableInstancing;
 using System.Text;
@@ -17,12 +19,10 @@ namespace GraphDocs.Infrastructure.Workflow
     public class WorkflowService : IWorkflowService
     {
         IGraphClient client;
-        ISettingsService settings;
-        public WorkflowService(ISettingsService settings)
+        public WorkflowService()
         {
             this.client = Neo4jConnectionFactory.GetConnection();
-            this.settings = settings;
-            Console.WriteLine("Store ID: " + settings.WorkflowStoreId);
+            Console.WriteLine("Store ID: " + ConfigurationManager.AppSettings["WorkflowStoreId"]);
         }
 
         public string[] GetAvailableWorkflows()
@@ -37,7 +37,7 @@ namespace GraphDocs.Infrastructure.Workflow
                 .ToArray();
             var activityNamesInAssembly = activitiesInAssembly.Select(a => a.Name).ToArray();
 
-            var activitiesInFolder = System.IO.Directory.EnumerateFiles(settings.WorkflowFolder)
+            var activitiesInFolder = System.IO.Directory.EnumerateFiles(ConfigurationManager.AppSettings["WorkflowFolder"])
                 .Where(a => a.EndsWith(".xaml"))
                 .Select(a => a.Split('\\').Last().Replace(".xaml", ""))
                 .ToArray();
@@ -56,7 +56,7 @@ namespace GraphDocs.Infrastructure.Workflow
             if (match != null)
                 return (Activity)Activator.CreateInstance(match);
 
-            var matchingFilename = System.IO.Directory.EnumerateFiles(settings.WorkflowFolder)
+            var matchingFilename = System.IO.Directory.EnumerateFiles(ConfigurationManager.AppSettings["WorkflowFolder"])
                 .Where(a => a.EndsWith("\\" + workflowName + ".xaml"))
                 .FirstOrDefault();
             if (matchingFilename != null)
@@ -71,10 +71,11 @@ namespace GraphDocs.Infrastructure.Workflow
             }
         }
 
-        public Guid InitializeWorkflow(string workflowName, IDictionary<string, object> parameters)
+        public WorkflowStatus InitializeWorkflow(string workflowName, IDictionary<string, object> parameters)
         {
-            using (var store = new Neo4jInstanceStore(client, settings.WorkflowStoreId))
+            using (var store = new Neo4jInstanceStore(client, new Guid(ConfigurationManager.AppSettings["WorkflowStoreId"])))
             {
+                string status = "In Progress";
                 Activity workflowDefinition = GetWorkflow(workflowName);
                 var instanceUnloaded = new AutoResetEvent(false);
                 var app = new WorkflowApplication(workflowDefinition, parameters)
@@ -83,6 +84,11 @@ namespace GraphDocs.Infrastructure.Workflow
                     PersistableIdle = (e) =>
                     {
                         return PersistableIdleAction.Unload;
+                    },
+                    Completed = (arg) =>
+                    {
+                        Console.WriteLine("WorkflowApplication has Completed in the {0} state.", arg.CompletionState);
+                        status = "Completed";
                     },
                     Unloaded = (workflowApplicationEventArgs) =>
                     {
@@ -94,22 +100,34 @@ namespace GraphDocs.Infrastructure.Workflow
                 app.Run();
                 instanceUnloaded.WaitOne();
                 Console.WriteLine("Started instance #" + newInstanceId);
-                return newInstanceId;
+                return new WorkflowStatus
+                {
+                    InstanceId = newInstanceId,
+                    Status = status
+                };
             }
         }
 
-        public object ResumeWorkflow(string workflowName, Guid workflowInstanceId, string bookmarkName, object bookmarkValue)
+        public WorkflowStatus ResumeWorkflow(string workflowName, Guid workflowInstanceId, string bookmarkName, object bookmarkValue)
         {
             Activity workflowDefinition = GetWorkflow(workflowName);
-            using (var store = new Neo4jInstanceStore(client, settings.WorkflowStoreId))
+            using (var store = new Neo4jInstanceStore(client, new Guid(ConfigurationManager.AppSettings["WorkflowStoreId"])))
             {
+                string status = "In Progress";
+                object result = null;
                 var instanceUnloaded = new AutoResetEvent(false);
                 var app = new WorkflowApplication(workflowDefinition)
                 {
                     InstanceStore = store,
+                    PersistableIdle = (e) =>
+                    {
+                        return PersistableIdleAction.Unload;
+                    },
                     Completed = (arg) =>
                     {
                         Console.WriteLine("WorkflowApplication has Completed in the {0} state.", arg.CompletionState);
+                        status = "Completed";
+                        result = (bool)arg.Outputs["Result"];
                     },
                     Unloaded = (arg) =>
                     {
@@ -119,13 +137,14 @@ namespace GraphDocs.Infrastructure.Workflow
                 };
                 app.Load(workflowInstanceId);
                 app.ResumeBookmark(bookmarkName, bookmarkValue);
-                object ret = null;
-                app.Completed = (completedEvent) =>
-                {
-                    ret = (bool)completedEvent.Outputs["Result"];
-                };
                 instanceUnloaded.WaitOne();
-                return ret;
+
+                return new WorkflowStatus
+                {
+                    InstanceId = workflowInstanceId,
+                    Status = status,
+                    Result = result
+                };
             }
         }
     }

@@ -3,6 +3,8 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GraphDocs.Infrastructure;
 using GraphDocs.Infrastructure.Database;
+using System.Collections.Generic;
+using GraphDocs.Core.Models;
 
 namespace GraphDocs.Tests
 {
@@ -16,14 +18,14 @@ namespace GraphDocs.Tests
         public FoldersTests()
         {
             Neo4jConnectionFactory.InitAndEraseAll();
-            folders.Create(new Core.Models.Folder { Path = "/", Name = "TestFolder" });
-            folders.Create(new Core.Models.Folder { Path = "/", Name = "Test1" });
-            folders.Create(new Core.Models.Folder { Path = "/Test1", Name = "Test2a" });
-            folders.Create(new Core.Models.Folder { Path = "/Test1", Name = "Test2b" });
-            folders.Create(new Core.Models.Folder { Path = "/Test1/Test2a", Name = "Test3a" });
-            folders.Create(new Core.Models.Folder { Path = "/Test1/Test2a/Test3a", Name = "Test4a" });
-            documents.Create(new Core.Models.Document { Path = "/", Name = "doc1.txt" });
-            documents.Create(new Core.Models.Document { Path = "/Test1", Name = "doc2.txt" });
+            folders.Create(new Folder { Path = "/", Name = "TestFolder" });
+            folders.Create(new Folder { Path = "/", Name = "Test1" });
+            folders.Create(new Folder { Path = "/Test1", Name = "Test2a" });
+            folders.Create(new Folder { Path = "/Test1", Name = "Test2b" });
+            folders.Create(new Folder { Path = "/Test1/Test2a", Name = "Test3a" });
+            folders.Create(new Folder { Path = "/Test1/Test2a/Test3a", Name = "Test4a" });
+            documents.Create(new Document { Path = "/", Name = "doc1.txt" });
+            documents.Create(new Document { Path = "/Test1", Name = "doc2.txt" });
         }
 
         [TestMethod]

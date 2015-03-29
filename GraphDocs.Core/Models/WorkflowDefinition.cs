@@ -2,9 +2,10 @@
 
 namespace GraphDocs.Core.Models
 {
-    public class WorkflowRule
+    public class WorkflowDefinition
     {
-        public Workflow Workflow { get; set; }
+        public string WorkflowName { get; set; }
         public Dictionary<string, string> Settings { get; set; }
+        public int Order { get; set; }
     }
 }

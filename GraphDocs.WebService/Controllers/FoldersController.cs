@@ -43,6 +43,12 @@ namespace GraphDocs.WebService.Controllers
                         self = PathToController("documents", a.Path)
                     }
                 }),
+                workflowDefinitions = folder.WorkflowDefinitions.OrderBy(a => a.Order).Select(a => new
+                {
+                    order = a.Order,
+                    workflowName = a.WorkflowName,
+                    settings = a.Settings
+                }),
                 links = new
                 {
                     self = PathTo(folder.Path)

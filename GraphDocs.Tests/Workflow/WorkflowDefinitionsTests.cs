@@ -15,14 +15,7 @@ namespace GraphDocs.Tests.Workflow
         public WorkflowDefinitionsTests()
         {
             // Set up class
-            workflows = new WorkflowService(new SettingsService
-            {
-                APIVersionNumber = "v1",
-                SiteBaseUrl = "http://localhost",
-                SmtpServer = "localhost",
-                WorkflowFolder = "WorkflowDefinitions",
-                WorkflowStoreId = new Guid("00000000-117e-4bac-b93a-613d7baaa000")
-            });
+            workflows = new WorkflowService();
         }
 
         [TestMethod]
@@ -65,12 +58,12 @@ namespace GraphDocs.Tests.Workflow
             parameters.Add("DocumentFile", new DocumentFile { });
             parameters.Add("EmailRecipients", "mmeisinger@gmail.com");
             parameters.Add("ApproverGroupName", "Group1");
-            var workflowInstanceId = workflows.InitializeWorkflow(workflowName, parameters);
-            Assert.IsNotNull(workflowInstanceId);
+            var status = workflows.InitializeWorkflow(workflowName, parameters);
+            Assert.IsNotNull(status.InstanceId);
 
-            var result = workflows.ResumeWorkflow("ApproveDocument", workflowInstanceId, "Approval-Group1", true);
-            Assert.IsTrue(result is bool);
-            Assert.IsTrue((bool)result == true);
+            var result = workflows.ResumeWorkflow("ApproveDocument", status.InstanceId, "Approval-Group1", true);
+            Assert.IsTrue(result.Result is bool);
+            Assert.IsTrue((bool)result.Result == true);
         }
 
         [TestMethod]
@@ -82,12 +75,12 @@ namespace GraphDocs.Tests.Workflow
             parameters.Add("DocumentFile", new DocumentFile { });
             parameters.Add("EmailRecipients", "mmeisinger@gmail.com");
             parameters.Add("ApproverGroupName", "Group1");
-            var workflowInstanceId = workflows.InitializeWorkflow(workflowName, parameters);
-            Assert.IsNotNull(workflowInstanceId);
+            var status = workflows.InitializeWorkflow(workflowName, parameters);
+            Assert.IsNotNull(status.InstanceId);
 
-            var result = workflows.ResumeWorkflow("ApproveDocument", workflowInstanceId, "Approval-Group1", false);
-            Assert.IsTrue(result is bool);
-            Assert.IsTrue((bool)result == false);
+            var result = workflows.ResumeWorkflow("ApproveDocument", status.InstanceId, "Approval-Group1", false);
+            Assert.IsTrue(result.Result is bool);
+            Assert.IsTrue((bool)result.Result == false);
         }
     }
 }

@@ -18,6 +18,7 @@ namespace GraphDocs.WebService.Controllers
         [ActionName("Index"), HttpGet]
         public ActionResult Get()
         {
+            // Get list of all available workflows
             return Json(workflow.GetAvailableWorkflows());
         }
     }

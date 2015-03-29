@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
-using GraphDocs.Core.Models;
 using Neo4jClient;
+using GraphDocs.Core.Models;
 using GraphDocs.Core.Interfaces;
+using GraphDocs.Infrastructure.Database.Converters;
 
 namespace GraphDocs.Infrastructure.Database
 {
@@ -20,6 +21,8 @@ namespace GraphDocs.Infrastructure.Database
             {
                 throw new Exception("Unable to connect to database at: " + connectionString);
             }
+            client.JsonConverters.Add(new WorkflowDefinitionConverter());
+            client.JsonConverters.Add(new ActiveWorkflowConverter());
             return client;
         }
 

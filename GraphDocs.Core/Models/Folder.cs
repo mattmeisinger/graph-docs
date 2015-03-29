@@ -8,6 +8,6 @@
         public Folder[] ChildFolders { get; set; }
         public Document[] ChildDocuments { get; set; }
 
-        public WorkflowRule[] WorkflowDefinitions { get; set; }
+        public WorkflowDefinition[] WorkflowDefinitions { get; set; }
     }
 }

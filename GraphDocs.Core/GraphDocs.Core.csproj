@@ -58,17 +58,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\ISettingsService.cs" />
     <Compile Include="Interfaces\IWorkflowService.cs" />
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\DocumentFile.cs" />
     <Compile Include="Models\Folder.cs" />
-    <Compile Include="Models\Settings.cs" />
-    <Compile Include="Models\Workflow.cs" />
-    <Compile Include="Models\WorkflowRule.cs" />
+    <Compile Include="Models\ActiveWorkflow.cs" />
+    <Compile Include="Models\WorkflowDefinition.cs" />
+    <Compile Include="Models\WorkflowStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Tag.cs" />
-    <Compile Include="SettingsService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

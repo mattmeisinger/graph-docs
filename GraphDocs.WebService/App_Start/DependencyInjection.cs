@@ -20,17 +20,17 @@ namespace GraphDocs.WebService
             // Register your MVC controllers.
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
 
-            // Register classes in Autofac
-            builder.RegisterType<SettingsService>().As<ISettingsService>()
-                .OnActivating(e =>
-                {
-                    e.Instance.APIVersionNumber = "v1";
-                    e.Instance.SiteBaseUrl = GetCurrentDomain();
-                    e.Instance.SmtpServer = "localhost";
-                    e.Instance.WorkflowFolder = HttpContext.Current.Server.MapPath("~/WorkflowDefinitions");
-                    e.Instance.WorkflowStoreId = new Guid("c068fd97-117e-4bac-b93a-613d7baaa088");
-                })
-                .InstancePerRequest();
+            //// Register classes in Autofac
+            //builder.RegisterType<SettingsService>().As<ISettingsService>()
+            //    .OnActivating(e =>
+            //    {
+            //        e.Instance.APIVersionNumber = "v1";
+            //        e.Instance.SiteBaseUrl = GetCurrentDomain();
+            //        e.Instance.SmtpServer = "localhost";
+            //        e.Instance.WorkflowFolder = HttpContext.Current.Server.MapPath("~/WorkflowDefinitions");
+            //        e.Instance.WorkflowStoreId = new Guid("c068fd97-117e-4bac-b93a-613d7baaa088");
+            //    })
+            //    .InstancePerRequest();
 
             builder.RegisterType<WorkflowService>().As<IWorkflowService>();
 

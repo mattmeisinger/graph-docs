@@ -11,11 +11,13 @@ namespace GraphDocs.Infrastructure
     {
         private IGraphClient client;
         private PathsDataService paths;
+        private DocumentsWorkflowsService documentsWorkflows;
 
         public DocumentsDataService()
         {
             client = Neo4jConnectionFactory.GetConnection();
             paths = new PathsDataService(client);
+            documentsWorkflows = new DocumentsWorkflowsService(client);
         }
 
         public Document Get(string path)
@@ -49,6 +51,13 @@ namespace GraphDocs.Infrastructure
                 .Return<Document>("d")
                 .Results
                 .Any();
+
+            document.ActiveWorkflows = client.Cypher
+                .WithParams(new { documentId })
+                .Match("(:Document { ID: {documentId} })<-[:ASSIGNED_TO]-(aw:ActiveWorkflow { activeWorkflow })")
+                .Return<ActiveWorkflow>("aw")
+                .Results
+                .ToArray();
 
             return document;
         }
@@ -105,6 +114,8 @@ namespace GraphDocs.Infrastructure
                 .ExecuteWithoutResults();
 
             setTags(d.ID, d.Tags);
+
+            documentsWorkflows.InitializeWorkflowsForDocument(parentId, d);
         }
 
         public void Save(Document d)

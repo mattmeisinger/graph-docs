@@ -37,6 +37,10 @@ namespace GraphDocs.WebService.Controllers
                         self = PathToController("tags", a)
                     }
                 }),
+                activeWorkflows = document.ActiveWorkflows.Select(a => new
+                {
+
+                }),
                 links = new
                 {
                     self = PathTo(document.Path),
