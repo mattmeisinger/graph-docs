@@ -3,7 +3,7 @@ using System.Linq;
 using Neo4jClient;
 using GraphDocs.Core.Models;
 using GraphDocs.Infrastructure.Utilities;
-using GraphDocs.Infrastructure.Database;
+using GraphDocs.Core.Interfaces;
 
 namespace GraphDocs.Infrastructure
 {
@@ -13,11 +13,11 @@ namespace GraphDocs.Infrastructure
         private PathsDataService paths;
         private DocumentsWorkflowsService documentsWorkflows;
 
-        public DocumentsDataService()
+        public DocumentsDataService(IConnectionFactory connFactory, PathsDataService paths, DocumentsWorkflowsService documentsWorkflows)
         {
-            client = Neo4jConnectionFactory.GetConnection();
-            paths = new PathsDataService(client);
-            documentsWorkflows = new DocumentsWorkflowsService(client);
+            this.client = connFactory.GetConnection();
+            this.paths = paths;
+            this.documentsWorkflows = documentsWorkflows;
         }
 
         public Document Get(string path)
@@ -54,7 +54,7 @@ namespace GraphDocs.Infrastructure
 
             document.ActiveWorkflows = client.Cypher
                 .WithParams(new { documentId })
-                .Match("(:Document { ID: {documentId} })<-[:ASSIGNED_TO]-(aw:ActiveWorkflow { activeWorkflow })")
+                .Match("(:Document { ID: {documentId} })<-[:ASSIGNED_TO]-(aw:ActiveWorkflow)")
                 .Return<ActiveWorkflow>("aw")
                 .Results
                 .ToArray();

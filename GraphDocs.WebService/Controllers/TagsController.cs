@@ -10,7 +10,11 @@ namespace GraphDocs.WebService.Controllers
 {
     public class TagsController : BaseController
     {
-        private TagsDataService tags = new TagsDataService();
+        private TagsDataService tags;
+        public TagsController(TagsDataService tags)
+        {
+            this.tags = tags;
+        }
 
         [ActionName("Index"), HttpGet]
         public ActionResult Get(string path)

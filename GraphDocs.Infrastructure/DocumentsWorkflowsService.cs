@@ -1,11 +1,9 @@
-﻿using GraphDocs.Core.Models;
+﻿using GraphDocs.Core.Interfaces;
+using GraphDocs.Core.Models;
 using GraphDocs.Infrastructure.Workflow;
 using Neo4jClient;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraphDocs.Infrastructure
 {
@@ -14,10 +12,10 @@ namespace GraphDocs.Infrastructure
         private IGraphClient client;
         private WorkflowService workflowService;
 
-        public DocumentsWorkflowsService(IGraphClient client)
+        public DocumentsWorkflowsService(IConnectionFactory connFactory, WorkflowService workflowService)
         {
-            this.client = client;
-            this.workflowService = new WorkflowService();
+            this.client = connFactory.GetConnection();
+            this.workflowService = workflowService;
         }
 
         public void InitializeWorkflowsForDocument(string folderId, Document document)

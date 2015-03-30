@@ -7,9 +7,9 @@ using GraphDocs.Infrastructure.Database.Converters;
 
 namespace GraphDocs.Infrastructure.Database
 {
-    public class Neo4jConnectionFactory
+    public class Neo4jConnectionFactory : IConnectionFactory
     {
-        public static IGraphClient GetConnection()
+        public IGraphClient GetConnection()
         {
             var connectionString = "http://localhost:7474/db/data";
             var client = new GraphClient(new Uri(connectionString));
@@ -26,13 +26,13 @@ namespace GraphDocs.Infrastructure.Database
             return client;
         }
 
-        public static void InitAndEraseAll()
+        public void InitAndEraseAll()
         {
             EraseAll();
             Init();
         }
 
-        public static void Init()
+        public void Init()
         {
             var client = GetConnection();
 
@@ -58,7 +58,7 @@ namespace GraphDocs.Infrastructure.Database
             }
         }
 
-        public static void EraseAll()
+        public void EraseAll()
         {
             var client = GetConnection();
             client.Cypher

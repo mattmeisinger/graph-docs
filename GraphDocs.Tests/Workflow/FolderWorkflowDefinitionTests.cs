@@ -9,15 +9,10 @@ using GraphDocs.Infrastructure.Database;
 namespace GraphDocs.Tests.Workflow
 {
     [TestClass]
-    public class FolderWorkflowDefinitionTests
+    public class FolderWorkflowDefinitionTests :TestBase
     {
-        FoldersDataService folders = new FoldersDataService();
-        PathsDataService paths = new PathsDataService(Neo4jConnectionFactory.GetConnection());
-        DocumentsDataService documents = new DocumentsDataService();
-
         public FolderWorkflowDefinitionTests()
         {
-            Neo4jConnectionFactory.InitAndEraseAll();
         }
 
         [TestMethod]

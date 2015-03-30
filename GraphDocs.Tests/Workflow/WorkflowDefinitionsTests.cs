@@ -9,13 +9,11 @@ using GraphDocs.Core.Models;
 namespace GraphDocs.Tests.Workflow
 {
     [TestClass]
-    public class WorkflowDefinitionsTests
+    public class WorkflowDefinitionsTests : TestBase
     {
-        WorkflowService workflows;
         public WorkflowDefinitionsTests()
+            : base()
         {
-            // Set up class
-            workflows = new WorkflowService();
         }
 
         [TestMethod]

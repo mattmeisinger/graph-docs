@@ -8,16 +8,11 @@ using GraphDocs.Infrastructure.Database;
 namespace GraphDocs.Tests
 {
     [TestClass]
-    public class PathsTests
+    public class PathsTests : TestBase
     {
-        FoldersDataService folders = new FoldersDataService();
-        PathsDataService paths = new PathsDataService(Neo4jConnectionFactory.GetConnection());
-        DocumentsDataService documents = new DocumentsDataService();
-        DocumentFilesDataService documentFiles = new DocumentFilesDataService();
-
         public PathsTests()
+            : base()
         {
-            Neo4jConnectionFactory.InitAndEraseAll();
             folders.Create(new Core.Models.Folder { Path = "/", Name = "TestFolder" });
             folders.Create(new Core.Models.Folder { Path = "/", Name = "Test1" });
             folders.Create(new Core.Models.Folder { Path = "/Test1", Name = "Test2a" });

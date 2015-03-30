@@ -9,15 +9,11 @@ using GraphDocs.Core.Models;
 namespace GraphDocs.Tests
 {
     [TestClass]
-    public class FoldersTests
+    public class FoldersTests : TestBase
     {
-        FoldersDataService folders = new FoldersDataService();
-        PathsDataService paths = new PathsDataService(Neo4jConnectionFactory.GetConnection());
-        DocumentsDataService documents = new DocumentsDataService();
-
         public FoldersTests()
+            : base()
         {
-            Neo4jConnectionFactory.InitAndEraseAll();
             folders.Create(new Folder { Path = "/", Name = "TestFolder" });
             folders.Create(new Folder { Path = "/", Name = "Test1" });
             folders.Create(new Folder { Path = "/Test1", Name = "Test2a" });

@@ -4,15 +4,16 @@ using System.Linq;
 using GraphDocs.Infrastructure.Utilities;
 using GraphDocs.Core.Models;
 using Neo4jClient;
+using GraphDocs.Core.Interfaces;
 
 namespace GraphDocs.Infrastructure
 {
     public class PathsDataService
     {
         private IGraphClient client;
-        public PathsDataService(IGraphClient client)
+        public PathsDataService(IConnectionFactory connFactory)
         {
-            this.client = client;
+            this.client = connFactory.GetConnection();
         }
 
         public string GetIDFromFolderPath(string path)

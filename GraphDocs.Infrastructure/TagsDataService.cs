@@ -2,7 +2,7 @@
 using System.Linq;
 using GraphDocs.Core.Models;
 using Neo4jClient;
-using GraphDocs.Infrastructure.Database;
+using GraphDocs.Core.Interfaces;
 
 namespace GraphDocs.Infrastructure
 {
@@ -10,10 +10,10 @@ namespace GraphDocs.Infrastructure
     {
         private IGraphClient client;
         private PathsDataService paths;
-        public TagsDataService()
+        public TagsDataService(IConnectionFactory connFactory, PathsDataService paths)
         {
-            client = Neo4jConnectionFactory.GetConnection();
-            paths = new PathsDataService(client);
+            this.client = connFactory.GetConnection();
+            this.paths = paths;
         }
 
         public Tag GetOrCreateTagByName(string name)

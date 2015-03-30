@@ -10,7 +10,11 @@ namespace GraphDocs.WebService.Controllers
 {
     public class FoldersController : BaseController
     {
-        private FoldersDataService folders = new FoldersDataService();
+        private FoldersDataService folders;
+        public FoldersController(FoldersDataService folders)
+        {
+            this.folders = folders;
+        }
 
         [ActionName("Index"), HttpGet]
         public ActionResult Get(string path)

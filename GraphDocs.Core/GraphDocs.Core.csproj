@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IConnectionFactory.cs" />
     <Compile Include="Interfaces\IWorkflowService.cs" />
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\DocumentFile.cs" />

@@ -7,14 +7,11 @@ using GraphDocs.Infrastructure.Database;
 namespace GraphDocs.Tests
 {
     [TestClass]
-    public class DocumentsTests
+    public class DocumentsTests : TestBase
     {
-        FoldersDataService folders = new FoldersDataService();
-        DocumentsDataService documents = new DocumentsDataService();
-
         public DocumentsTests()
+            : base()
         {
-            Neo4jConnectionFactory.InitAndEraseAll();
             folders.Create(new Core.Models.Folder { Path = "/", Name = "TestFolder" });
             folders.Create(new Core.Models.Folder { Path = "/", Name = "Test1" });
             folders.Create(new Core.Models.Folder { Path = "/Test1", Name = "Test2a" });

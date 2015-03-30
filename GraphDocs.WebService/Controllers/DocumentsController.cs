@@ -10,7 +10,11 @@ namespace GraphDocs.WebService.Controllers
 {
     public class DocumentsController : BaseController
     {
-        private DocumentsDataService documents = new DocumentsDataService();
+        private DocumentsDataService documents;
+        public DocumentsController(DocumentsDataService documents)
+        {
+            this.documents = documents;
+        }
 
         [ActionName("Index"), HttpGet]
         public ActionResult Get(string path)

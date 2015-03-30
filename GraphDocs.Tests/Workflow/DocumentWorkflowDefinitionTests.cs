@@ -5,19 +5,17 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GraphDocs.Core.Models;
 using GraphDocs.Infrastructure;
 using GraphDocs.Infrastructure.Database;
+using GraphDocs.Core.Interfaces;
 
 namespace GraphDocs.Tests.Workflow
 {
     [TestClass]
-    public class DocumentWorkflowDefinitionTests
+    public class DocumentWorkflowDefinitionTests : TestBase
     {
-        FoldersDataService folders = new FoldersDataService();
-        PathsDataService paths = new PathsDataService(Neo4jConnectionFactory.GetConnection());
-        DocumentsDataService documents = new DocumentsDataService();
-
         public DocumentWorkflowDefinitionTests()
+            : base()
         {
-            Neo4jConnectionFactory.InitAndEraseAll();
+
         }
 
         [TestMethod]

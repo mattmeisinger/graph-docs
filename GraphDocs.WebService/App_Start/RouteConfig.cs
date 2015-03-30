@@ -16,17 +16,17 @@ namespace GraphDocs.WebService
             routes.MapRoute(
                 name: "Folders_Route",
                 url: "v1/Folders/{*path}",
-                defaults: new { action = "Index", path = UrlParameter.Optional }
+                defaults: new { action = "Index", controller = "Folders", path = UrlParameter.Optional }
             );
             routes.MapRoute(
                 name: "Documents_Route",
                 url: "v1/Documents/{*path}",
-                defaults: new { action = "Index", path = UrlParameter.Optional }
+                defaults: new { action = "Index", controller = "Documents", path = UrlParameter.Optional }
             );
             routes.MapRoute(
                 name: "WorkflowDefinitions_Route",
                 url: "v1/WorkflowDefinitions/{folderId}/{workflowName}",
-                defaults: new { action = "Index" }
+                defaults: new { action = "Index", controller = "WorkflowDefinitions" }
             );
             routes.MapRoute(
                 name: "Default_Route",

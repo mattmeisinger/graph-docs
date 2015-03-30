@@ -3,8 +3,8 @@ using System.Linq;
 using GraphDocs.Infrastructure.Utilities;
 using GraphDocs.Core.Models;
 using Neo4jClient;
-using GraphDocs.Infrastructure.Database;
 using System.Dynamic;
+using GraphDocs.Core.Interfaces;
 
 namespace GraphDocs.Infrastructure
 {
@@ -13,10 +13,10 @@ namespace GraphDocs.Infrastructure
         private IGraphClient client;
         private PathsDataService paths;
 
-        public FoldersDataService()
+        public FoldersDataService(IConnectionFactory connFactory, PathsDataService paths)
         {
-            client = Neo4jConnectionFactory.GetConnection();
-            paths = new PathsDataService(client);
+            this.client = connFactory.GetConnection();
+            this.paths = paths;
         }
 
         public Folder Get(string path)
