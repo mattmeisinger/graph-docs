@@ -22,7 +22,6 @@ namespace GraphDocs.Workflow.Neo4jInstanceStore
         IGraphClient client;
         InstanceHandle handle;
 
-        public Neo4jInstanceStore(IGraphClient conn) : this(conn, Guid.NewGuid()) { }
         public Neo4jInstanceStore(IGraphClient conn, Guid storeId)
         {
             this.client = conn;

@@ -1,12 +1,10 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
-using GraphDocs.Core;
 using GraphDocs.Core.Interfaces;
 using GraphDocs.Infrastructure;
 using GraphDocs.Infrastructure.Database;
 using GraphDocs.Infrastructure.Workflow;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Web;
@@ -46,7 +44,6 @@ namespace GraphDocs.WebService
             builder.RegisterType<FoldersDataService>().As<FoldersDataService>();
             builder.RegisterType<PathsDataService>().As<PathsDataService>();
             builder.RegisterType<TagsDataService>().As<TagsDataService>();
-            builder.RegisterType<WorkflowService>().As<WorkflowService>();
             builder.RegisterType<DocumentsWorkflowsService>().As<DocumentsWorkflowsService>();
 
             // Build DI container

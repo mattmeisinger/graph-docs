@@ -128,6 +128,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DocumentFilesController.cs" />
     <Compile Include="Controllers\DocumentsController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TagsController.cs" />
     <Compile Include="Controllers\FoldersController.cs" />
     <Compile Include="Controllers\WorkflowsController.cs" />
@@ -149,8 +150,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\Folders\" />
-    <Folder Include="Views\Workflows\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GraphDocs.Infrastructure\GraphDocs.Infrastructure.csproj">

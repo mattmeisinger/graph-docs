@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Activities;
-using System.Net.Mail;
 using GraphDocs.Core.Models;
 using System.Configuration;
 using System.Net;
@@ -15,15 +12,12 @@ namespace GraphDocs.Workflow.Core
         /// <summary>
         /// Comma- or semicolon-separated list of email addresses.
         /// </summary>
-        [RequiredArgument]
         public InArgument<string> EmailRecipients { get; set; }
 
-        [RequiredArgument]
         public InArgument<Document> Document { get; set; }
 
         public InArgument<DocumentFile> DocumentFile { get; set; }
 
-        [RequiredArgument]
         public InArgument<string> ApproverGroupName { get; set; }
 
         // NativeActivity derived activities that do asynchronous operations by calling 

@@ -41,9 +41,16 @@ namespace GraphDocs.WebService.Controllers
                         self = PathToController("tags", a)
                     }
                 }),
-                activeWorkflows = document.ActiveWorkflows.Select(a => new
+                activeWorkflows = document.ActiveWorkflows.OrderBy(a => a.Order).Select(a => new
                 {
-
+                    name = a.WorkflowName,
+                    status = a.Status,
+                    order = a.Order,
+                    settings = a.Settings.Select(b => new
+                    {
+                        key = b.Key,
+                        value = b.Value
+                    })
                 }),
                 links = new
                 {

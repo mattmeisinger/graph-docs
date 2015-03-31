@@ -52,7 +52,7 @@ namespace GraphDocs.Tests
         public void DeleteFolder_FolderExists()
         {
             // Create a folder and make sure it exists
-            folders.Create(new Core.Models.Folder { Path = "/", Name = "FolderToDelete" });
+            folders.Create(new Folder { Path = "/", Name = "FolderToDelete" });
             var id = paths.GetIDFromFolderPath("/FolderToDelete");
             Assert.IsNotNull(id);
 
@@ -65,9 +65,9 @@ namespace GraphDocs.Tests
         [TestMethod]
         public void DeleteFolder_WithChildren()
         {
-            folders.Create(new Core.Models.Folder { Path = "/", Name = "FolderToDelete" });
-            folders.Create(new Core.Models.Folder { Path = "/FolderToDelete", Name = "SubFolder" });
-            folders.Create(new Core.Models.Folder { Path = "/FolderToDelete/SubFolder", Name = "SubSubFolder" });
+            folders.Create(new Folder { Path = "/", Name = "FolderToDelete" });
+            folders.Create(new Folder { Path = "/FolderToDelete", Name = "SubFolder" });
+            folders.Create(new Folder { Path = "/FolderToDelete/SubFolder", Name = "SubSubFolder" });
             var id = paths.GetIDFromFolderPath("/FolderToDelete");
             Assert.IsNotNull(id);
             id = paths.GetIDFromFolderPath("/FolderToDelete/SubFolder");
@@ -83,7 +83,7 @@ namespace GraphDocs.Tests
         [TestMethod]
         public void CreateFolder_NewFolder()
         {
-            folders.Create(new Core.Models.Folder { Path = "/", Name = "NewFolder-D" });
+            folders.Create(new Folder { Path = "/", Name = "NewFolder-D" });
             var id = paths.GetIDFromFolderPath("/NewFolder-D");
             Assert.IsNotNull(id);
         }
@@ -91,8 +91,8 @@ namespace GraphDocs.Tests
         [TestMethod]
         public void CreateFolder_NewSubFolder()
         {
-            folders.Create(new Core.Models.Folder { Path = "/", Name = "NewFolder-E" });
-            folders.Create(new Core.Models.Folder { Path = "/NewFolder-E", Name = "NewSubFolder-E" });
+            folders.Create(new Folder { Path = "/", Name = "NewFolder-E" });
+            folders.Create(new Folder { Path = "/NewFolder-E", Name = "NewSubFolder-E" });
             var id = paths.GetIDFromFolderPath("/NewFolder-E/NewSubFolder-E");
             Assert.IsNotNull(id);
         }
@@ -100,9 +100,9 @@ namespace GraphDocs.Tests
         [TestMethod]
         public void CreateFolder_NewSubSubFolder()
         {
-            folders.Create(new Core.Models.Folder { Path = "/", Name = "NewFolder-F" });
-            folders.Create(new Core.Models.Folder { Path = "/NewFolder-F", Name = "NewSubFolder-F" });
-            folders.Create(new Core.Models.Folder { Path = "/NewFolder-F/NewSubFolder-F", Name = "NewSubSubFolder-F" });
+            folders.Create(new Folder { Path = "/", Name = "NewFolder-F" });
+            folders.Create(new Folder { Path = "/NewFolder-F", Name = "NewSubFolder-F" });
+            folders.Create(new Folder { Path = "/NewFolder-F/NewSubFolder-F", Name = "NewSubSubFolder-F" });
             var id = paths.GetIDFromFolderPath("/NewFolder-F/NewSubFolder-F/NewSubSubFolder-F");
             Assert.IsNotNull(id);
         }

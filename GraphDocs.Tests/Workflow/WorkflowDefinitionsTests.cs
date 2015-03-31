@@ -59,7 +59,7 @@ namespace GraphDocs.Tests.Workflow
             var status = workflows.InitializeWorkflow(workflowName, parameters);
             Assert.IsNotNull(status.InstanceId);
 
-            var result = workflows.ResumeWorkflow("ApproveDocument", status.InstanceId, "Approval-Group1", true);
+            var result = workflows.ResumeWorkflow(workflowName, status.InstanceId, "Approval-Group1", true);
             Assert.IsTrue(result.Result is bool);
             Assert.IsTrue((bool)result.Result == true);
         }
@@ -76,7 +76,7 @@ namespace GraphDocs.Tests.Workflow
             var status = workflows.InitializeWorkflow(workflowName, parameters);
             Assert.IsNotNull(status.InstanceId);
 
-            var result = workflows.ResumeWorkflow("ApproveDocument", status.InstanceId, "Approval-Group1", false);
+            var result = workflows.ResumeWorkflow(workflowName, status.InstanceId, "Approval-Group1", false);
             Assert.IsTrue(result.Result is bool);
             Assert.IsTrue((bool)result.Result == false);
         }
