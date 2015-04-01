@@ -65,7 +65,7 @@ namespace GraphDocs.Tests
         {
             var id1 = paths.GetIDFromDocumentPath("/doc1.txt");
             var id2 = paths.GetIDFromDocumentPath("/Test1/doc2.txt");
-            var doc = documents.Get("/Test1/doc2.txt");
+            var doc = documents.GetByPath("/Test1/doc2.txt");
             doc.Tags = doc.Tags.Union(new[] { "Tag4", "Tag5" }).Where(a => a != "Tag3").ToArray();
             documents.Save(doc);
             Assert.IsNotNull(id1);

@@ -39,7 +39,7 @@ namespace GraphDocs.Workflow.Core
             var body = "<p>Approval requested for GraphDocs document." +
                 "<br/>Name : " + document.Name +
                 "<br/>Path : " + document.Path +
-                "<br/>Tags : " + string.Join(", ", document.Tags) +
+                "<br/>Tags : " + string.Join(", ", document.Tags ?? new string[] { }) +
                 "</p>" +
                 "<p>Can be approved by: " + ApproverGroupName.Get(context) + "</p>" +
                 "<p><a href=\"" + ConfigurationManager.AppSettings["SiteBaseUrl"] + "/Workflow/Approve?id=" + context.WorkflowInstanceId + "?approverGroup=" + WebUtility.UrlEncode(approverGroupName) + "\" style=\"font-weight: bold;\">Approve</a></p>" +

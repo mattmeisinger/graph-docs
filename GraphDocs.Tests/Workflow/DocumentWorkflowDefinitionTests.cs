@@ -38,7 +38,7 @@ namespace GraphDocs.Tests.Workflow
             Assert.IsTrue(folders.Get("/WorkflowFolder").WorkflowDefinitions.Count() == 1);
 
             documents.Create(new Core.Models.Document { Path = "/WorkflowFolder", Name = "test.txt", Tags = new[] { "test1", "testtag2" } });
-            var doc = documents.Get("/WorkflowFolder/test.txt");
+            var doc = documents.GetByPath("/WorkflowFolder/test.txt");
             Assert.IsTrue(doc.Active == false);
         }
     }

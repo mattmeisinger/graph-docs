@@ -54,10 +54,31 @@ namespace GraphDocs.Tests.Workflow
         }
 
         [TestMethod]
-        public void CreateDocumentThatNeedsWorkflow2()
+        public void CreateDocumentThatNeedsWorkflow_NotActiveUntilApproved()
         {
+            // Create document that is not approved until feedback is given
             documents.Create(new Document { Path = "/WF", Name = "doc2.txt" });
-            //documentsWorkflows.ResumeWorkflowsForDocument();
+            var doc = documents.GetByPath("/WF/doc2.txt");
+            var activeWorkflow = doc.ActiveWorkflows.First();
+            Assert.IsFalse(documents.GetByPath("/WF/doc2.txt").Active);
+
+            // Simulate feedback coming in
+            documentsWorkflows.SubmitWorkflowReply(doc, activeWorkflow.WorkflowName, activeWorkflow.Bookmark, true);
+            Assert.IsTrue(documents.GetByPath("/WF/doc2.txt").Active);
+        }
+
+        [TestMethod]
+        public void CreateDocumentThatNeedsWorkflow_NotActiveBecauseRejected()
+        {
+            // Create document that is not approved until feedback is given
+            documents.Create(new Document { Path = "/WF", Name = "doc2.txt" });
+            var doc = documents.GetByPath("/WF/doc2.txt");
+            var activeWorkflow = doc.ActiveWorkflows.First();
+            Assert.IsFalse(documents.GetByPath("/WF/doc2.txt").Active);
+
+            // Simulate feedback coming in
+            documentsWorkflows.SubmitWorkflowReply(doc, activeWorkflow.WorkflowName, activeWorkflow.Bookmark, false);
+            Assert.IsFalse(documents.GetByPath("/WF/doc2.txt").Active);
         }
     }
 }

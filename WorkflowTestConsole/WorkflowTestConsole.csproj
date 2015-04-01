@@ -79,10 +79,6 @@
       <Project>{d7ed7782-73ea-4187-837f-4bfdad7a52dd}</Project>
       <Name>GraphDocs.Workflow.Neo4jInstanceStore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WorkflowActivities\WorkflowActivities.csproj">
-      <Project>{b848c685-8136-472b-b205-0d9f32745b1f}</Project>
-      <Name>WorkflowActivities</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

@@ -1,18 +1,14 @@
-﻿using GraphDocs.Core.Interfaces;
+﻿using GraphDocs.Core.Enums;
+using GraphDocs.Core.Interfaces;
 using GraphDocs.Core.Models;
-using GraphDocs.Infrastructure.Database;
 using GraphDocs.Workflow.Neo4jInstanceStore;
 using Neo4jClient;
 using System;
 using System.Activities;
 using System.Activities.XamlIntegration;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Runtime.DurableInstancing;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace GraphDocs.Infrastructure.Workflow
 {
@@ -77,76 +73,71 @@ namespace GraphDocs.Infrastructure.Workflow
 
         public WorkflowStatus InitializeWorkflow(string workflowName, IDictionary<string, object> parameters)
         {
-            using (var store = new Neo4jInstanceStore(client, workflowStoreId))
-            {
-                string status = "In Progress";
-                Activity workflowDefinition = GetWorkflow(workflowName);
-                var instanceUnloaded = new AutoResetEvent(false);
-                var app = new WorkflowApplication(workflowDefinition, parameters)
-                {
-                    InstanceStore = store,
-                    PersistableIdle = (e) =>
-                    {
-                        return PersistableIdleAction.Unload;
-                    },
-                    Completed = (arg) =>
-                    {
-                        Console.WriteLine("WorkflowApplication has Completed in the {0} state.", arg.CompletionState);
-                        status = "Completed";
-                    },
-                    Unloaded = (workflowApplicationEventArgs) =>
-                    {
-                        Console.WriteLine("WorkflowApplication has Unloaded.");
-                        instanceUnloaded.Set();
-                    }
-                };
-                Guid newInstanceId = app.Id;
-                app.Run();
-                instanceUnloaded.WaitOne();
-                Console.WriteLine("Started instance #" + newInstanceId);
-                return new WorkflowStatus
-                {
-                    InstanceId = newInstanceId,
-                    Status = status
-                };
-            }
+            return runWorkflow(workflowName, parameters, null, null, false);
         }
 
-        public WorkflowStatus ResumeWorkflow(string workflowName, Guid workflowInstanceId, string bookmarkName, object bookmarkValue)
+        public WorkflowStatus ResumeWorkflow(string workflowName, Guid? workflowInstanceId, string bookmarkName, bool response)
+        {
+            return runWorkflow(workflowName, null, workflowInstanceId, bookmarkName, response);
+        }
+
+        private WorkflowStatus runWorkflow(string workflowName, IDictionary<string, object> parameters, Guid? workflowInstanceId, string bookmarkName, bool response)
         {
             Activity workflowDefinition = GetWorkflow(workflowName);
             using (var store = new Neo4jInstanceStore(client, workflowStoreId))
             {
-                string status = "In Progress";
-                object result = null;
+                WorkflowStatusEnum status = WorkflowStatusEnum.InProgress;
+                string bookmark = null;
+                bool? result = null;
                 var instanceUnloaded = new AutoResetEvent(false);
-                var app = new WorkflowApplication(workflowDefinition)
-                {
-                    InstanceStore = store,
-                    PersistableIdle = (e) =>
-                    {
-                        return PersistableIdleAction.Unload;
-                    },
-                    Completed = (arg) =>
-                    {
-                        Console.WriteLine("WorkflowApplication has Completed in the {0} state.", arg.CompletionState);
-                        status = "Completed";
-                        result = (bool)arg.Outputs["Result"];
-                    },
-                    Unloaded = (arg) =>
-                    {
-                        Console.WriteLine("WorkflowApplication has Unloaded.");
-                        instanceUnloaded.Set();
-                    }
-                };
-                app.Load(workflowInstanceId);
-                app.ResumeBookmark(bookmarkName, bookmarkValue);
-                instanceUnloaded.WaitOne();
 
+                var app = parameters == null ? new WorkflowApplication(workflowDefinition) : new WorkflowApplication(workflowDefinition, parameters);
+                app.InstanceStore = store;
+                app.PersistableIdle = (e) =>
+                {
+                    return PersistableIdleAction.Unload;
+                };
+                app.Completed = (arg) =>
+                {
+                    Console.WriteLine("Workflow has Completed in the {0} state.", arg.CompletionState);
+                    status = WorkflowStatusEnum.Completed;
+
+                    // If the result of the workflow is a boolean, use that value, otherwise the workflow must be so 
+                    // simple that it doesn't return anything, so we'll set the result to true.
+                    if (arg.Outputs.ContainsKey("Result") && arg.Outputs["Result"] is bool)
+                        result = (bool)arg.Outputs["Result"];
+                    else
+                        result = true;
+                };
+                app.Unloaded = (arg) =>
+                {
+                    Console.WriteLine("Workflow has Unloaded.");
+                    instanceUnloaded.Set();
+                };
+                app.Idle = (idle) =>
+                {
+                    bookmark = idle.Bookmarks.Select(a => a.BookmarkName).FirstOrDefault();
+                    Console.WriteLine("Workflow has Idled.");
+                };
+                if (workflowInstanceId.HasValue)
+                {
+                    app.Load(workflowInstanceId.Value);
+                    app.ResumeBookmark(bookmarkName, response);
+                }
+                else
+                {
+                    workflowInstanceId = app.Id;
+                    app.Run();
+                    Console.WriteLine("Started instance #" + workflowInstanceId.Value);
+                }
+
+                // Wait for the workflow to complete before returning the data
+                instanceUnloaded.WaitOne();
                 return new WorkflowStatus
                 {
-                    InstanceId = workflowInstanceId,
+                    InstanceId = workflowInstanceId.Value,
                     Status = status,
+                    Bookmark = bookmark,
                     Result = result
                 };
             }

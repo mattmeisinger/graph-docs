@@ -28,7 +28,7 @@ namespace GraphDocs.WebService.Controllers
             if (file == null)
                 throw new Exception("File not found: " + path);
 
-            var document = documents.Get(path);
+            var document = documents.GetByPath(path);
             if (document == null)
                 throw new Exception("Document not found." + path);
 

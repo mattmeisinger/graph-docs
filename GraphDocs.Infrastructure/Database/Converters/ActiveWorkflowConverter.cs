@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using GraphDocs.Core.Models;
@@ -31,9 +29,9 @@ namespace GraphDocs.Infrastructure.Database.Converters
                 // Get the Settings property off of the object, remove it from the object, then
                 // add it back as a Json string property instead of an object, because Neo4J cannot
                 // handle properties that are objects.
-                var stringifiedValue = jsonObject.Property("Settings").Value.ToString();
+                var settingsJsonString = jsonObject.Property("Settings").Value.ToString();
                 jsonObject.Remove("Settings");
-                jsonObject.Add("Settings", stringifiedValue);
+                jsonObject.Add("Settings", settingsJsonString);
 
                 jsonObject.WriteTo(writer);
             }
@@ -47,14 +45,16 @@ namespace GraphDocs.Infrastructure.Database.Converters
             var jsonObject = JObject.Load(reader);
 
             // Get workflow settings dictionary from the original JSON object
-            var settingsJson = jsonObject["Settings"].Value<string>();
-            var settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(settingsJson);
+            var settingsJsonString = jsonObject["Settings"].Value<string>();
+            var settings = JsonConvert.DeserializeObject<Dictionary<string, string>>(settingsJsonString);
 
             return new ActiveWorkflow
             {
                 WorkflowName = jsonObject["WorkflowName"].Value<string>(),
                 Order = jsonObject["Order"].Value<int>(),
                 Status = jsonObject["Status"].Value<string>(),
+                InstanceId = jsonObject["InstanceId"].Value<string>(),
+                Bookmark = jsonObject["Bookmark"].Value<string>(),
                 Settings = settings
             };
         }

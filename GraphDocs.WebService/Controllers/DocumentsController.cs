@@ -22,13 +22,14 @@ namespace GraphDocs.WebService.Controllers
             if (string.IsNullOrWhiteSpace(path) || path == "/")
                 throw new Exception("A document path must be provided to retrieve documents.");
 
-            var document = documents.Get(path);
+            var document = documents.GetByPath(path);
             return Json(new
             {
                 data = new
                 {
                     id = document.ID,
                     name = document.Name,
+                    active = document.Active,
                     path = document.Path,
                     tags = document.Tags,
                     hasFile = document.HasFile
@@ -46,11 +47,21 @@ namespace GraphDocs.WebService.Controllers
                     name = a.WorkflowName,
                     status = a.Status,
                     order = a.Order,
+                    instanceId = a.InstanceId,
+                    bookmark = a.Bookmark,
                     settings = a.Settings.Select(b => new
                     {
                         key = b.Key,
                         value = b.Value
-                    })
+                    }),
+                    links = a.Status == "InProgress"
+                        ? new Dictionary<string, object>
+                        {
+                            // Only show these items when the status indicates it is expecting a response
+                            { "respondApprove", PathToController("workflowreply", document.ID, a.WorkflowName, a.Bookmark, "true") },
+                            { "respondReject", PathToController("workflowreply", document.ID, a.WorkflowName, a.Bookmark, "false") }
+                        }
+                        : new Dictionary<string, object>()
                 }),
                 links = new
                 {

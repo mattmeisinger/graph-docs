@@ -20,7 +20,7 @@ namespace GraphDocs.Infrastructure
             this.documentsWorkflows = documentsWorkflows;
         }
 
-        public Document Get(string path)
+        public Document GetByPath(string path)
         {
             path = PathUtilities.ReformatPath(path);
             var documentId = paths.GetIDFromDocumentPath(path);
@@ -60,6 +60,12 @@ namespace GraphDocs.Infrastructure
                 .ToArray();
 
             return document;
+        }
+
+        public Document GetByID(string documentId)
+        {
+            var path = paths.GetPathFromDocumentID(documentId);
+            return GetByPath(path);
         }
 
         public void Delete(string path)

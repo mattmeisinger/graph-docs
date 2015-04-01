@@ -58,8 +58,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\WorkflowStatusEnum.cs" />
     <Compile Include="Interfaces\IConnectionFactory.cs" />
-    <Compile Include="Interfaces\IWorkflowService.cs" />
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\DocumentFile.cs" />
     <Compile Include="Models\Folder.cs" />
