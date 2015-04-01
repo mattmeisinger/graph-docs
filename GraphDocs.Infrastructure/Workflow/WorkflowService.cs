@@ -9,6 +9,7 @@ using System.Activities.XamlIntegration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Xaml;
 
 namespace GraphDocs.Infrastructure.Workflow
 {
@@ -47,9 +48,9 @@ namespace GraphDocs.Infrastructure.Workflow
 
         public Activity GetWorkflow(string workflowName)
         {
-            var assembly = typeof(GraphDocs.Workflow.Core.SimpleEmailNotification).Assembly;
+            var workflowCoreAssembly = typeof(GraphDocs.Workflow.Core.SimpleEmailNotification).Assembly;
             Type target = typeof(Activity);
-            var match = assembly.GetTypes()
+            var match = workflowCoreAssembly.GetTypes()
                 .Where(a => target.IsAssignableFrom(a) && a.Name == workflowName)
                 .FirstOrDefault();
 
@@ -61,8 +62,11 @@ namespace GraphDocs.Infrastructure.Workflow
                 .FirstOrDefault();
             if (matchingFilename != null)
             {
-                // Load workflow from XAML file
-                Activity activity = ActivityXamlServices.Load(matchingFilename);
+                // Load workflow from XAML file. Need to reference the core assembly as the LocalAssembly
+                // while loading though or the custom activities will not work.
+                //var o = XamlServices.Parse(@"<ApproveDocument xmlns=""clr-namespace:GraphDocs.Workflow.Core""/>");
+                var xamlReader = ActivityXamlServices.CreateReader(new XamlXmlReader(matchingFilename, new XamlXmlReaderSettings { LocalAssembly = System.Reflection.Assembly.GetExecutingAssembly() }));
+                Activity activity = ActivityXamlServices.Load(xamlReader);
                 return activity;
             }
             else

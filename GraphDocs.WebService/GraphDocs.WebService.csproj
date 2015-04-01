@@ -161,9 +161,26 @@
       <Project>{ea1facfd-11ea-4333-9b70-e4761cf9224b}</Project>
       <Name>GraphDocs.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GraphDocs.Workflow.Core\GraphDocs.Workflow.Core.csproj">
+      <Project>{f6f9bc1b-5cb8-4c75-97e4-f4081a0c88a7}</Project>
+      <Name>GraphDocs.Workflow.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <XamlAppDef Include="WorkflowDefinitions\SimpleEmailNotificationWorkflow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="WorkflowDefinitions\MyWF.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="WorkflowDefinitions\MyActivity.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </XamlAppDef>

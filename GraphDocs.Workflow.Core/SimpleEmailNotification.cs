@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Activities;
-using System.Net.Mail;
-using GraphDocs.Core.Models;
 using System.Configuration;
-using System.Net;
 
 namespace GraphDocs.Workflow.Core
 {

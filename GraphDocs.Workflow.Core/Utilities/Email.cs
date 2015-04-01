@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraphDocs.Workflow.Core.Utilities
 {
@@ -21,7 +19,7 @@ namespace GraphDocs.Workflow.Core.Utilities
         /// <param name="attachmentFilename"></param>
         public static void Send(string from, string to, string subject, string body, bool isHtml, byte[] attachment = null, string attachmentFilename = null)
         {
-            var message = new System.Net.Mail.MailMessage(from, to, subject, body);
+            var message = new MailMessage(from, to, subject, body);
             message.IsBodyHtml = isHtml;
 
             if (attachment != null)
