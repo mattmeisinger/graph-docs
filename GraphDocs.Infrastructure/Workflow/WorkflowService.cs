@@ -8,6 +8,7 @@ using System.Activities;
 using System.Activities.XamlIntegration;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Xaml;
 
@@ -57,7 +58,8 @@ namespace GraphDocs.Infrastructure.Workflow
             if (match != null)
                 return (Activity)Activator.CreateInstance(match);
 
-            var matchingFilename = System.IO.Directory.EnumerateFiles(workflowFolder)
+            var workflowFiles = System.IO.Directory.EnumerateFiles(workflowFolder).ToArray();
+            var matchingFilename = workflowFiles
                 .Where(a => a.EndsWith("\\" + workflowName + ".xaml"))
                 .FirstOrDefault();
             if (matchingFilename != null)
@@ -65,6 +67,9 @@ namespace GraphDocs.Infrastructure.Workflow
                 // Load workflow from XAML file. Need to reference the core assembly as the LocalAssembly
                 // while loading though or the custom activities will not work.
                 //var o = XamlServices.Parse(@"<ApproveDocument xmlns=""clr-namespace:GraphDocs.Workflow.Core""/>");
+                var workflowText = System.IO.File.ReadAllText(matchingFilename);
+                return ActivityXamlServices.Load(new System.IO.MemoryStream(ASCIIEncoding.Default.GetBytes(workflowText)));
+                //var o = XamlServices.Parse();
                 var xamlReader = ActivityXamlServices.CreateReader(new XamlXmlReader(matchingFilename, new XamlXmlReaderSettings { LocalAssembly = System.Reflection.Assembly.GetExecutingAssembly() }));
                 Activity activity = ActivityXamlServices.Load(xamlReader);
                 return activity;

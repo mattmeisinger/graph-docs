@@ -128,6 +128,13 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </XamlAppDef>
   </ItemGroup>
+  <ItemGroup>
+    <XamlAppDef Include="WorkflowDefinitions\AdHocWorkflow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </XamlAppDef>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

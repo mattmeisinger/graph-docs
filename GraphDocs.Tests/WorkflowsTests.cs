@@ -26,6 +26,36 @@ namespace GraphDocs.Tests.Workflow
                     },
                     new WorkflowDefinition {
                         Order = 2,
+                        WorkflowName = "MyWF2", // This one is a compiled workflow
+                        Settings = new Dictionary<string, string> {
+                            { "EmailRecipients", "mmeisinger@gmail.com" },
+                            { "ApproverGroupName", "Group1" }
+                        }
+                    }
+                }
+            });
+            folders.Create(new Folder
+            {
+                Path = "/",
+                Name = "AdHocWF",
+                WorkflowDefinitions = new WorkflowDefinition[] {
+                    new WorkflowDefinition {
+                        Order = 1,
+                        WorkflowName = "AdHocWorkflow",
+                        Settings = new Dictionary<string, string> {
+                            { "EmailRecipients", "mmeisinger@gmail.com" },
+                            { "ApproverGroupName", "Group1" }
+                        }
+                    }
+                }
+            });
+            folders.Create(new Folder
+            {
+                Path = "/",
+                Name = "CompiledWF",
+                WorkflowDefinitions = new WorkflowDefinition[] {
+                    new WorkflowDefinition {
+                        Order = 1,
                         WorkflowName = "MyWF2",
                         Settings = new Dictionary<string, string> {
                             { "EmailRecipients", "mmeisinger@gmail.com" },
@@ -80,9 +110,19 @@ namespace GraphDocs.Tests.Workflow
         }
 
         [TestMethod]
-        public void CreateDocumentThatNeedsWorkflow()
+        public void CreateDocumentThatNeedsWorkflow_Compiled()
         {
-            documents.Create(new Document { Path = "/WF", Name = "doc.txt" });
+            documents.Create(new Document { Path = "/CompiledWF", Name = "test.txt" });
+            var doc = documents.GetByPath("/CompiledWF/test.txt");
+            Assert.IsFalse(doc.Active, "This doc should be stuck in a workflow, but instead it skipped the workflow.");
+        }
+
+        [TestMethod]
+        public void CreateDocumentThatNeedsWorkflow_AdHoc()
+        {
+            documents.Create(new Document { Path = "/AdHocWF", Name = "test.txt" });
+            var doc = documents.GetByPath("/AdHocWF/test.txt");
+            Assert.IsFalse(doc.Active, "This doc should be stuck in a workflow, but instead it skipped the workflow.");
         }
 
         [TestMethod]

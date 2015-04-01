@@ -42,6 +42,7 @@ namespace GraphDocs.WebService.Controllers
                     id = a.ID,
                     path = a.Path,
                     name = a.Name,
+                    active = a.Active,
                     links = new
                     {
                         self = PathToController("documents", a.Path)
