@@ -1,11 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using GraphDocs.Infrastructure;
 using System.Text;
-using GraphDocs.Infrastructure.Database;
 
-namespace GraphDocs.Tests
+namespace GraphDocs.Tests.IntegrationTests
 {
     [TestClass]
     public class PathsTests : TestBase

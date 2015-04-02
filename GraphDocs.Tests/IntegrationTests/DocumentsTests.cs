@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using GraphDocs.Infrastructure;
-using GraphDocs.Infrastructure.Database;
 
-namespace GraphDocs.Tests
+namespace GraphDocs.Tests.IntegrationTests
 {
     [TestClass]
     public class DocumentsTests : TestBase

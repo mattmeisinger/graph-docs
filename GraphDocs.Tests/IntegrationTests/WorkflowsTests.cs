@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GraphDocs.Core.Models;
 
-namespace GraphDocs.Tests.Workflow
+namespace GraphDocs.Tests.Workflow.IntegrationTests
 {
     [TestClass]
     public class FolderWorkflowDefinitionTests : TestBase
