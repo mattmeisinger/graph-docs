@@ -14,6 +14,7 @@
     <x:Property Name="Document" Type="InArgument(gcm:Document)" />
     <x:Property Name="ApproverGroupName" Type="InArgument(x:String)" />
     <x:Property Name="EmailRecipients" Type="InArgument(x:String)" />
+    <x:Property Name="ReplyUrlTemplate" Type="InArgument(x:String)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>GraphDocs.Tests.WorkflowDefinitions.AdHocWorkflow_1</sap2010:WorkflowViewState.IdRef>
@@ -74,6 +75,11 @@
           <mca:CSharpValue x:TypeArguments="x:String">EmailRecipients</mca:CSharpValue>
         </InArgument>
       </gwc:ApproveDocument.EmailRecipients>
+      <gwc:ApproveDocument.ReplyUrlTemplate>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">ReplyUrlTemplate</mca:CSharpValue>
+        </InArgument>
+      </gwc:ApproveDocument.ReplyUrlTemplate>
     </gwc:ApproveDocument>
     <gwc:ApproveDocument DocumentFile="{x:Null}" sap2010:WorkflowViewState.IdRef="ApproveDocument_2">
       <gwc:ApproveDocument.ApproverGroupName>
@@ -91,8 +97,13 @@
           <mca:CSharpValue x:TypeArguments="x:String">EmailRecipients</mca:CSharpValue>
         </InArgument>
       </gwc:ApproveDocument.EmailRecipients>
+      <gwc:ApproveDocument.ReplyUrlTemplate>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">ReplyUrlTemplate</mca:CSharpValue>
+        </InArgument>
+      </gwc:ApproveDocument.ReplyUrlTemplate>
     </gwc:ApproveDocument>
-    <sads:DebugSymbol.Symbol>d0xDOlxwcm9qZWN0c1xHcmFwaERvY3NcR3JhcGhEb2NzLlRlc3RzXFdvcmtmbG93RGVmaW5pdGlvbnNcQWRIb2NXb3JrZmxvdy54YW1sCTwDYA4CAQE9BU0bAgEPTgVeGwIBAkULRVUCARhKC0pYAgEUQAtAWgIBEFYLVlUCAQtbC1tYAgEHUQtRbQIBAw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0xDOlxwcm9qZWN0c1xHcmFwaERvY3NcR3JhcGhEb2NzLlRlc3RzXFdvcmtmbG93RGVmaW5pdGlvbnNcQWRIb2NXb3JrZmxvdy54YW1sCz0Daw4CAQE+BVMbAgEXVAVpGwIBAkYLRlUCASdQC1BZAgEiSwtLWAIBHUELQVoCARhcC1xVAgESZgtmWQIBDWELYVgCAQhXC1dtAgED</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

@@ -69,17 +69,25 @@ namespace GraphDocs.Infrastructure
             }
         }
 
-        public void SubmitWorkflowReply(Document document, string workflowName, string bookmark, bool response)
+        public void SubmitWorkflowReply(string workflowInstanceId, string bookmark, bool response)
         {
             var workflow = client.Cypher
-                .WithParams(new { documentId = document.ID, workflowName = workflowName })
-                .Match("(:Document { ID: {documentId} })<-[:ASSIGNED_TO]-(aw:ActiveWorkflow { WorkflowName: {workflowName} })")
+                .WithParams(new { instanceId = workflowInstanceId })
+                .Match("(:Document)<-[:ASSIGNED_TO]-(aw:ActiveWorkflow { InstanceId: {instanceId} })")
                 .Return(aw => aw.As<ActiveWorkflow>())
                 .Results
                 .FirstOrDefault();
 
-            if (workflow == null)
-                throw new Exception("Workflow not found");
+            var document = client.Cypher
+                .WithParams(new { instanceId = workflowInstanceId })
+                .Match("(d:Document)<-[:ASSIGNED_TO]-(:ActiveWorkflow { InstanceId: {instanceId} })")
+                .Return(d => d.As<Document>())
+                .Results
+                .FirstOrDefault();
+
+            if (workflow == null || document == null)
+                throw new Exception("Workflow instance not found.");
+
             if (workflow.Status == WorkflowStatusEnum.Pending.ToString())
                 throw new Exception("This workflow has not been started yet. It cannot receive a reply.");
             if (workflow.Status == WorkflowStatusEnum.Completed.ToString())

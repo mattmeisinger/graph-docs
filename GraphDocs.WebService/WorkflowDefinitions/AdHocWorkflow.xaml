@@ -14,6 +14,7 @@
     <x:Property Name="Document" Type="InArgument(gcm:Document)" />
     <x:Property Name="ApproverGroupName" Type="InArgument(x:String)" />
     <x:Property Name="EmailRecipients" Type="InArgument(x:String)" />
+    <x:Property Name="WorkflowName" Type="InArgument(x:String)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>GraphDocs.Tests.WorkflowDefinitions.AdHocWorkflow_1</sap2010:WorkflowViewState.IdRef>
@@ -92,7 +93,7 @@
         </InArgument>
       </gwc:ApproveDocument.EmailRecipients>
     </gwc:ApproveDocument>
-    <sads:DebugSymbol.Symbol>d0xDOlxwcm9qZWN0c1xHcmFwaERvY3NcR3JhcGhEb2NzLlRlc3RzXFdvcmtmbG93RGVmaW5pdGlvbnNcQWRIb2NXb3JrZmxvdy54YW1sCTwDYA4CAQE9BU0bAgEPTgVeGwIBAkULRVUCARhKC0pYAgEUQAtAWgIBEFYLVlUCAQtbC1tYAgEHUQtRbQIBAw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0xDOlxwcm9qZWN0c1xHcmFwaERvY3NcR3JhcGhEb2NzLlRlc3RzXFdvcmtmbG93RGVmaW5pdGlvbnNcQWRIb2NXb3JrZmxvdy54YW1sCT0DYQ4CAQE+BU4bAgESTwVfGwIBAkYLRlUCAR1LC0tYAgEYQQtBWgIBE1cLV1UCAQ1cC1xYAgEIUgtSbQIBAw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

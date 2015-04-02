@@ -66,9 +66,9 @@
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
-    <gwc:ApproveDocument Document="{x:Null}" DocumentFile="{x:Null}" ApproverGroupName="Editors" EmailRecipients="mmeisinger@gmail.com" sap2010:WorkflowViewState.IdRef="ApproveDocument_1" />
+    <gwc:ApproveDocument Document="{x:Null}" DocumentFile="{x:Null}" ReplyUrlTemplate="{x:Null}" ApproverGroupName="Editors" EmailRecipients="mmeisinger@gmail.com" sap2010:WorkflowViewState.IdRef="ApproveDocument_1" />
     <gwc:SimpleEmailNotification Body="Approved" EmailRecipients="mmeisinger@gmail.com" sap2010:WorkflowViewState.IdRef="SimpleEmailNotification_1" Subject="Approved!" />
-    <sads:DebugSymbol.Symbol>d05DOlxwcm9qZWN0c1xHcmFwaERvY3NcR3JhcGhEb2NzLldlYlNlcnZpY2VcV29ya2Zsb3dEZWZpbml0aW9uc1xNeUFjdGl2aXR5LnhhbWwIRANIDgIBAUUFRb8BAgEGRgVGqwECAQJFckWIAQIBCEVYRWECAQdGJ0YxAgEFRp0BRqgBAgEERkJGWAIBAw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1RDOlxwcm9qZWN0c1xHcmFwaERvY3NcR3JhcGhEb2NzLldlYlNlcnZpY2VcV29ya2Zsb3dEZWZpbml0aW9uc1xBcHByb3ZlQW5kTm90aWZ5LnhhbWwIRANIDgIBAUUFRdsBAgEGRgVGqwECAQJFjgFFpAECAQhFdEV9AgEHRidGMQIBBUadAUaoAQIBBEZCRlgCAQM=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

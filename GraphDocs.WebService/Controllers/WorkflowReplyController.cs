@@ -18,12 +18,25 @@ namespace GraphDocs.WebService.Controllers
         }
 
         [ActionName("Index"), HttpGet]
-        public ActionResult Get(string documentId, string workflowName, string bookmarkName, bool response)
+        public ActionResult Get(string workflowInstanceId, string bookmarkName, bool response)
         {
-            // Get list of all available workflows
-            var doc = documents.GetByID(documentId);
-            workflow.SubmitWorkflowReply(doc, workflowName, bookmarkName, response);
-            return Json(new { Message = "Reply has been submitted." });
+            try
+            {
+                workflow.SubmitWorkflowReply(workflowInstanceId, bookmarkName, response);
+                return Json(new
+                {
+                    Message = "Reply has been submitted.",
+                    Error = false
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    Message = "Error: " + ex.Message,
+                    Error = true
+                });
+            }
         }
     }
 }

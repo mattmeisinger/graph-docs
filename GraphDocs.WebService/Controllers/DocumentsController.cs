@@ -58,8 +58,8 @@ namespace GraphDocs.WebService.Controllers
                         ? new Dictionary<string, object>
                         {
                             // Only show these items when the status indicates it is expecting a response
-                            { "respondApprove", PathToController("workflowreply", document.ID, a.WorkflowName, a.Bookmark, "true") },
-                            { "respondReject", PathToController("workflowreply", document.ID, a.WorkflowName, a.Bookmark, "false") }
+                            { "respondApprove", PathToController("workflowreply", a.InstanceId, a.Bookmark, "true") },
+                            { "respondReject", PathToController("workflowreply", a.InstanceId, a.Bookmark, "false") }
                         }
                         : new Dictionary<string, object>()
                 }),

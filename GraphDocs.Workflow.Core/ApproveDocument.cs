@@ -20,6 +20,8 @@ namespace GraphDocs.Workflow.Core
 
         public InArgument<string> ApproverGroupName { get; set; }
 
+        public InArgument<string> ReplyUrlTemplate { get; set; }
+
         // NativeActivity derived activities that do asynchronous operations by calling 
         // one of the CreateBookmark overloads defined on System.Activities.NativeActivityContext 
         // must override the CanInduceIdle property and return true.
@@ -32,25 +34,28 @@ namespace GraphDocs.Workflow.Core
             // Obtain the runtime value of the Text input argument
             var to = context.GetValue(EmailRecipients);
             var approverGroupName = ApproverGroupName.Get(context);
+            var bookmarkName = "Approval-" + approverGroupName;
             var document = context.GetValue(Document);
             var documentFile = context.GetValue(DocumentFile);
             var from = ConfigurationManager.AppSettings["EmailFromAddress"];
             var subject = "Approval requested: " + document.Name;
+
+            var instanceId = context.WorkflowInstanceId;
+            var replyUrlTemplate = context.GetValue(ReplyUrlTemplate);
             var body = "<p>Approval requested for GraphDocs document." +
                 "<br/>Name : " + document.Name +
                 "<br/>Path : " + document.Path +
                 "<br/>Tags : " + string.Join(", ", document.Tags ?? new string[] { }) +
                 "</p>" +
                 "<p>Can be approved by: " + ApproverGroupName.Get(context) + "</p>" +
-                "<p><a href=\"" + ConfigurationManager.AppSettings["SiteBaseUrl"] + "/Workflow/Approve?id=" + context.WorkflowInstanceId + "?approverGroup=" + WebUtility.UrlEncode(approverGroupName) + "\" style=\"font-weight: bold;\">Approve</a></p>" +
-                "<p><a href=\"" + ConfigurationManager.AppSettings["SiteBaseUrl"] + "/Workflow/Reject?id=" + context.WorkflowInstanceId + "?approverGroup=" + WebUtility.UrlEncode(approverGroupName) + "\">Reject</a></p>";
+                "<p><a href=\"" + getReplyUrl(replyUrlTemplate, instanceId, bookmarkName, true) + "\" style=\"font-weight: bold;\">Approve</a></p>" +
+                "<p><a href=\"" + getReplyUrl(replyUrlTemplate, instanceId, bookmarkName, false) + "\">Reject</a></p>";
 
-            // TODO: Attach file
+            // TODO Attach file if it exists
 
             Utilities.Email.Send(from, to, subject, body, true);
 
             // Create a Bookmark and wait for it to be resumed.
-            var bookmarkName = "Approval-" + approverGroupName;
             context.CreateBookmark(bookmarkName, new BookmarkCallback(OnResumeBookmark));
         }
 
@@ -60,6 +65,19 @@ namespace GraphDocs.Workflow.Core
             // we can use logic to branch based on whether it was approved or not.
             var isApproved = (bool)obj;
             Result.Set(context, isApproved);
+        }
+
+        private string getReplyUrl(string replyUrlTemplate, Guid instanceId, string bookmarkName, bool response)
+        {
+            if (string.IsNullOrWhiteSpace(replyUrlTemplate))
+            {
+                replyUrlTemplate = ConfigurationManager.AppSettings["SiteBaseUrl"] + "/workflowreply/{instanceId}/{bookmarkName}/{response}";
+            }
+
+            return replyUrlTemplate
+                .Replace("{instanceId}", instanceId.ToString())
+                .Replace("{bookmarkName}", bookmarkName)
+                .Replace("{response}", response.ToString());
         }
     }
 }

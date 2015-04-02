@@ -91,7 +91,8 @@ namespace GraphDocs.Tests.Workflow.IntegrationTests
                         WorkflowName = "ApproveDocument",
                         Settings = new Dictionary<string, string> {
                             { "ApproverGroupName", "Approver" },
-                            { "EmailRecipients", "mmeisinger@gmail.com" }
+                            { "EmailRecipients", "mmeisinger@gmail.com" },
+                            { "ReplyUrlTemplate", "http://localhost:9241/v1/workflowreply/{instanceId}/{bookmarkName}/{response}" }
                         }
                     }
                 }
@@ -135,12 +136,12 @@ namespace GraphDocs.Tests.Workflow.IntegrationTests
             Assert.IsFalse(documents.GetByPath("/WF/doc2.txt").Active);
 
             // Simulate feedback coming in
-            documentsWorkflows.SubmitWorkflowReply(doc, activeWorkflow.WorkflowName, activeWorkflow.Bookmark, true);
+            documentsWorkflows.SubmitWorkflowReply(activeWorkflow.InstanceId, activeWorkflow.Bookmark, true);
             Assert.IsFalse(documents.GetByPath("/WF/doc2.txt").Active);
 
             doc = documents.GetByPath("/WF/doc2.txt");
             activeWorkflow = doc.ActiveWorkflows.Last();
-            documentsWorkflows.SubmitWorkflowReply(doc, activeWorkflow.WorkflowName, activeWorkflow.Bookmark, true);
+            documentsWorkflows.SubmitWorkflowReply(activeWorkflow.InstanceId, activeWorkflow.Bookmark, true);
             Assert.IsTrue(documents.GetByPath("/WF/doc2.txt").Active);
         }
 
@@ -154,7 +155,7 @@ namespace GraphDocs.Tests.Workflow.IntegrationTests
             Assert.IsFalse(documents.GetByPath("/WF/doc2.txt").Active);
 
             // Simulate feedback coming in
-            documentsWorkflows.SubmitWorkflowReply(doc, activeWorkflow.WorkflowName, activeWorkflow.Bookmark, false);
+            documentsWorkflows.SubmitWorkflowReply(activeWorkflow.InstanceId, activeWorkflow.Bookmark, false);
             Assert.IsFalse(documents.GetByPath("/WF/doc2.txt").Active);
         }
 
@@ -181,10 +182,12 @@ namespace GraphDocs.Tests.Workflow.IntegrationTests
         public void DocumentCreatedEmailNotification()
         {
             var workflowName = "DocumentCreatedEmailNotification";
-            IDictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("EmailRecipients", "mmeisinger@gmail.com");
-            parameters.Add("Document", new Document { Active = true, Name = "MyFile", Tags = new[] { "Item", "Tag2" } });
-            parameters.Add("DocumentFile", new DocumentFile { });
+            IDictionary<string, object> parameters = new Dictionary<string, object>
+            {
+                { "EmailRecipients", "mmeisinger@gmail.com" },
+                { "Document", new Document { Active = true, Name = "MyFile", Tags = new[] { "Item", "Tag2" } } },
+                { "DocumentFile", new DocumentFile { } }
+            };
             var workflowInstanceId = workflows.InitializeWorkflow(workflowName, parameters);
             Assert.IsNotNull(workflowInstanceId);
         }
