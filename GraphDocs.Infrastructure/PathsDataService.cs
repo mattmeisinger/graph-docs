@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GraphDocs.Infrastructure.Utilities;
 using GraphDocs.Core.Models;
 using Neo4jClient;
 using GraphDocs.Core.Interfaces;
+using GraphDocs.Core.Utilities;
 
 namespace GraphDocs.Infrastructure
 {
-    public class PathsDataService
+    public class PathsDataService : IPathsDataService
     {
         private IGraphClient client;
         public PathsDataService(IConnectionFactory connFactory)

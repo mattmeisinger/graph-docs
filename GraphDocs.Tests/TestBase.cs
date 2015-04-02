@@ -1,7 +1,6 @@
 ﻿using GraphDocs.Core.Interfaces;
 using GraphDocs.Infrastructure;
 using GraphDocs.Infrastructure.Database;
-using GraphDocs.Infrastructure.Workflow;
 using System;
 using System.Configuration;
 using System.IO;
@@ -13,12 +12,12 @@ namespace GraphDocs.Tests
     public class TestBase
     {
         internal IConnectionFactory connFactory;
-        internal FoldersDataService folders;
-        internal PathsDataService paths;
-        internal DocumentsDataService documents;
-        internal DocumentFilesDataService documentFiles;
-        internal DocumentsWorkflowsService documentsWorkflows;
-        internal WorkflowService workflows;
+        internal IFoldersDataService folders;
+        internal IPathsDataService paths;
+        internal IDocumentsDataService documents;
+        internal IDocumentFilesDataService documentFiles;
+        internal IDocumentsWorkflowsService documentsWorkflows;
+        internal IWorkflowService workflows;
 
         public static string AssemblyDirectory
         {

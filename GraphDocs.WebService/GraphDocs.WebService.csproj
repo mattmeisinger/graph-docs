@@ -153,13 +153,13 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GraphDocs.Infrastructure\GraphDocs.Infrastructure.csproj">
-      <Project>{2243df9b-8e71-47d3-b7fe-82ec9050df21}</Project>
-      <Name>GraphDocs.Infrastructure</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GraphDocs.Core\GraphDocs.Core.csproj">
       <Project>{ea1facfd-11ea-4333-9b70-e4761cf9224b}</Project>
       <Name>GraphDocs.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GraphDocs.Infrastructure\GraphDocs.Infrastructure.csproj">
+      <Project>{2243df9b-8e71-47d3-b7fe-82ec9050df21}</Project>
+      <Name>GraphDocs.Infrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\GraphDocs.Workflow.Core\GraphDocs.Workflow.Core.csproj">
       <Project>{f6f9bc1b-5cb8-4c75-97e4-f4081a0c88a7}</Project>

@@ -1,19 +1,18 @@
 ﻿using GraphDocs.Core.Enums;
 using GraphDocs.Core.Interfaces;
 using GraphDocs.Core.Models;
-using GraphDocs.Infrastructure.Workflow;
 using Neo4jClient;
 using System;
 using System.Linq;
 
 namespace GraphDocs.Infrastructure
 {
-    public class DocumentsWorkflowsService
+    public class DocumentsWorkflowsService : IDocumentsWorkflowsService
     {
         private IGraphClient client;
-        private WorkflowService workflowService;
+        private IWorkflowService workflowService;
 
-        public DocumentsWorkflowsService(IConnectionFactory connFactory, WorkflowService workflowService)
+        public DocumentsWorkflowsService(IConnectionFactory connFactory, IWorkflowService workflowService)
         {
             this.client = connFactory.GetConnection();
             this.workflowService = workflowService;

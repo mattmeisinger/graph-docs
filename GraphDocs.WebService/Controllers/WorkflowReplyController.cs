@@ -1,4 +1,4 @@
-﻿using GraphDocs.Infrastructure;
+﻿using GraphDocs.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +9,9 @@ namespace GraphDocs.WebService.Controllers
 {
     public class WorkflowReplyController : BaseController
     {
-        DocumentsDataService documents;
-        DocumentsWorkflowsService workflow;
-        public WorkflowReplyController(DocumentsWorkflowsService workflow, DocumentsDataService documents)
+        IDocumentsWorkflowsService workflow;
+        IDocumentsDataService documents;
+        public WorkflowReplyController(IDocumentsWorkflowsService workflow, IDocumentsDataService documents)
         {
             this.workflow = workflow;
             this.documents = documents;

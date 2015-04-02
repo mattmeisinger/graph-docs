@@ -1,17 +1,17 @@
-﻿using System;
+﻿using GraphDocs.Core.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using GraphDocs.Infrastructure;
 
 namespace GraphDocs.WebService.Controllers
 {
     public class FoldersController : BaseController
     {
-        private FoldersDataService folders;
-        public FoldersController(FoldersDataService folders)
+        private IFoldersDataService folders;
+        public FoldersController(IFoldersDataService folders)
         {
             this.folders = folders;
         }

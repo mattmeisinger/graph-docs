@@ -3,7 +3,6 @@ using Autofac.Integration.Mvc;
 using GraphDocs.Core.Interfaces;
 using GraphDocs.Infrastructure;
 using GraphDocs.Infrastructure.Database;
-using GraphDocs.Infrastructure.Workflow;
 using System;
 using System.Configuration;
 using System.Linq;
@@ -37,14 +36,14 @@ namespace GraphDocs.WebService
             builder.RegisterType<WorkflowService>()
                 .WithParameter("workflowFolder", HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["WorkflowFolder"]))
                 .WithParameter("workflowStoreId", new Guid(ConfigurationManager.AppSettings["WorkflowStoreId"]))
-                .As<WorkflowService>();
+                .As<IWorkflowService>();
 
-            builder.RegisterType<DocumentFilesDataService>().As<DocumentFilesDataService>();
-            builder.RegisterType<DocumentsDataService>().As<DocumentsDataService>();
-            builder.RegisterType<FoldersDataService>().As<FoldersDataService>();
-            builder.RegisterType<PathsDataService>().As<PathsDataService>();
-            builder.RegisterType<TagsDataService>().As<TagsDataService>();
-            builder.RegisterType<DocumentsWorkflowsService>().As<DocumentsWorkflowsService>();
+            builder.RegisterType<DocumentFilesDataService>().As<IDocumentFilesDataService>();
+            builder.RegisterType<DocumentsDataService>().As<IDocumentsDataService>();
+            builder.RegisterType<FoldersDataService>().As<IFoldersDataService>();
+            builder.RegisterType<PathsDataService>().As<IPathsDataService>();
+            builder.RegisterType<TagsDataService>().As<ITagsDataService>();
+            builder.RegisterType<DocumentsWorkflowsService>().As<IDocumentsWorkflowsService>();
 
             // Build DI container
             var container = builder.Build();

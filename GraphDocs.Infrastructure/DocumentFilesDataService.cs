@@ -2,17 +2,17 @@
 using System.Linq;
 using Neo4jClient;
 using GraphDocs.Core.Models;
-using GraphDocs.Infrastructure.Utilities;
 using GraphDocs.Core.Interfaces;
+using GraphDocs.Core.Utilities;
 
 namespace GraphDocs.Infrastructure
 {
-    public class DocumentFilesDataService
+    public class DocumentFilesDataService : IDocumentFilesDataService
     {
         private IGraphClient client;
-        private PathsDataService paths;
+        private IPathsDataService paths;
 
-        public DocumentFilesDataService(IConnectionFactory connFactory, PathsDataService paths)
+        public DocumentFilesDataService(IConnectionFactory connFactory, IPathsDataService paths)
         {
             this.client = connFactory.GetConnection();
             this.paths = paths;

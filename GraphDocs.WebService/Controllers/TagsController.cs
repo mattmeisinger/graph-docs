@@ -4,14 +4,14 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using GraphDocs.Infrastructure;
+using GraphDocs.Core.Interfaces;
 
 namespace GraphDocs.WebService.Controllers
 {
     public class TagsController : BaseController
     {
-        private TagsDataService tags;
-        public TagsController(TagsDataService tags)
+        private ITagsDataService tags;
+        public TagsController(ITagsDataService tags)
         {
             this.tags = tags;
         }

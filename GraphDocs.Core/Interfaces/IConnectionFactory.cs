@@ -1,5 +1,4 @@
-﻿
-using Neo4jClient;
+﻿using Neo4jClient;
 
 namespace GraphDocs.Core.Interfaces
 {

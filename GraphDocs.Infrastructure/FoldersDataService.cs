@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Linq;
-using GraphDocs.Infrastructure.Utilities;
 using GraphDocs.Core.Models;
 using Neo4jClient;
 using System.Dynamic;
 using GraphDocs.Core.Interfaces;
+using GraphDocs.Core.Utilities;
 
 namespace GraphDocs.Infrastructure
 {
-    public class FoldersDataService
+    public class FoldersDataService : IFoldersDataService
     {
         private IGraphClient client;
-        private PathsDataService paths;
+        private IPathsDataService paths;
 
-        public FoldersDataService(IConnectionFactory connFactory, PathsDataService paths)
+        public FoldersDataService(IConnectionFactory connFactory, IPathsDataService paths)
         {
             this.client = connFactory.GetConnection();
             this.paths = paths;

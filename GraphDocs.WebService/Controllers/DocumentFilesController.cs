@@ -4,15 +4,15 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using GraphDocs.Infrastructure;
+using GraphDocs.Core.Interfaces;
 
 namespace GraphDocs.WebService.Controllers
 {
     public class DocumentFilesController : BaseController
     {
-        private DocumentFilesDataService documentFiles;
-        private DocumentsDataService documents;
-        public DocumentFilesController(DocumentFilesDataService documentFiles, DocumentsDataService documents)
+        private IDocumentFilesDataService documentFiles;
+        private IDocumentsDataService documents;
+        public DocumentFilesController(IDocumentFilesDataService documentFiles, IDocumentsDataService documents)
         {
             this.documentFiles = documentFiles;
             this.documents = documents;

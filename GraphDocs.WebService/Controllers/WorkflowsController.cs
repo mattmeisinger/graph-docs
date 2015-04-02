@@ -1,5 +1,4 @@
 ﻿using GraphDocs.Core.Interfaces;
-using GraphDocs.Infrastructure.Workflow;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +9,8 @@ namespace GraphDocs.WebService.Controllers
 {
     public class WorkflowsController : BaseController
     {
-        WorkflowService workflow;
-        public WorkflowsController(WorkflowService workflow)
+        IWorkflowService workflow;
+        public WorkflowsController(IWorkflowService workflow)
         {
             this.workflow = workflow;
         }

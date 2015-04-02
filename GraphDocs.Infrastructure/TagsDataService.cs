@@ -6,11 +6,11 @@ using GraphDocs.Core.Interfaces;
 
 namespace GraphDocs.Infrastructure
 {
-    public class TagsDataService
+    public class TagsDataService : ITagsDataService
     {
         private IGraphClient client;
-        private PathsDataService paths;
-        public TagsDataService(IConnectionFactory connFactory, PathsDataService paths)
+        private IPathsDataService paths;
+        public TagsDataService(IConnectionFactory connFactory, IPathsDataService paths)
         {
             this.client = connFactory.GetConnection();
             this.paths = paths;

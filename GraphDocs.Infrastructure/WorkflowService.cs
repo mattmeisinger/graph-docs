@@ -8,13 +8,12 @@ using System.Activities;
 using System.Activities.XamlIntegration;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Xaml;
 
-namespace GraphDocs.Infrastructure.Workflow
+namespace GraphDocs.Infrastructure
 {
-    public class WorkflowService
+    public class WorkflowService : IWorkflowService
     {
         IGraphClient client;
         string workflowFolder;
