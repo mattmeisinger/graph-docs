@@ -1,7 +1,7 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="GraphDocs.Workflow.Core.MyWF2"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:gcm="clr-namespace:GraphDocs.Core.Models;assembly=GraphDocs.Core"
- xmlns:local="clr-namespace:GraphDocs.Workflow.Core;assembly=GraphDocs.Workflow.Core"
+ xmlns:gwc="clr-namespace:GraphDocs.Workflow.Core;assembly=GraphDocs.Workflow.Core"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
@@ -15,6 +15,7 @@
     <x:Property Name="ApproverGroupName" Type="InArgument(x:String)" />
     <x:Property Name="EmailRecipients" Type="InArgument(x:String)" />
     <x:Property Name="ReplyUrlTemplate" Type="InArgument(x:String)" />
+    <x:Property Name="Result" Type="OutArgument(x:Boolean)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>GraphDocs.Workflow.Core.ApproveDocumentWorkflow_1</sap2010:WorkflowViewState.IdRef>
@@ -30,54 +31,82 @@
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Autofac</AssemblyReference>
+      <AssemblyReference>Autofac.Integration.Mvc</AssemblyReference>
+      <AssemblyReference>Autofac.Integration.Owin</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>Microsoft.Owin</AssemblyReference>
       <AssemblyReference>Neo4jClient</AssemblyReference>
       <AssemblyReference>Newtonsoft.Json</AssemblyReference>
-      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>Owin</AssemblyReference>
       <AssemblyReference>System.Activities</AssemblyReference>
-      <AssemblyReference>System.Configuration</AssemblyReference>
-      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
       <AssemblyReference>System.Net.Http</AssemblyReference>
       <AssemblyReference>System.Net.Http.Extensions</AssemblyReference>
       <AssemblyReference>System.Net.Http.Primitives</AssemblyReference>
       <AssemblyReference>System.Net.Http.WebRequest</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
       <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
-      <AssemblyReference>System.Xaml</AssemblyReference>
-      <AssemblyReference>System.Xml.Linq</AssemblyReference>
-      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
-      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System.Web.DynamicData</AssemblyReference>
+      <AssemblyReference>System.Web.Entity</AssemblyReference>
+      <AssemblyReference>System.Web.ApplicationServices</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.DataAnnotations</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Web.Extensions</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Web</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Configuration</AssemblyReference>
+      <AssemblyReference>System.Web.Services</AssemblyReference>
+      <AssemblyReference>System.EnterpriseServices</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>System.Web.Razor</AssemblyReference>
+      <AssemblyReference>System.Web.WebPages</AssemblyReference>
+      <AssemblyReference>System.Web.WebPages.Deployment</AssemblyReference>
+      <AssemblyReference>System.Web.WebPages.Razor</AssemblyReference>
+      <AssemblyReference>System.Web.Helpers</AssemblyReference>
+      <AssemblyReference>Microsoft.Web.Infrastructure</AssemblyReference>
+      <AssemblyReference>System.Web.Mvc</AssemblyReference>
       <AssemblyReference>GraphDocs.Core</AssemblyReference>
-      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>GraphDocs.Infrastructure</AssemblyReference>
       <AssemblyReference>GraphDocs.Workflow.Core</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>GraphDocs.WebService</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
-    <local:ApproveDocument DocumentFile="{x:Null}" sap2010:WorkflowViewState.IdRef="ApproveDocument_1">
-      <local:ApproveDocument.ApproverGroupName>
+    <gwc:ApproveDocument DocumentFile="{x:Null}" sap2010:WorkflowViewState.IdRef="ApproveDocument_1">
+      <gwc:ApproveDocument.ApproverGroupName>
         <InArgument x:TypeArguments="x:String">
           <mca:CSharpValue x:TypeArguments="x:String">ApproverGroupName</mca:CSharpValue>
         </InArgument>
-      </local:ApproveDocument.ApproverGroupName>
-      <local:ApproveDocument.Document>
+      </gwc:ApproveDocument.ApproverGroupName>
+      <gwc:ApproveDocument.Document>
         <InArgument x:TypeArguments="gcm:Document">
           <mca:CSharpValue x:TypeArguments="gcm:Document">Document</mca:CSharpValue>
         </InArgument>
-      </local:ApproveDocument.Document>
-      <local:ApproveDocument.EmailRecipients>
+      </gwc:ApproveDocument.Document>
+      <gwc:ApproveDocument.EmailRecipients>
         <InArgument x:TypeArguments="x:String">
           <mca:CSharpValue x:TypeArguments="x:String">EmailRecipients</mca:CSharpValue>
         </InArgument>
-      </local:ApproveDocument.EmailRecipients>
-      <local:ApproveDocument.ReplyUrlTemplate>
+      </gwc:ApproveDocument.EmailRecipients>
+      <gwc:ApproveDocument.ReplyUrlTemplate>
         <InArgument x:TypeArguments="x:String">
           <mca:CSharpValue x:TypeArguments="x:String">ReplyUrlTemplate</mca:CSharpValue>
         </InArgument>
-      </local:ApproveDocument.ReplyUrlTemplate>
-    </local:ApproveDocument>
-    <local:SimpleEmailNotification Body="Document has been approved." EmailRecipients="mmeisinger@gmail.com" sap2010:WorkflowViewState.IdRef="SimpleEmailNotification_1" Subject="Approved!" />
-    <sads:DebugSymbol.Symbol>d0NDOlxwcm9qZWN0c1xHcmFwaERvY3NcR3JhcGhEb2NzLldvcmtmbG93LkNvcmVcQ29tcGlsZWRXb3JrZmxvdy54YW1sCjgDUQ4CAQE5BU4dAgEGTwVPwAECAQJBC0FVAgEWSwtLWQIBEUYLRlgCAQw8CzxaAgEHTylPRgIBBU+yAU+9AQIBBE9XT20CAQM=</sads:DebugSymbol.Symbol>
+      </gwc:ApproveDocument.ReplyUrlTemplate>
+      <gwc:ApproveDocument.Result>
+        <OutArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpReference x:TypeArguments="x:Boolean">Result</mca:CSharpReference>
+        </OutArgument>
+      </gwc:ApproveDocument.Result>
+    </gwc:ApproveDocument>
+    <gwc:SimpleEmailNotification Body="Document has been approved." EmailRecipients="mmeisinger@gmail.com" sap2010:WorkflowViewState.IdRef="SimpleEmailNotification_1" Subject="Approved!" />
+    <sads:DebugSymbol.Symbol>d1FDOlxwcm9qZWN0c1xHcmFwaERvY3NcR3JhcGhEb2NzLldlYlNlcnZpY2VcV29ya2Zsb3dEZWZpbml0aW9uc1xBZEhvY1dvcmtmbG93LnhhbWwLUANuDgIBAVEFaxsCAQZsBWy+AQIBAlkLWVUCAR9jC2NZAgEZaAtoWAIBE14LXlgCAQ1UC1RaAgEHbCdsRAIBBWywAWy7AQIBBGxVbGsCAQM=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
