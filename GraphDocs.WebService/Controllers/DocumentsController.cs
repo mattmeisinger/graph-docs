@@ -1,4 +1,6 @@
 ﻿using GraphDocs.Core.Interfaces;
+using GraphDocs.WebService.Models;
+using GraphDocs.WebService.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,16 +74,23 @@ namespace GraphDocs.WebService.Controllers
         }
 
         [ActionName("Index"), HttpPost]
-        public ActionResult Post(string path, string name, string[] tags)
+        [ReadJsonBody(Param = "model", JsonDataType = typeof(DocumentItem))]
+        public ActionResult Post(string path, DocumentItem model)
         {
-            documents.Create(new Core.Models.Document { Path = path, Name = name, Tags = tags });
+            var doc = model.ToDocument();
+            doc.Path = path;
+            documents.Create(doc);
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         [ActionName("Index"), HttpPut]
-        public ActionResult Put(string path, string name, string[] tags, string id)
+        [ReadJsonBody(Param = "model", JsonDataType = typeof(DocumentItem))]
+        public ActionResult Put(string path, string id, DocumentItem model)
         {
-            documents.Save(new Core.Models.Document { Path = path, Name = name, Tags = tags, ID = id });
+            var doc = model.ToDocument();
+            doc.Path = path;
+            doc.ID = id;
+            documents.Save(doc);
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 

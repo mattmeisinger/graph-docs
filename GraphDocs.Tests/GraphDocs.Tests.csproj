@@ -122,16 +122,16 @@
     <Folder Include="Uploads\" />
   </ItemGroup>
   <ItemGroup>
+    <XamlAppDef Include="WorkflowDefinitions\ApproveAndNotify.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </XamlAppDef>
+  </ItemGroup>
+  <ItemGroup>
     <XamlAppDef Include="WorkflowDefinitions\AdHocWorkflow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </XamlAppDef>
-  </ItemGroup>
-  <ItemGroup>
-    <XamlAppDef Include="WorkflowDefinitions\ApproveAndNotify.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </XamlAppDef>
   </ItemGroup>
   <Choose>

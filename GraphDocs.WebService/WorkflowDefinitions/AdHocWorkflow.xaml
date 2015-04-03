@@ -1,7 +1,7 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="GraphDocs.Tests.WorkflowDefinitions.AdHocWorkflow"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="GraphDocs.Workflow.Core.MyWF2"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:gcm="clr-namespace:GraphDocs.Core.Models;assembly=GraphDocs.Core"
- xmlns:gwc="clr-namespace:GraphDocs.Workflow.Core;assembly=GraphDocs.Workflow.Core"
+ xmlns:local="clr-namespace:GraphDocs.Workflow.Core;assembly=GraphDocs.Workflow.Core"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
@@ -14,10 +14,10 @@
     <x:Property Name="Document" Type="InArgument(gcm:Document)" />
     <x:Property Name="ApproverGroupName" Type="InArgument(x:String)" />
     <x:Property Name="EmailRecipients" Type="InArgument(x:String)" />
-    <x:Property Name="WorkflowName" Type="InArgument(x:String)" />
+    <x:Property Name="ReplyUrlTemplate" Type="InArgument(x:String)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
-  <sap2010:WorkflowViewState.IdRef>GraphDocs.Tests.WorkflowDefinitions.AdHocWorkflow_1</sap2010:WorkflowViewState.IdRef>
+  <sap2010:WorkflowViewState.IdRef>GraphDocs.Workflow.Core.ApproveDocumentWorkflow_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System</x:String>
@@ -30,14 +30,12 @@
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
-      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
-      <AssemblyReference>Moq</AssemblyReference>
       <AssemblyReference>Neo4jClient</AssemblyReference>
       <AssemblyReference>Newtonsoft.Json</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
       <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>System.Configuration</AssemblyReference>
-      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Net.Http</AssemblyReference>
       <AssemblyReference>System.Net.Http.Extensions</AssemblyReference>
       <AssemblyReference>System.Net.Http.Primitives</AssemblyReference>
@@ -45,60 +43,46 @@
       <AssemblyReference>System.ServiceModel</AssemblyReference>
       <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
       <AssemblyReference>System.Xaml</AssemblyReference>
-      <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
-      <AssemblyReference>Microsoft.VisualStudio.QualityTools.UnitTestFramework</AssemblyReference>
-      <AssemblyReference>GraphDocs.Infrastructure</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>GraphDocs.Core</AssemblyReference>
-      <AssemblyReference>GraphDocs.WebService</AssemblyReference>
-      <AssemblyReference>GraphDocs.Workflow.Core</AssemblyReference>
-      <AssemblyReference>GraphDocs.Workflow.Neo4jInstanceStore</AssemblyReference>
-      <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
-      <AssemblyReference>GraphDocs.Tests</AssemblyReference>
+      <AssemblyReference>GraphDocs.Workflow.Core</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
-    <gwc:ApproveDocument DocumentFile="{x:Null}" sap2010:WorkflowViewState.IdRef="ApproveDocument_1">
-      <gwc:ApproveDocument.ApproverGroupName>
+    <local:ApproveDocument DocumentFile="{x:Null}" sap2010:WorkflowViewState.IdRef="ApproveDocument_1">
+      <local:ApproveDocument.ApproverGroupName>
         <InArgument x:TypeArguments="x:String">
           <mca:CSharpValue x:TypeArguments="x:String">ApproverGroupName</mca:CSharpValue>
         </InArgument>
-      </gwc:ApproveDocument.ApproverGroupName>
-      <gwc:ApproveDocument.Document>
+      </local:ApproveDocument.ApproverGroupName>
+      <local:ApproveDocument.Document>
         <InArgument x:TypeArguments="gcm:Document">
           <mca:CSharpValue x:TypeArguments="gcm:Document">Document</mca:CSharpValue>
         </InArgument>
-      </gwc:ApproveDocument.Document>
-      <gwc:ApproveDocument.EmailRecipients>
+      </local:ApproveDocument.Document>
+      <local:ApproveDocument.EmailRecipients>
         <InArgument x:TypeArguments="x:String">
           <mca:CSharpValue x:TypeArguments="x:String">EmailRecipients</mca:CSharpValue>
         </InArgument>
-      </gwc:ApproveDocument.EmailRecipients>
-    </gwc:ApproveDocument>
-    <gwc:ApproveDocument DocumentFile="{x:Null}" sap2010:WorkflowViewState.IdRef="ApproveDocument_2">
-      <gwc:ApproveDocument.ApproverGroupName>
+      </local:ApproveDocument.EmailRecipients>
+      <local:ApproveDocument.ReplyUrlTemplate>
         <InArgument x:TypeArguments="x:String">
-          <mca:CSharpValue x:TypeArguments="x:String">ApproverGroupName + " a second time"</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="x:String">ReplyUrlTemplate</mca:CSharpValue>
         </InArgument>
-      </gwc:ApproveDocument.ApproverGroupName>
-      <gwc:ApproveDocument.Document>
-        <InArgument x:TypeArguments="gcm:Document">
-          <mca:CSharpValue x:TypeArguments="gcm:Document">Document</mca:CSharpValue>
-        </InArgument>
-      </gwc:ApproveDocument.Document>
-      <gwc:ApproveDocument.EmailRecipients>
-        <InArgument x:TypeArguments="x:String">
-          <mca:CSharpValue x:TypeArguments="x:String">EmailRecipients</mca:CSharpValue>
-        </InArgument>
-      </gwc:ApproveDocument.EmailRecipients>
-    </gwc:ApproveDocument>
-    <sads:DebugSymbol.Symbol>d0xDOlxwcm9qZWN0c1xHcmFwaERvY3NcR3JhcGhEb2NzLlRlc3RzXFdvcmtmbG93RGVmaW5pdGlvbnNcQWRIb2NXb3JrZmxvdy54YW1sCT0DYQ4CAQE+BU4bAgESTwVfGwIBAkYLRlUCAR1LC0tYAgEYQQtBWgIBE1cLV1UCAQ1cC1xYAgEIUgtSbQIBAw==</sads:DebugSymbol.Symbol>
+      </local:ApproveDocument.ReplyUrlTemplate>
+    </local:ApproveDocument>
+    <local:SimpleEmailNotification Body="Document has been approved." EmailRecipients="mmeisinger@gmail.com" sap2010:WorkflowViewState.IdRef="SimpleEmailNotification_1" Subject="Approved!" />
+    <sads:DebugSymbol.Symbol>d0NDOlxwcm9qZWN0c1xHcmFwaERvY3NcR3JhcGhEb2NzLldvcmtmbG93LkNvcmVcQ29tcGlsZWRXb3JrZmxvdy54YW1sCjgDUQ4CAQE5BU4dAgEGTwVPwAECAQJBC0FVAgEWSwtLWQIBEUYLRlgCAQw8CzxaAgEHTylPRgIBBU+yAU+9AQIBBE9XT20CAQM=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
       <sap2010:ViewStateData Id="ApproveDocument_1" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="ApproveDocument_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="SimpleEmailNotification_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="222,208">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -106,7 +90,14 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="GraphDocs.Tests.WorkflowDefinitions.AdHocWorkflow_1" sap:VirtualizedContainerService.HintSize="262,288" />
+      <sap2010:ViewStateData Id="GraphDocs.Workflow.Core.ApproveDocumentWorkflow_1" sap:VirtualizedContainerService.HintSize="262,288">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="ShouldExpandAll">False</x:Boolean>
+            <x:Boolean x:Key="ShouldCollapseAll">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

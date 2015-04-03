@@ -11,11 +11,13 @@ namespace GraphDocs.Infrastructure
     {
         private IGraphClient client;
         private IWorkflowService workflowService;
+        private IDocumentFilesDataService documentFiles;
 
-        public DocumentsWorkflowsService(IConnectionFactory connFactory, IWorkflowService workflowService)
+        public DocumentsWorkflowsService(IConnectionFactory connFactory, IWorkflowService workflowService, IDocumentFilesDataService documentFiles)
         {
-            this.client = connFactory.GetConnection();
+            client = connFactory.GetConnection();
             this.workflowService = workflowService;
+            this.documentFiles = documentFiles;
         }
 
         public void InitializeWorkflowsForDocument(string folderId, Document document)
@@ -148,7 +150,14 @@ namespace GraphDocs.Infrastructure
             foreach (var workflow in nextWorkflowsToStart)
             {
                 var parameters = workflow.Settings.ToDictionary(a => a.Key, a => (object)a.Value);
-                parameters.Add("Document", document);
+                if (!parameters.ContainsKey("Document"))
+                {
+                    parameters.Add("Document", document);
+                }
+                if (!parameters.ContainsKey("DocumentFile") && document.HasFile)
+                {
+                    parameters.Add("DocumentFile", documentFiles.Get(document.Path));
+                }
                 var status = workflowService.InitializeWorkflow(workflow.WorkflowName, parameters);
                 SetStatusOnWorkflow(document.ID, workflow, status);
             }

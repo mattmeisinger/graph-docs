@@ -72,6 +72,7 @@
     <Compile Include="Models\DocumentFile.cs" />
     <Compile Include="Models\Folder.cs" />
     <Compile Include="Models\ActiveWorkflow.cs" />
+    <Compile Include="Models\Workflow.cs" />
     <Compile Include="Models\WorkflowDefinition.cs" />
     <Compile Include="Models\WorkflowStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

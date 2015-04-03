@@ -14,6 +14,7 @@
     <x:Property Name="Document" Type="InArgument(gcm:Document)" />
     <x:Property Name="ApproverGroupName" Type="InArgument(x:String)" />
     <x:Property Name="EmailRecipients" Type="InArgument(x:String)" />
+    <x:Property Name="ReplyUrlTemplate" Type="InArgument(x:String)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>GraphDocs.Workflow.Core.ApproveDocumentWorkflow_1</sap2010:WorkflowViewState.IdRef>
@@ -29,36 +30,31 @@
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
     <sco:Collection x:TypeArguments="AssemblyReference">
-      <AssemblyReference>Moq</AssemblyReference>
       <AssemblyReference>Neo4jClient</AssemblyReference>
       <AssemblyReference>Newtonsoft.Json</AssemblyReference>
       <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
       <AssemblyReference>System.Configuration</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Net.Http</AssemblyReference>
       <AssemblyReference>System.Net.Http.Extensions</AssemblyReference>
       <AssemblyReference>System.Net.Http.Primitives</AssemblyReference>
       <AssemblyReference>System.Net.Http.WebRequest</AssemblyReference>
-      <AssemblyReference>Microsoft.VisualStudio.QualityTools.UnitTestFramework</AssemblyReference>
-      <AssemblyReference>GraphDocs.Infrastructure</AssemblyReference>
-      <AssemblyReference>GraphDocs.Core</AssemblyReference>
-      <AssemblyReference>GraphDocs.WebService</AssemblyReference>
-      <AssemblyReference>GraphDocs.Workflow.Core</AssemblyReference>
-      <AssemblyReference>GraphDocs.Workflow.Neo4jInstanceStore</AssemblyReference>
-      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
-      <AssemblyReference>System.Activities</AssemblyReference>
-      <AssemblyReference>System.Data</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
       <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
       <AssemblyReference>System.Xaml</AssemblyReference>
-      <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
-      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>GraphDocs.Core</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
-      <AssemblyReference>GraphDocs.Tests</AssemblyReference>
+      <AssemblyReference>GraphDocs.Workflow.Core</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
-    <local:ApproveDocument DocumentFile="{x:Null}" ReplyUrlTemplate="{x:Null}" sap2010:WorkflowViewState.IdRef="ApproveDocument_1">
+    <local:ApproveDocument DocumentFile="{x:Null}" sap2010:WorkflowViewState.IdRef="ApproveDocument_1">
       <local:ApproveDocument.ApproverGroupName>
         <InArgument x:TypeArguments="x:String">
           <mca:CSharpValue x:TypeArguments="x:String">ApproverGroupName</mca:CSharpValue>
@@ -74,9 +70,14 @@
           <mca:CSharpValue x:TypeArguments="x:String">EmailRecipients</mca:CSharpValue>
         </InArgument>
       </local:ApproveDocument.EmailRecipients>
+      <local:ApproveDocument.ReplyUrlTemplate>
+        <InArgument x:TypeArguments="x:String">
+          <mca:CSharpValue x:TypeArguments="x:String">ReplyUrlTemplate</mca:CSharpValue>
+        </InArgument>
+      </local:ApproveDocument.ReplyUrlTemplate>
     </local:ApproveDocument>
     <local:SimpleEmailNotification Body="Document has been approved." EmailRecipients="mmeisinger@gmail.com" sap2010:WorkflowViewState.IdRef="SimpleEmailNotification_1" Subject="Approved!" />
-    <sads:DebugSymbol.Symbol>d0NDOlxwcm9qZWN0c1xHcmFwaERvY3NcR3JhcGhEb2NzLldvcmtmbG93LkNvcmVcQ29tcGlsZWRXb3JrZmxvdy54YW1sCTwDUA4CAQE9BU0dAgEGTgVOwAECAQJFC0VVAgEPSgtKWAIBC0ALQFoCAQdOKU5GAgEFTrIBTr0BAgEETldObQIBAw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxwcm9qZWN0c1xHcmFwaERvY3NcR3JhcGhEb2NzLldvcmtmbG93LkNvcmVcQ29tcGlsZWRXb3JrZmxvdy54YW1sCjgDUQ4CAQE5BU4dAgEGTwVPwAECAQJBC0FVAgEWSwtLWQIBEUYLRlgCAQw8CzxaAgEHTylPRgIBBU+yAU+9AQIBBE9XT20CAQM=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

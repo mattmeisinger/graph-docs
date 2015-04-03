@@ -159,11 +159,14 @@ namespace GraphDocs.Infrastructure
             // should be deleted. If a non-empty array, then delete existing and add the new items.
             if (workflowDefinitions != null)
             {
+                if (workflowDefinitions.Any(a => string.IsNullOrWhiteSpace(a.WorkflowName)))
+                    throw new Exception("Workflow name cannot be null");
+
                 deleteWorkflowDefinitions(folderId);
 
                 dynamic definition = new ExpandoObject();
 
-                foreach (var workflowDefinition in workflowDefinitions)
+                foreach (var workflowDefinition in workflowDefinitions.Where(a => !string.IsNullOrWhiteSpace(a.WorkflowName)))
                 {
                     client.Cypher
                         .WithParams(new

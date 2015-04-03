@@ -1,4 +1,6 @@
 ﻿using GraphDocs.Core.Interfaces;
+using GraphDocs.WebService.Models;
+using GraphDocs.WebService.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +28,13 @@ namespace GraphDocs.WebService.Controllers
                 {
                     id = folder.ID,
                     name = folder.Name,
-                    path = folder.Path
+                    path = folder.Path,
+                    workflowDefinitions = folder.WorkflowDefinitions.OrderBy(a => a.Order).Select(a => new
+                    {
+                        order = a.Order,
+                        workflowName = a.WorkflowName,
+                        settings = a.Settings
+                    })
                 },
                 childFolders = folder.ChildFolders.Select(a => new
                 {
@@ -48,12 +56,6 @@ namespace GraphDocs.WebService.Controllers
                         self = PathToController("documents", a.Path)
                     }
                 }),
-                workflowDefinitions = folder.WorkflowDefinitions.OrderBy(a => a.Order).Select(a => new
-                {
-                    order = a.Order,
-                    workflowName = a.WorkflowName,
-                    settings = a.Settings
-                }),
                 links = new
                 {
                     self = PathTo(folder.Path)
@@ -62,16 +64,23 @@ namespace GraphDocs.WebService.Controllers
         }
 
         [ActionName("Index"), HttpPost]
-        public ActionResult Post(string path, string name)
+        [ReadJsonBody(Param = "model", JsonDataType = typeof(FolderItem))]
+        public ActionResult Post(string path, FolderItem model)
         {
-            folders.Create(new Core.Models.Folder { Path = path, Name = name });
+            var folder = model.ConvertToFolder();
+            folder.Path = path;
+            folders.Create(folder);
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         [ActionName("Index"), HttpPut]
-        public ActionResult Put(string path, string name, string id)
+        [ReadJsonBody(Param = "model", JsonDataType = typeof(FolderItem))]
+        public ActionResult Put(string path, string id, FolderItem model)
         {
-            folders.Save(new Core.Models.Folder { Path = path, Name = name, ID = id });
+            var folder = model.ConvertToFolder();
+            folder.Path = path;
+            folder.ID = id;
+            folders.Save(folder);
             return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 

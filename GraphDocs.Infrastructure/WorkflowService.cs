@@ -7,6 +7,7 @@ using System;
 using System.Activities;
 using System.Activities.XamlIntegration;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Xaml;
@@ -26,7 +27,7 @@ namespace GraphDocs.Infrastructure
             Console.WriteLine("Store ID: " + workflowStoreId);
         }
 
-        public string[] GetAvailableWorkflows()
+        public Core.Models.Workflow[] GetAvailableWorkflows()
         {
             // First, get all compiled workflows from the Workflow.Core project
             var exampleWorkflowClass = typeof(GraphDocs.Workflow.Core.SimpleEmailNotification);
@@ -36,19 +37,50 @@ namespace GraphDocs.Infrastructure
                 .Where(a => target.IsAssignableFrom(a))
                 .Where(a => a.Namespace == exampleWorkflowClass.Namespace) // Should be exactly the same namespace as the example
                 .ToArray();
-            var activityNamesInAssembly = activitiesInAssembly.Select(a => a.Name).ToArray();
+            var activityNamesInAssembly = activitiesInAssembly.Select(a => new Core.Models.Workflow { Name = a.Name, Type = "Built-In" }).ToArray();
 
-            var activitiesInFolder = System.IO.Directory.EnumerateFiles(this.workflowFolder)
+            var activitiesInFolder = Directory.EnumerateFiles(workflowFolder)
                 .Where(a => a.EndsWith(".xaml"))
                 .Select(a => a.Split('\\').Last().Replace(".xaml", ""))
+                .Select(a => new Core.Models.Workflow { Name = a, Type = "User-Defined" })
                 .ToArray();
 
-            return activityNamesInAssembly.Union(activitiesInFolder).ToArray();
+            var allWorkflows = activityNamesInAssembly.Union(activitiesInFolder).ToArray();
+
+            foreach (var workflow in allWorkflows)
+            {
+                workflow.AvailableSettings = getAvailableSettingsForWorkflow(GetWorkflow(workflow.Name));
+            }
+
+            return allWorkflows;
+        }
+
+        private string[] getAvailableSettingsForWorkflow(Activity wf)
+        {
+            if (wf is DynamicActivity)
+            {
+                // Dynamic activities are not compiled (yet), so we can't use reflection to get their
+                // properties like we can normal activities.
+                return (wf as DynamicActivity).Properties.Select(a => a.Name).ToArray();
+            }
+            else
+            {
+                var ret = new List<string>();
+                var properties = wf.GetType().GetProperties();
+                foreach (var property in properties)
+                {
+                    if (property.PropertyType.Name.StartsWith("InArgument") || property.PropertyType.Name.StartsWith("InOutArgument"))
+                    {
+                        ret.Add(property.Name);
+                    }
+                }
+                return ret.ToArray();
+            }
         }
 
         public Activity GetWorkflow(string workflowName)
         {
-            var workflowCoreAssembly = typeof(GraphDocs.Workflow.Core.SimpleEmailNotification).Assembly;
+            var workflowCoreAssembly = typeof(Workflow.Core.SimpleEmailNotification).Assembly;
             Type target = typeof(Activity);
             var match = workflowCoreAssembly.GetTypes()
                 .Where(a => target.IsAssignableFrom(a) && a.Name == workflowName)
@@ -57,7 +89,7 @@ namespace GraphDocs.Infrastructure
             if (match != null)
                 return (Activity)Activator.CreateInstance(match);
 
-            var workflowFiles = System.IO.Directory.EnumerateFiles(workflowFolder).ToArray();
+            var workflowFiles = Directory.EnumerateFiles(workflowFolder).ToArray();
             var matchingFilename = workflowFiles
                 .Where(a => a.EndsWith("\\" + workflowName + ".xaml"))
                 .FirstOrDefault();
@@ -105,7 +137,21 @@ namespace GraphDocs.Infrastructure
                 bool? result = null;
                 var instanceUnloaded = new AutoResetEvent(false);
 
-                var app = parameters == null ? new WorkflowApplication(workflowDefinition) : new WorkflowApplication(workflowDefinition, parameters);
+                WorkflowApplication app;
+                
+                if (parameters == null)
+                {
+                    app = new WorkflowApplication(workflowDefinition);
+                }
+                else
+                {
+                    // Only pass in parameters that the appear in the workflow
+                    var parametersDefinedInThisWorkflow = getAvailableSettingsForWorkflow(workflowDefinition);
+                    var applicableParameters = parameters
+                        .Where(a => parametersDefinedInThisWorkflow.Contains(a.Key))
+                        .ToDictionary(a => a.Key, a => a.Value);
+                    app = new WorkflowApplication(workflowDefinition, applicableParameters);
+                }
                 app.InstanceStore = store;
                 app.PersistableIdle = (e) =>
                 {
@@ -155,6 +201,24 @@ namespace GraphDocs.Infrastructure
                     Result = result
                 };
             }
+        }
+
+        public void Create(string name, Stream inputStream)
+        {
+            var path = Path.Combine(workflowFolder, name + ".xaml");
+            using (var filestream = File.Create(path))
+            {
+                inputStream.CopyTo(filestream);
+            }
+        }
+
+        public void Delete(string name)
+        {
+            var path = Path.Combine(workflowFolder, name + ".xaml");
+            if (!File.Exists(path))
+                throw new Exception("Workflow file '" + name + "' does not exist, or is not a user-defined workflow.");
+
+            File.Delete(path);
         }
     }
 }

@@ -36,9 +36,9 @@ namespace GraphDocs.Tests
             paths = new PathsDataService(connFactory);
             folders = new FoldersDataService(connFactory, paths);
             workflows = new WorkflowService(AssemblyDirectory + "\\" + ConfigurationManager.AppSettings["WorkflowFolder"], new Guid(ConfigurationManager.AppSettings["WorkflowStoreId"]), connFactory);
-            documentsWorkflows = new DocumentsWorkflowsService(connFactory, workflows);
-            documents = new DocumentsDataService(connFactory, paths, documentsWorkflows);
             documentFiles = new DocumentFilesDataService(connFactory, paths);
+            documentsWorkflows = new DocumentsWorkflowsService(connFactory, workflows,documentFiles);
+            documents = new DocumentsDataService(connFactory, paths, documentsWorkflows);
 
             connFactory.InitAndEraseAll();
         }

@@ -46,6 +46,11 @@ namespace GraphDocs.WebService
                 defaults: new { action = "Index", controller = "WorkflowReply" }
             );
             routes.MapRoute(
+                name: "Workflows_Route",
+                url: apiVersion + "/Workflows/{name}",
+                defaults: new { action = "Index", controller = "Workflows", name = UrlParameter.Optional }
+            );
+            routes.MapRoute(
                 name: "Default_Route",
                 url: apiVersion + "/{controller}/{action}/{id}",
                 defaults: new { action = "Index", path = UrlParameter.Optional, id = UrlParameter.Optional }
