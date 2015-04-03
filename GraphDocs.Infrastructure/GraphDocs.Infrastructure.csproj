@@ -91,9 +91,9 @@
       <Project>{f6f9bc1b-5cb8-4c75-97e4-f4081a0c88a7}</Project>
       <Name>GraphDocs.Workflow.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Neo4jWorkflowInstanceStore\GraphDocs.Workflow.Neo4jInstanceStore.csproj">
+    <ProjectReference Include="..\Neo4jWorkflowInstanceStore\CustomInstanceStore.csproj">
       <Project>{d7ed7782-73ea-4187-837f-4bfdad7a52dd}</Project>
-      <Name>GraphDocs.Workflow.Neo4jInstanceStore</Name>
+      <Name>CustomInstanceStore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F1611485
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflow", "Workflow", "{26AD2ED5-024A-42EC-8934-FDB96D691497}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDocs.Workflow.Neo4jInstanceStore", "Neo4jWorkflowInstanceStore\GraphDocs.Workflow.Neo4jInstanceStore.csproj", "{D7ED7782-73EA-4187-837F-4BFDAD7A52DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomInstanceStore", "Neo4jWorkflowInstanceStore\CustomInstanceStore.csproj", "{D7ED7782-73EA-4187-837F-4BFDAD7A52DD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDocs.Workflow.Core", "GraphDocs.Workflow.Core\GraphDocs.Workflow.Core.csproj", "{F6F9BC1B-5CB8-4C75-97E4-F4081A0C88A7}"
 EndProject
