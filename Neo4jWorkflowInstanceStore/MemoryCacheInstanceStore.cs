@@ -2,12 +2,13 @@
 using System.Runtime.Caching;
 using System.Xml;
 
-namespace GraphDocs.Workflow.Neo4jInstanceStore
+namespace CustomInstanceStore
 {
     /// <summary>
-    /// Stores instance data in the default memory cache.
+    /// Persists instance data to the default memory cache. This is useful for unit tests
+    /// and debugging.
     /// </summary>
-    public class MemoryCacheInstanceStore : CustomInstanceStore
+    public class MemoryCacheInstanceStore : CustomInstanceStoreBase
     {
         public MemoryCacheInstanceStore(Guid storeId) : base(storeId) { }
 

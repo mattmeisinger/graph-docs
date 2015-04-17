@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Xml;
 
-namespace GraphDocs.Workflow.Neo4jInstanceStore
+namespace CustomInstanceStore.Neo4j
 {
     /// <summary>
-    /// Stores instance state data in a Neo4J connection.
+    /// Persists instance state data to a Neo4J database.
     /// </summary>
-    public class Neo4jInstanceStore : CustomInstanceStore
+    public class Neo4jInstanceStore : CustomInstanceStoreBase
     {
         Neo4jClient.IGraphClient _client;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GraphDocs.Workflow.Neo4jInstanceStore
+namespace CustomInstanceStore
 {
     //An AsyncResult that completes as soon as it is instantiated.
     class CompletedAsyncResult : AsyncResult

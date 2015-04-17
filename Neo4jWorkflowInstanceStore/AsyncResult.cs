@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace GraphDocs.Workflow.Neo4jInstanceStore
+namespace CustomInstanceStore
 {
     abstract class AsyncResult : IAsyncResult
     {

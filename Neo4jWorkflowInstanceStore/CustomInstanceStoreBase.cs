@@ -7,9 +7,9 @@ using System.Runtime.Serialization;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace GraphDocs.Workflow.Neo4jInstanceStore
+namespace CustomInstanceStore
 {
-    public abstract class CustomInstanceStore : InstanceStore, IDisposable
+    public abstract class CustomInstanceStoreBase : InstanceStore, IDisposable
     {
         /// <summary>
         /// A unique identifier for the store of instances. There will usually be one store id for all workflows
@@ -22,7 +22,7 @@ namespace GraphDocs.Workflow.Neo4jInstanceStore
         /// </summary>
         private InstanceHandle _handle;
 
-        public CustomInstanceStore(Guid storeId)
+        public CustomInstanceStoreBase(Guid storeId)
         {
             _storeId = storeId;
 

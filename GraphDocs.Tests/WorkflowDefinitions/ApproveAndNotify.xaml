@@ -1,6 +1,6 @@
 ﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="GraphDocs.WebService.WorkflowDefinitions.MyActivity" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="GraphDocs.WebService.WorkflowDefinitions.MyActivity_1"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
- xmlns:gwc="clr-namespace:GraphDocs.Workflow.Core;assembly=GraphDocs.Workflow.Core"
+ xmlns:gwc="clr-namespace:GraphDocs.Infrastructure.Workflow;assembly=GraphDocs.Infrastructure.Workflow"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
  xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
@@ -59,7 +59,7 @@
       <AssemblyReference>System.Web.Mvc</AssemblyReference>
       <AssemblyReference>GraphDocs.Infrastructure</AssemblyReference>
       <AssemblyReference>GraphDocs.Core</AssemblyReference>
-      <AssemblyReference>GraphDocs.Workflow.Core</AssemblyReference>
+      <AssemblyReference>GraphDocs.Infrastructure.Workflow</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>GraphDocs.WebService</AssemblyReference>

@@ -1,7 +1,7 @@
-﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="GraphDocs.Workflow.Core.MyWF2"
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="GraphDocs.Infrastructure.Workflow.MyWF2"
  xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
  xmlns:gcm="clr-namespace:GraphDocs.Core.Models;assembly=GraphDocs.Core"
- xmlns:gwc="clr-namespace:GraphDocs.Workflow.Core;assembly=GraphDocs.Workflow.Core"
+ xmlns:gwc="clr-namespace:GraphDocs.Infrastructure.Workflow;assembly=GraphDocs.Infrastructure.Workflow"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
  xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
@@ -18,7 +18,7 @@
     <x:Property Name="Result" Type="OutArgument(x:Boolean)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
-  <sap2010:WorkflowViewState.IdRef>GraphDocs.Workflow.Core.ApproveDocumentWorkflow_1</sap2010:WorkflowViewState.IdRef>
+  <sap2010:WorkflowViewState.IdRef>GraphDocs.Infrastructure.Workflow.ApproveDocumentWorkflow_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System</x:String>
@@ -71,7 +71,7 @@
       <AssemblyReference>System.Web.Mvc</AssemblyReference>
       <AssemblyReference>GraphDocs.Core</AssemblyReference>
       <AssemblyReference>GraphDocs.Infrastructure</AssemblyReference>
-      <AssemblyReference>GraphDocs.Workflow.Core</AssemblyReference>
+      <AssemblyReference>GraphDocs.Infrastructure.Workflow</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>GraphDocs.WebService</AssemblyReference>
@@ -119,7 +119,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="GraphDocs.Workflow.Core.ApproveDocumentWorkflow_1" sap:VirtualizedContainerService.HintSize="262,288">
+      <sap2010:ViewStateData Id="GraphDocs.Infrastructure.Workflow.ApproveDocumentWorkflow_1" sap:VirtualizedContainerService.HintSize="262,288">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="ShouldExpandAll">False</x:Boolean>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
 
-namespace GraphDocs.Workflow.Core.Utilities
+namespace GraphDocs.Infrastructure.Workflow.Utilities
 {
     public class Email
     {

@@ -5,9 +5,9 @@ using GraphDocs.Core.Models;
 using System.Configuration;
 using System.Net;
 
-namespace GraphDocs.Workflow.Core
+namespace GraphDocs.Infrastructure.Workflow
 {
-    public sealed class ApproveDocument : NativeActivity<bool>
+    public class ApproveDocument : NativeActivity<bool>
     {
         /// <summary>
         /// Comma- or semicolon-separated list of email addresses.

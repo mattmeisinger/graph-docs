@@ -1,7 +1,7 @@
-﻿using GraphDocs.Core.Enums;
+﻿using CustomInstanceStore.Neo4j;
+using GraphDocs.Core.Enums;
 using GraphDocs.Core.Interfaces;
 using GraphDocs.Core.Models;
-using GraphDocs.Workflow.Neo4jInstanceStore;
 using Neo4jClient;
 using System;
 using System.Activities;
@@ -30,7 +30,7 @@ namespace GraphDocs.Infrastructure
         public Core.Models.Workflow[] GetAvailableWorkflows()
         {
             // First, get all compiled workflows from the Workflow.Core project
-            var exampleWorkflowClass = typeof(GraphDocs.Workflow.Core.SimpleEmailNotification);
+            var exampleWorkflowClass = typeof(GraphDocs.Infrastructure.Workflow.SimpleEmailNotification);
             var assembly = exampleWorkflowClass.Assembly;
             Type target = typeof(Activity);
             var activitiesInAssembly = assembly.GetTypes()
@@ -80,7 +80,7 @@ namespace GraphDocs.Infrastructure
 
         public Activity GetWorkflow(string workflowName)
         {
-            var workflowCoreAssembly = typeof(Workflow.Core.SimpleEmailNotification).Assembly;
+            var workflowCoreAssembly = typeof(GraphDocs.Infrastructure.Workflow.SimpleEmailNotification).Assembly;
             Type target = typeof(Activity);
             var match = workflowCoreAssembly.GetTypes()
                 .Where(a => target.IsAssignableFrom(a) && a.Name == workflowName)
@@ -97,7 +97,7 @@ namespace GraphDocs.Infrastructure
             {
                 // Load workflow from XAML file. Need to reference the core assembly as the LocalAssembly
                 // while loading though or the custom activities will not work.
-                //var o = XamlServices.Parse(@"<ApproveDocument xmlns=""clr-namespace:GraphDocs.Workflow.Core""/>");
+                //var o = XamlServices.Parse(@"<ApproveDocument xmlns=""clr-namespace:GraphDocs.Infrastructure.Workflow""/>");
                 //var workflowText = System.IO.File.ReadAllText(matchingFilename);
                 //return ActivityXamlServices.Load(new System.IO.MemoryStream(Encoding.Default.GetBytes(workflowText)));
                 //var o = XamlServices.Parse();

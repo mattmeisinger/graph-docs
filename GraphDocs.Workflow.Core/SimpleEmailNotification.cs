@@ -4,9 +4,9 @@ using System.Linq;
 using System.Activities;
 using System.Configuration;
 
-namespace GraphDocs.Workflow.Core
+namespace GraphDocs.Infrastructure.Workflow
 {
-    public sealed class SimpleEmailNotification : CodeActivity
+    public class SimpleEmailNotification : CodeActivity
     {
         /// <summary>
         /// Comma- or semicolon-separated list of email addresses.
