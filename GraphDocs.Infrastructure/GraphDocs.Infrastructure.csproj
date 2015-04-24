@@ -33,6 +33,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CustomInstanceStore">
+      <HintPath>..\packages\CustomInstanceStore.0.9.0.0\lib\net40\CustomInstanceStore.dll</HintPath>
+    </Reference>
+    <Reference Include="CustomInstanceStore.Neo4j">
+      <HintPath>..\packages\CustomInstanceStore.Neo4j.0.9.0.0\lib\net40\CustomInstanceStore.Neo4j.dll</HintPath>
+    </Reference>
     <Reference Include="Neo4jClient">
       <HintPath>..\packages\Neo4jClient.1.0.0.662\lib\net40\Neo4jClient.dll</HintPath>
     </Reference>
@@ -87,17 +93,9 @@
       <Project>{ea1facfd-11ea-4333-9b70-e4761cf9224b}</Project>
       <Name>GraphDocs.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GraphDocs.Workflow.Core\GraphDocs.Infrastructure.Workflow.csproj">
+    <ProjectReference Include="..\GraphDocs.Infrastructure.Workflow\GraphDocs.Infrastructure.Workflow.csproj">
       <Project>{f6f9bc1b-5cb8-4c75-97e4-f4081a0c88a7}</Project>
       <Name>GraphDocs.Infrastructure.Workflow</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Neo4jInstanceStore\CustomInstanceStore.Neo4j.csproj">
-      <Project>{91fed7df-e8b0-4929-a8e0-8af587607633}</Project>
-      <Name>CustomInstanceStore.Neo4j</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Neo4jWorkflowInstanceStore\CustomInstanceStore.csproj">
-      <Project>{d7ed7782-73ea-4187-837f-4bfdad7a52dd}</Project>
-      <Name>CustomInstanceStore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

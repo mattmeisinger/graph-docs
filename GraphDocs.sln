@@ -13,11 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDocs.WebService", "Gra
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F1611485-034C-45AA-A10B-AB30AF1148CC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflow", "Workflow", "{26AD2ED5-024A-42EC-8934-FDB96D691497}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomInstanceStore", "Neo4jWorkflowInstanceStore\CustomInstanceStore.csproj", "{D7ED7782-73EA-4187-837F-4BFDAD7A52DD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDocs.Infrastructure.Workflow", "GraphDocs.Workflow.Core\GraphDocs.Infrastructure.Workflow.csproj", "{F6F9BC1B-5CB8-4C75-97E4-F4081A0C88A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphDocs.Infrastructure.Workflow", "GraphDocs.Infrastructure.Workflow\GraphDocs.Infrastructure.Workflow.csproj", "{F6F9BC1B-5CB8-4C75-97E4-F4081A0C88A7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B6661C9B-D7E9-46EF-A228-209B0ADA964B}"
 	ProjectSection(SolutionItems) = preProject
@@ -25,8 +21,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B6661C
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomInstanceStore.Neo4j", "Neo4jInstanceStore\CustomInstanceStore.Neo4j.csproj", "{91FED7DF-E8B0-4929-A8E0-8AF587607633}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,25 +44,15 @@ Global
 		{F50EA729-E6DE-414A-A1C4-9AA9279E4FF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F50EA729-E6DE-414A-A1C4-9AA9279E4FF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F50EA729-E6DE-414A-A1C4-9AA9279E4FF0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D7ED7782-73EA-4187-837F-4BFDAD7A52DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D7ED7782-73EA-4187-837F-4BFDAD7A52DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D7ED7782-73EA-4187-837F-4BFDAD7A52DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D7ED7782-73EA-4187-837F-4BFDAD7A52DD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F6F9BC1B-5CB8-4C75-97E4-F4081A0C88A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F6F9BC1B-5CB8-4C75-97E4-F4081A0C88A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6F9BC1B-5CB8-4C75-97E4-F4081A0C88A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6F9BC1B-5CB8-4C75-97E4-F4081A0C88A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{91FED7DF-E8B0-4929-A8E0-8AF587607633}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{91FED7DF-E8B0-4929-A8E0-8AF587607633}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{91FED7DF-E8B0-4929-A8E0-8AF587607633}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{91FED7DF-E8B0-4929-A8E0-8AF587607633}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9C4AB162-868C-4E86-9861-97A12EC4FE71} = {F1611485-034C-45AA-A10B-AB30AF1148CC}
-		{D7ED7782-73EA-4187-837F-4BFDAD7A52DD} = {26AD2ED5-024A-42EC-8934-FDB96D691497}
-		{91FED7DF-E8B0-4929-A8E0-8AF587607633} = {26AD2ED5-024A-42EC-8934-FDB96D691497}
 	EndGlobalSection
 EndGlobal

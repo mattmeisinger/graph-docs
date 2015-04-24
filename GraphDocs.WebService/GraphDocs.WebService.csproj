@@ -163,7 +163,7 @@
       <Project>{2243df9b-8e71-47d3-b7fe-82ec9050df21}</Project>
       <Name>GraphDocs.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GraphDocs.Workflow.Core\GraphDocs.Infrastructure.Workflow.csproj">
+    <ProjectReference Include="..\GraphDocs.Infrastructure.Workflow\GraphDocs.Infrastructure.Workflow.csproj">
       <Project>{f6f9bc1b-5cb8-4c75-97e4-f4081a0c88a7}</Project>
       <Name>GraphDocs.Infrastructure.Workflow</Name>
     </ProjectReference>

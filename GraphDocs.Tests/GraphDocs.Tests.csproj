@@ -100,13 +100,9 @@
       <Project>{f50ea729-e6de-414a-a1c4-9aa9279e4ff0}</Project>
       <Name>GraphDocs.WebService</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GraphDocs.Workflow.Core\GraphDocs.Infrastructure.Workflow.csproj">
+    <ProjectReference Include="..\GraphDocs.Infrastructure.Workflow\GraphDocs.Infrastructure.Workflow.csproj">
       <Project>{f6f9bc1b-5cb8-4c75-97e4-f4081a0c88a7}</Project>
       <Name>GraphDocs.Infrastructure.Workflow</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Neo4jWorkflowInstanceStore\CustomInstanceStore.csproj">
-      <Project>{d7ed7782-73ea-4187-837f-4bfdad7a52dd}</Project>
-      <Name>CustomInstanceStore</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
